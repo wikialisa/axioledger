@@ -1,0 +1,8 @@
+basicConstraints      = CA:FALSE
+keyUsage              = critical, digitalSignature, keyEncipherment
+extendedKeyUsage      = serverAuth, clientAuth
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier = keyid:always,issuer
+subjectAltName        = DNS:axqprotocol.axq,DNS:axqchain.axq,DNS:api.axioledger.axq,DNS:rpc.axioledger.axq,DNS:ws.axioledger.axq,DNS:vpxchain.vpx,DNS:rpc.valiprecision.vpx,DNS:sqxledger.sqx,DNS:rpc.sequentichain.sqx,DNS:kpxprotocol.kpx,DNS:amm.kinetoprotocol.kpx,DNS:vrqledger.vrq,DNS:did.veraciphers.vrq,DNS:axioledger-devnode.axq,IP:192.168.0.47,IP:113.22.172.197
+authorityInfoAccess   = OCSP;URI:http://ocsp.axioledger.axq
+crlDistributionPoints = URI:http://crl.axioledger.axq/gateway.crl

@@ -1,0 +1,19 @@
+packages:
+  # ─── Apps (user-facing frontends & wallets) ────────────────────────────────
+  - "apps/*"
+
+  # ─── Design System (Unified v6 — single source of truth) ──────────────────
+  - "design-system"
+
+  # ─── Shared packages (libraries, SDKs) ────────────────────────────────────
+  # NOTE: packages/axio-design-system has been removed (superseded by design-system/).
+  #       Remaining packages: axq-sdk, evm-interop, swift-bridge.
+  - "packages/axq-sdk"
+  - "packages/evm-interop"
+  - "packages/swift-bridge"
+
+  # ─── Core nodes (validator, sequencer — non-JS stubs / FFI bindings) ───────
+  - "core-nodes/*"
+
+  # ─── Smart contracts (Solidity / Forge workspaces) ─────────────────────────
+  - "smart-contracts/*"

@@ -1,0 +1,195 @@
+name: "⚡ Swift Bridge CI"
+
+# Triggers only on changes to swift-bridge package or this workflow file.
+# Integrates into the existing Monorepo CI chain — runs after security-scan.
+#
+# Jobs:
+#   swift-secret-scan     Block cleartext config + TruffleHog (PII/credentials)
+#   swift-build-test      Java 17 compile + soft tests (no SWIFT credentials needed)
+#   solidity-contracts    Foundry tests for axioledger-system + kpx-liquidity
+#
+# Required Secrets (add in GitHub Settings → Secrets → Actions):
+#   SWIFT_SDK_CACHE_KEY   — optional, for caching unpacked SDK
+#
+# DP-5: This CI runs for Giai đoạn A/B/C (sandbox).
+#   Production paths (Giai đoạn D) are gated by branch feature/swift-prod-*
+#   which is locked until post-TGE.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/swift-bridge/**"
+      - "smart-contracts/axioledger-system/**"
+      - "smart-contracts/kpx-liquidity/**"
+      - ".github/workflows/swift-bridge-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/swift-bridge/**"
+      - "smart-contracts/axioledger-system/**"
+      - "smart-contracts/kpx-liquidity/**"
+
+concurrency:
+  group: swift-bridge-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ─── Job 1: Security Gate ──────────────────────────────────────────────────
+  swift-secret-scan:
+    name: "🔐 Swift Security Gate"
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 1a. TruffleHog — scan for secrets, credentials, keystores
+      - name: "🔍 TruffleHog secret scan"
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.before || 'HEAD~1' }}
+          head: ${{ github.sha }}
+          extra_args: --only-verified
+
+      # 1b. Block cleartext config-swift-mgw.yaml (DP-4 mandate)
+      - name: "🚫 Block cleartext config-swift-mgw.yaml"
+        run: |
+          if git diff --name-only ${{ github.event.before || 'HEAD~1' }} HEAD \
+              | grep -q "config-swift-mgw\.yaml$"; then
+            echo "❌ BLOCKED: config-swift-mgw.yaml must NOT be committed."
+            echo "   Run bin/encrypt.sh first. Commit only .enc and .ks files."
+            exit 1
+          fi
+          echo "✅ No cleartext SWIFT config detected."
+
+      # 1c. Block JKS / P12 keystores from being committed
+      - name: "🚫 Block keystore files"
+        run: |
+          if git diff --name-only ${{ github.event.before || 'HEAD~1' }} HEAD \
+              | grep -qE "\.(jks|p12|pem|key)$"; then
+            echo "❌ BLOCKED: Keystore/key files (.jks, .p12, .pem, .key) must NOT be committed."
+            echo "   These belong in ./swift-server/keys/ (chmod 600, gitignored)."
+            exit 1
+          fi
+          echo "✅ No keystore files detected."
+
+      # 1d. Verify PII-stripping contract: RwaSettlementEvent must not have PII fields
+      - name: "🔒 DP-3 PII field audit"
+        run: |
+          PII_FOUND=0
+          for f in packages/swift-bridge/src/main/java/com/axioledger/swift/gpi/model/*.java; do
+            [ -f "$f" ] || continue
+            if grep -qiE "(creditorName|debtorName|personalData|dateOfBirth|nationalId|address)" "$f"; then
+              echo "❌ PII field detected in $f — violates DP-3"
+              PII_FOUND=1
+            fi
+          done
+          if [ $PII_FOUND -eq 1 ]; then exit 1; fi
+          echo "✅ DP-3: No PII fields in model classes."
+
+  # ─── Job 2: Build & Soft Tests (Java 17) ──────────────────────────────────
+  swift-build-test:
+    name: "☕ Swift Bridge — Build & Soft Tests (Java 17)"
+    runs-on: ubuntu-latest
+    needs: swift-secret-scan
+    timeout-minutes: 20
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "☕ Set up Java 17 (Bridge Layer — openapi_codegen path)"
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: maven
+
+      # The SWIFT SDK JARs are NOT committed to git (see .gitignore).
+      # In CI, they must be provided via repository secret + artifact store,
+      # or a private Maven registry. Here we check for the cached copy first.
+      - name: "📦 Restore SWIFT SDK from cache"
+        id: sdk-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/com/swift/commons/oauth/
+          key: swift-security-sdk-2.17.5-6
+
+      - name: "⚠️ Skip build if SDK not cached (first-time CI setup)"
+        if: steps.sdk-cache.outputs.cache-hit != 'true'
+        run: |
+          echo "⚠️  SWIFT Security SDK not found in cache."
+          echo "   First-time setup: SysAdmin must run install-sdk.sh on the CI runner"
+          echo "   or upload the SDK to a private Maven registry."
+          echo "   Soft tests will be skipped this run."
+          echo "SDK_AVAILABLE=false" >> $GITHUB_ENV
+
+      - name: "✅ SDK available"
+        if: steps.sdk-cache.outputs.cache-hit == 'true'
+        run: echo "SDK_AVAILABLE=true" >> $GITHUB_ENV
+
+      - name: "🏗️ Compile swift-bridge (Java 17)"
+        if: env.SDK_AVAILABLE == 'true'
+        run: mvn -B clean compile --file pom.xml -q
+        working-directory: packages/swift-bridge
+
+      - name: "🧪 Run soft tests (mock — no SWIFT credentials)"
+        if: env.SDK_AVAILABLE == 'true'
+        run: |
+          mvn -B test \
+            -Dtest="**/soft/**Test" \
+            -DfailIfNoTests=false \
+            --file pom.xml
+        working-directory: packages/swift-bridge
+
+      - name: "📤 Upload test results"
+        uses: actions/upload-artifact@v4
+        if: always() && env.SDK_AVAILABLE == 'true'
+        with:
+          name: swift-bridge-test-results-${{ github.sha }}
+          path: packages/swift-bridge/target/surefire-reports/
+          retention-days: 14
+
+  # ─── Job 3: Solidity Contracts (Foundry) ──────────────────────────────────
+  solidity-contracts:
+    name: "🔷 Solidity Contracts (Foundry)"
+    runs-on: ubuntu-latest
+    needs: swift-secret-scan
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    if: |
+      contains(github.event.head_commit.modified, 'smart-contracts/') ||
+      contains(github.event.pull_request.title, 'contract') ||
+      github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: "🔨 Install Foundry"
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: "🧪 Test axioledger-system contracts"
+        run: forge test -vvv
+        working-directory: smart-contracts/axioledger-system
+
+      - name: "🧪 Test kpx-liquidity contracts"
+        run: forge test -vvv
+        working-directory: smart-contracts/kpx-liquidity
+
+      - name: "📊 Gas snapshot"
+        run: |
+          forge snapshot --no-match-test "testFuzz" 2>/dev/null || true
+        working-directory: smart-contracts/axioledger-system
+        continue-on-error: true

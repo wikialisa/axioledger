@@ -1,0 +1,53 @@
+# AXIOLEDGER Cron Jobs Reference
+# File: /root/axioledger-monorepo/core/scripts/crontab.reference
+#
+# INSTALLED: /etc/cron.d/axioledger (2026-09-03)
+# Node: /usr/bin/node -> /usr/local/bin/node (v20.20.2)
+#   On WSL devenv: /usr/bin/node is a symlink to /usr/local/bin/node
+#   On production server: verify with `which node` and update PATH if needed
+#
+# Format (cron.d): min hour dom mon dow user command
+# Logs directory: /root/logs/
+#
+# To install on a new server:
+#   sudo cp /root/axioledger-monorepo/core/scripts/crontab.reference /etc/cron.d/axioledger
+#   sudo chmod 644 /etc/cron.d/axioledger
+#   sudo service cron reload
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# ─── Node Health Monitor ──────────────────────────────────────────────────
+# Mỗi phút — self-healing monitor, restart nếu node bị stale
+* * * * * root /usr/bin/node /root/core/scripts/check-node-health.js >> /root/logs/node-health.log 2>&1
+
+# ─── RWA Yield Buyback ────────────────────────────────────────────────────
+# Mỗi ngày lúc 02:00 AM — trích 10% yield RWA mua lại và đốt $AXQ
+0 2 * * * root /usr/bin/node /root/core/scripts/rwa-yield-buyback.js >> /root/logs/treasury.log 2>&1
+
+# ─── Treasury Sweep ───────────────────────────────────────────────────────
+# Mỗi ngày lúc 03:00 AM — quét số dư treasury
+0 3 * * * root /usr/bin/node /root/core/scripts/treasury-sweep.js >> /root/logs/treasury.log 2>&1
+
+# ─── AXQ Emission Trigger ─────────────────────────────────────────────────
+# Kiểm tra ΔTVL_RWA mỗi 6 giờ — kích hoạt Value-Pegged Emission nếu cần
+0 */6 * * * root /usr/bin/node /root/core/scripts/axq-emission.js >> /root/logs/treasury.log 2>&1
+
+# ─── File Integrity Monitoring ────────────────────────────────────────────
+# Quét toàn vẹn tệp tin mỗi nửa đêm — Legal Audit Trail
+0 0 * * * root /usr/bin/node /root/core/scripts/integrity-check.js >> /root/logs/security.log 2>&1
+
+# ─── Supply Chain Scanner ─────────────────────────────────────────────────
+# VRQ node quét DApp/npm packages mỗi 15 phút — detect Typosquatting
+*/15 * * * * root /usr/bin/node /root/core/scripts/supply-chain-scan.js >> /root/logs/security.log 2>&1
+
+# ─── GitHub Audit ─────────────────────────────────────────────────────────
+# Kiểm toán GitHub Orgs mỗi ngày Chủ Nhật 01:00 AM
+0 1 * * 0 root /root/core/github/w7-audit.sh >> /root/logs/github-audit.log 2>&1
+
+# ─── Maintenance ──────────────────────────────────────────────────────────
+# Dọn log cũ hơn 30 ngày — Chủ Nhật 03:00 AM
+0 3 * * 0 root find /root/logs/ -type f -mtime +30 -name "*.log" -delete 2>/dev/null; true
+
+# ─── ANS Indexer (disabled — uncomment sau khi smart contracts v1.0.0 deploy) ──
+# */5 * * * * root pgrep -f ans-indexer.js || /usr/bin/node /root/core/scripts/ans-indexer.js >> /root/logs/ans.log 2>&1 &

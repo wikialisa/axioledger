@@ -1,0 +1,34 @@
+{
+  "name": "axioledger-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AXIOLEDGER ($AXQ) — 500k LOC monorepo. Hub & 4 Pillars architecture.",
+  "license": "BSL-1.1",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build":        "turbo run build",
+    "test":         "turbo run test",
+    "test:e2e":     "jest e2e/ --testTimeout=30000 --forceExit",
+    "lint":         "turbo run lint",
+    "typecheck":    "turbo run typecheck",
+    "clean":        "turbo run clean && rm -rf node_modules",
+    "dev":          "turbo run dev --parallel",
+    "localnet":     "bash scripts/localnet-setup.sh",
+    "contracts:build": "turbo run contracts:build --filter='./smart-contracts/**'",
+    "contracts:test":  "turbo run contracts:test  --filter='./smart-contracts/**'"
+  },
+  "devDependencies": {
+    "turbo":        "^2.1.3",
+    "prettier":     "^3.3.3",
+    "eslint":       "^9.7.0",
+    "typescript":   "^5.5.4"
+  },
+  "packageManager": "pnpm@9.7.1",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

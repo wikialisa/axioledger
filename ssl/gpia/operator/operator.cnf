@@ -1,0 +1,27 @@
+[req]
+default_bits       = 2048
+prompt             = no
+default_md         = sha256
+distinguished_name = dn
+req_extensions     = v3_operator
+
+[dn]
+C  = VN
+ST = Hanoi
+O  = Axioledger Foundation
+OU = Node Operator
+CN = axioledger-devnode.axq
+
+[v3_operator]
+subjectKeyIdentifier = hash
+basicConstraints     = CA:FALSE
+keyUsage             = critical, digitalSignature, keyEncipherment, nonRepudiation
+extendedKeyUsage     = clientAuth, serverAuth
+subjectAltName       = @alt_operator
+
+[alt_operator]
+DNS.1 = axioledger-devnode.axq
+DNS.2 = axioledger-devnode
+IP.1  = 192.168.0.47
+IP.2  = 127.0.0.1
+IP.3  = 113.22.172.197

@@ -1,0 +1,99 @@
+# =============================================================================
+# AXIO Banking Translator Service — application.yml
+# /mnt/q/core/banking/swift-gateway/src/main/resources/application.yml
+#
+# ⚠️  SECRETS MANAGEMENT (Cố vấn DevOps Chỉ thị):
+#   - SWIFT_CLIENT_ID, SWIFT_CLIENT_SECRET, SWIFT_MGW_API_KEY → env vars only
+#   - SWIFT_KEYSTORE_PASSWORD, SWIFT_TRUSTSTORE_PASSWORD → env vars only
+#   - cert_path / key_path files → chmod 600, owner service user only
+#   - DO NOT commit this file if it contains non-placeholder values
+# =============================================================================
+
+spring:
+  application:
+    name: axio-banking-translator
+  profiles:
+    active: sandbox   # sandbox | production — production locked until v1.1.0
+
+---
+# ── Sandbox profile (v0.1.0 / v0.2.0) ────────────────────────────────────────
+spring:
+  config:
+    activate:
+      on-profile: sandbox
+
+server:
+  port: 8080
+
+axioledger:
+  kpx_router: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"   # KPXRouterGateway — localnet (chain 31337)
+  vrq_api:    "https://api-sandbox.axioledger.axq/vrq/"
+  rpc_url:    "https://rpc-testnet.axq/"
+  min_axq_collateral_pct: 15   # YAML fallback — Treasury DAO value takes precedence at runtime
+
+  swift:
+    connectivity:
+      environment: sandbox
+      bic8: "AXIQBEB0"          # Kineto SPV BIC placeholder — replace after DP-1 BIC registration
+      endpoint: "https://sandbox.swift.com/oauth2/v1"
+    auth:
+      type: oauth2
+      client_id: "${SWIFT_CLIENT_ID}"       # export SWIFT_CLIENT_ID=<from SWIFT Developer Portal>
+      client_secret: "${SWIFT_CLIENT_SECRET}"
+      cert_path: "/mnt/q/core/banking/swift-gateway/keys/client.p12"
+      key_path:  "/mnt/q/core/banking/swift-gateway/keys/client.key"
+      ca_path:   "/mnt/q/core/banking/swift-gateway/keys/swift-sandbox-ca.jks"
+    mgw:
+      host: "127.0.0.1"
+      port: 8443
+      api_key: "${SWIFT_MGW_API_KEY}"
+
+logging:
+  level:
+    com.axioledger: DEBUG
+    okhttp3: INFO
+
+---
+# ── Production profile — LOCKED until v1.1.0 Gate G3 ─────────────────────────
+spring:
+  config:
+    activate:
+      on-profile: production
+
+# Production profile intentionally left minimal.
+# Activate only after:
+#   [ ] TVL ≥ $10B on Mainnet
+#   [ ] Kineto SPV BIC provisioned (DP-1 production)
+#   [ ] Connectivity Option License signed (DP-2)
+#   [ ] TGE complete and $VPX/$SQX stable
+
+server:
+  port: 8443
+
+axioledger:
+  kpx_router: "REPLACE_WITH_MAINNET_ADDRESS"
+  vrq_api:    "https://api.axioledger.axq/vrq/"
+  rpc_url:    "https://rpc.axq/"
+  min_axq_collateral_pct: 0   # 0 = use DAO value exclusively in production — no YAML floor
+
+  swift:
+    connectivity:
+      environment: live
+      bic8: "REPLACE_WITH_KINETO_SPV_BIC"
+      endpoint: "https://api.swiftnet.sipn.swift.com/oauth2/v1"
+    auth:
+      type: oauth2
+      client_id: "${SWIFT_CLIENT_ID}"
+      client_secret: "${SWIFT_CLIENT_SECRET}"
+      cert_path: "/mnt/q/core/banking/swift-gateway/keys/client-prod.p12"
+      key_path:  "/mnt/q/core/banking/swift-gateway/keys/client-prod.key"
+      ca_path:   "/mnt/q/core/banking/swift-gateway/keys/swift-prod-ca.jks"
+    mgw:
+      host: "127.0.0.1"
+      port: 9003
+      api_key: "${SWIFT_MGW_API_KEY}"
+
+logging:
+  level:
+    com.axioledger: INFO
+    okhttp3: WARN

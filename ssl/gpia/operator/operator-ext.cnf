@@ -1,0 +1,7 @@
+basicConstraints     = CA:FALSE
+keyUsage             = critical, digitalSignature, keyEncipherment, nonRepudiation
+extendedKeyUsage     = clientAuth, serverAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+subjectAltName       = DNS:axioledger-devnode.axq,DNS:axioledger-devnode,IP:192.168.0.47,IP:127.0.0.1,IP:113.22.172.197
+authorityInfoAccess  = OCSP;URI:http://ocsp.axioledger.axq

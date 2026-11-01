@@ -1,0 +1,43 @@
+{
+  "name": "@axioledger/workspace",
+  "version": "0.0.0",
+  "description": "AXIOLEDGER Monorepo — 5 Scopes: @axioledger @valiprecision @sequentichain @kinetoprotocol @veraciphers",
+  "private": true,
+  "workspaces": [
+    "packages/@axioledger/*",
+    "packages/@valiprecision/*",
+    "packages/@sequentichain/*",
+    "packages/@kinetoprotocol/*",
+    "packages/@veraciphers/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "vitest run --config vitest.config.ts",
+    "test:ci": "vitest run --config vitest.config.ts --coverage",
+    "test:watch": "vitest --config vitest.config.ts",
+    "lint": "eslint . --ext .ts,.tsx,.js --fix",
+    "typecheck": "tsc --build --verbose",
+    "clean": "find packages -name dist -type d -exec rm -rf {} + 2>/dev/null; find packages -name node_modules -type d -exec rm -rf {} + 2>/dev/null; echo done",
+    "audit-supply": "node scripts/supply-chain-scan.js",
+    "release:dry": "changeset version --snapshot canary"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitest/coverage-v8": "^1.6.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axioledger/axioledger.git"
+  },
+  "license": "BSL-1.1",
+  "author": "AXIOLEDGER Foundation <315885655+davictran76@users.noreply.github.com>"
+}

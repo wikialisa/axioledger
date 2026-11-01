@@ -1,0 +1,191 @@
+# .github/workflows/publish-sdk.yml
+# AXIOLEDGER — Core SDK Publish to GitHub Packages
+#
+# Publishes all 15 packages in core/sdk/ to GitHub Packages under their respective
+# NPM scopes (@axioledger, @valiprecision, @sequentichain, @kinetoprotocol, @veraciphers).
+#
+# Triggers:
+#   - Manual (workflow_dispatch) — for hotfix/manual publishes
+#   - Push of a version tag: sdk-v* (e.g. sdk-v0.1.0, sdk-v0.2.0)
+#
+# Auth strategy (in priority order):
+#   1. NODE_AUTH_TOKEN secret — PAT with write:packages scope (optional)
+#      Settings → Developer settings → Personal access tokens (classic)
+#      Scopes: write:packages, read:packages
+#   2. GITHUB_TOKEN (built-in) — automatically available in every workflow run,
+#      has packages:write scope for the repository owner's packages.
+#      No manual setup required — used as fallback when NODE_AUTH_TOKEN is absent.
+#
+# Workflow:
+#   1. Install deps (npm ci inside core/sdk/)
+#   2. Run full vitest suite — must pass before publish
+#   3. Build (tsc) all packages
+#   4. Publish all packages under each scope to GitHub Packages registry
+#
+# Registry: https://npm.pkg.github.com
+# Consuming apps must add to .npmrc:
+#   @axioledger:registry=https://npm.pkg.github.com
+#   @valiprecision:registry=https://npm.pkg.github.com
+#   @sequentichain:registry=https://npm.pkg.github.com
+#   @kinetoprotocol:registry=https://npm.pkg.github.com
+#   @veraciphers:registry=https://npm.pkg.github.com
+
+name: Publish Core SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry-run (--dry-run flag — no actual publish)'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+  push:
+    tags:
+      - 'sdk-v*'
+
+# Grant built-in GITHUB_TOKEN the packages:write permission so it can publish
+# to GitHub Packages without a separate PAT (NODE_AUTH_TOKEN is still preferred
+# when set — it is scoped to multiple orgs; GITHUB_TOKEN only covers this repo's org).
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-sdk-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Test — vitest 45 tests must pass
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@axioledger'
+
+      - name: Install dependencies
+        working-directory: core/sdk
+        run: npm ci --ignore-scripts
+
+      - name: Run vitest suite
+        working-directory: core/sdk
+        run: npm run test:ci
+        env:
+          CI: true
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sdk-coverage
+          path: core/sdk/coverage/
+          if-no-files-found: ignore
+
+  publish:
+    name: Publish — ${{ matrix.scope }}
+    runs-on: ubuntu-latest
+    needs: test
+
+    strategy:
+      matrix:
+        scope:
+          - '@axioledger'
+          - '@valiprecision'
+          - '@sequentichain'
+          - '@kinetoprotocol'
+          - '@veraciphers'
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: ${{ matrix.scope }}
+
+      - name: Install deps
+        working-directory: core/sdk
+        run: npm ci --ignore-scripts
+
+      - name: Build packages for ${{ matrix.scope }}
+        working-directory: core/sdk
+        run: |
+          SCOPE="${{ matrix.scope }}"
+          # Find all packages in this scope and build them
+          find "packages/${SCOPE}" -name "package.json" -maxdepth 2 | while read pkgjson; do
+            pkgdir=$(dirname "$pkgjson")
+            pkgname=$(node -e "console.log(require('./$pkgjson').name)" 2>/dev/null)
+            echo "Building $pkgname..."
+            (cd "$pkgdir" && npx tsc -p tsconfig.json 2>/dev/null || echo "No tsconfig in $pkgname, skipping build")
+          done
+
+      - name: Publish packages for ${{ matrix.scope }}
+        working-directory: core/sdk
+        env:
+          # Prefer explicit PAT (NODE_AUTH_TOKEN) for cross-org publish;
+          # fall back to built-in GITHUB_TOKEN which has packages:write for this repo.
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          SCOPE="${{ matrix.scope }}"
+          DRY_RUN_FLAG=""
+          if [[ "${{ github.event.inputs.dry_run }}" == "true" && "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            DRY_RUN_FLAG="--dry-run"
+            echo "DRY RUN MODE — no packages will be published"
+          fi
+
+          # Resolve effective token (NODE_AUTH_TOKEN already set via env above)
+          EFFECTIVE_TOKEN="${NODE_AUTH_TOKEN}"
+
+          # Configure npm for GitHub Packages
+          cat > .npmrc << EOF
+          ${SCOPE}:registry=https://npm.pkg.github.com
+          //npm.pkg.github.com/:_authToken=${EFFECTIVE_TOKEN}
+          EOF
+
+          find "packages/${SCOPE}" -name "package.json" -maxdepth 2 | while read pkgjson; do
+            pkgdir=$(dirname "$pkgjson")
+            pkgname=$(node -e "console.log(require('./$pkgjson').name)" 2>/dev/null)
+            pkgver=$(node  -e "console.log(require('./$pkgjson').version)" 2>/dev/null)
+            echo "Publishing $pkgname@$pkgver $DRY_RUN_FLAG..."
+            (cd "$pkgdir" && npm publish --access public $DRY_RUN_FLAG 2>&1) || \
+              echo "::warning::Failed to publish $pkgname — may already exist at this version"
+          done
+
+          # Clean up .npmrc (don't leak auth token in workspace)
+          rm -f .npmrc
+
+  summary:
+    name: Summary
+    runs-on: ubuntu-latest
+    needs: publish
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print publish summary
+        working-directory: core/sdk
+        run: |
+          echo "=== Core SDK Publish Summary ==="
+          find packages -name "package.json" -maxdepth 3 | sort | while read f; do
+            node -e "const p=require('./$f'); console.log(p.name+'@'+p.version)" 2>/dev/null
+          done
+          echo ""
+          echo "Registry: https://npm.pkg.github.com"
+          echo "Scopes:   @axioledger @valiprecision @sequentichain @kinetoprotocol @veraciphers"
+          echo ""
+          echo "To consume:"
+          echo "  Add to .npmrc:"
+          for scope in @axioledger @valiprecision @sequentichain @kinetoprotocol @veraciphers; do
+            echo "  ${scope}:registry=https://npm.pkg.github.com"
+          done

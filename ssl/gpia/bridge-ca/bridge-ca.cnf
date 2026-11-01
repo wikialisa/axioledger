@@ -1,0 +1,22 @@
+[req]
+default_bits       = 4096
+prompt             = no
+default_md         = sha384
+distinguished_name = dn
+x509_extensions    = v3_bridge_ca
+
+[dn]
+C  = VN
+ST = Hanoi
+O  = Axioledger Ecosystem
+OU = Cross-Pillar Bridge Authority
+CN = AXIOLEDGER CROSS-BRIDGE CA
+
+[v3_bridge_ca]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints       = critical, CA:TRUE, pathlen:1
+keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
+extendedKeyUsage       = serverAuth, clientAuth, OCSPSigning
+crlDistributionPoints  = URI:http://crl.axioledger.axq/bridge-ca.crl
+authorityInfoAccess    = OCSP;URI:http://ocsp.axioledger.axq

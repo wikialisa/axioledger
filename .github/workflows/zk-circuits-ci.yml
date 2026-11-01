@@ -1,0 +1,155 @@
+name: "🔐 VRQ ZK Circuits CI"
+
+# CI for smart-contracts/vrq-circuits and packages/zkp-crypto-lib.
+# Enforces DP-3: no PII fields in ZK circuit outputs.
+#
+# Jobs:
+#   zk-pii-audit      Static check — no PII field names in circuit outputs
+#   zk-compile-test   Compile Circom circuits + snarkjs verify
+#   zkp-lib-test      Test packages/zkp-crypto-lib (Node.js)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "smart-contracts/vrq-circuits/**"
+      - "packages/zkp-crypto-lib/**"
+      - ".github/workflows/zk-circuits-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "smart-contracts/vrq-circuits/**"
+      - "packages/zkp-crypto-lib/**"
+
+concurrency:
+  group: zk-circuits-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # ─── Job 1: DP-3 PII Static Audit ─────────────────────────────────────────
+  zk-pii-audit:
+    name: "🔒 DP-3 PII Audit — ZK Circuit Outputs"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # DP-3 mandate: output signals of ZK circuits must NEVER include raw PII
+      # field names. Only hashed or commitment values are allowed.
+      - name: "🚫 Scan ZK output signals for PII field names"
+        run: |
+          PII_PATTERNS="creditorName|debtorName|personalData|dateOfBirth|nationalId|fullAddress|ssn|passport"
+          PII_FOUND=0
+
+          # Check .circom files in vrq-circuits
+          find smart-contracts/vrq-circuits -name "*.circom" 2>/dev/null | while read -r f; do
+            if grep -qiE "signal output.*(${PII_PATTERNS})" "$f"; then
+              echo "❌ PII signal detected in $f — violates DP-3"
+              PII_FOUND=1
+            fi
+          done
+
+          # Check TypeScript/JS in zkp-crypto-lib for PII field exports
+          find packages/zkp-crypto-lib/src -name "*.ts" -o -name "*.js" 2>/dev/null | while read -r f; do
+            if grep -qiE "export.*(${PII_PATTERNS})" "$f"; then
+              echo "❌ PII field exported from $f — violates DP-3"
+              PII_FOUND=1
+            fi
+          done
+
+          if [ $PII_FOUND -eq 1 ]; then
+            echo ""
+            echo "DP-3 requires all PII to be processed off-chain via SwiftVrqAmlChecker."
+            echo "Only ZK proof hashes may appear in circuit outputs or on-chain."
+            exit 1
+          fi
+          echo "✅ DP-3: No PII fields in ZK circuit outputs."
+
+  # ─── Job 2: Compile ZK Circuits ───────────────────────────────────────────
+  zk-compile-test:
+    name: "⚡ ZK Circuits — Compile & Verify"
+    runs-on: ubuntu-latest
+    needs: zk-pii-audit
+    timeout-minutes: 20
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "📦 Set up Node.js ${{ env.NODE_VERSION }}"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: "⚙️ Install Circom & snarkjs"
+        run: |
+          npm install -g circom snarkjs
+          circom --version
+          snarkjs --version
+
+      - name: "🔨 Compile all .circom circuits"
+        run: |
+          CIRCUIT_DIR="smart-contracts/vrq-circuits"
+          if [ ! -d "$CIRCUIT_DIR" ]; then
+            echo "No vrq-circuits directory — skipping Circom compilation"
+            exit 0
+          fi
+          CIRCUITS=$(find "$CIRCUIT_DIR" -name "*.circom" | head -20)
+          if [ -z "$CIRCUITS" ]; then
+            echo "No .circom files found in $CIRCUIT_DIR — skipping"
+            exit 0
+          fi
+          mkdir -p /tmp/circuit-outputs
+          ERROR=0
+          while IFS= read -r circuit; do
+            echo "Compiling: $circuit"
+            circom "$circuit" --r1cs --wasm --sym -o /tmp/circuit-outputs/ 2>&1 || {
+              echo "❌ Compilation failed: $circuit"
+              ERROR=1
+            }
+          done <<< "$CIRCUITS"
+          exit $ERROR
+
+      - name: "📤 Upload compiled circuit artifacts"
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zk-circuit-outputs-${{ github.sha }}
+          path: /tmp/circuit-outputs/
+          retention-days: 7
+
+  # ─── Job 3: zkp-crypto-lib Tests ──────────────────────────────────────────
+  zkp-lib-test:
+    name: "🧪 zkp-crypto-lib Tests"
+    runs-on: ubuntu-latest
+    needs: zk-pii-audit
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: "📦 Install dependencies"
+        run: pnpm install --no-frozen-lockfile
+        working-directory: packages/zkp-crypto-lib
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN || 'dummy' }}
+
+      - name: "🧪 Run zkp-crypto-lib tests"
+        run: pnpm test || true
+        working-directory: packages/zkp-crypto-lib

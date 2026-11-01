@@ -1,0 +1,43 @@
+# wrangler.toml — axiopass-wallet Cloudflare Pages
+# https://developers.cloudflare.com/pages/platform/wrangler-configuration/
+#
+# Usage:
+#   npx wrangler pages dev apps/axiopass-wallet/.next/   # local CF preview
+#   npx wrangler pages deploy apps/axiopass-wallet/.next/ --project-name=axiopass-wallet
+
+name = "axiopass-wallet"
+
+# ── Pages project ─────────────────────────────────────────────────────────────
+pages_build_output_dir = "apps/axiopass-wallet/.next"
+
+# ── Compatibility ─────────────────────────────────────────────────────────────
+compatibility_date       = "2024-12-01"
+compatibility_flags      = ["nodejs_compat"]
+
+# ── Staging environment ───────────────────────────────────────────────────────
+[env.staging]
+name = "axiopass-wallet-staging"
+
+[env.staging.vars]
+NEXT_PUBLIC_NETWORK        = "sepolia"
+NEXT_PUBLIC_CHAIN_ID       = "11155111"
+NEXT_PUBLIC_ENABLE_MOCK_PASSKEY = "false"
+# RPC_URL and contract addresses are set as Encrypted Secrets in CF dashboard
+# Dashboard → Pages → axiopass-wallet → Settings → Environment Variables
+
+# ── Production environment ────────────────────────────────────────────────────
+[env.production]
+name = "axiopass-wallet"
+
+[env.production.vars]
+NEXT_PUBLIC_NETWORK  = "mainnet"
+NEXT_PUBLIC_CHAIN_ID = "1"
+NEXT_PUBLIC_ENABLE_MOCK_PASSKEY = "false"
+
+# ── CF Zero Trust (optional — requires Cloudflare Access) ─────────────────────
+# Protects staging behind an email OTP gate.
+# Uncomment and configure in CF Access dashboard:
+#
+# [[env.staging.access]]
+# domain = "axiopass-staging.pages.dev"
+# type   = "self_hosted"

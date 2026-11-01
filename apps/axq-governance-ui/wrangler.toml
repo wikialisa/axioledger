@@ -1,0 +1,28 @@
+# wrangler.toml — axq-governance-ui Cloudflare Pages
+#
+# Usage:
+#   npx wrangler pages dev apps/axq-governance-ui/.next/
+#   npx wrangler pages deploy apps/axq-governance-ui/.next/ --project-name=axio-governance
+
+name = "axio-governance"
+
+pages_build_output_dir   = "apps/axq-governance-ui/.next"
+compatibility_date       = "2024-12-01"
+compatibility_flags      = ["nodejs_compat"]
+
+# ── Staging ───────────────────────────────────────────────────────────────────
+[env.staging]
+name = "axio-governance-staging"
+
+[env.staging.vars]
+NEXT_PUBLIC_NETWORK  = "sepolia"
+NEXT_PUBLIC_CHAIN_ID = "11155111"
+# Contract addresses set as Encrypted Secrets in CF dashboard
+
+# ── Production ────────────────────────────────────────────────────────────────
+[env.production]
+name = "axio-governance"
+
+[env.production.vars]
+NEXT_PUBLIC_NETWORK  = "mainnet"
+NEXT_PUBLIC_CHAIN_ID = "1"

@@ -1,0 +1,13 @@
+{
+  "name": "@axioledger/axioledger-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AXQ governance contracts — DAO, treasury, quadratic voting, guardian council, time-lock",
+  "scripts": {
+    "contracts:build": "forge build",
+    "contracts:test":  "forge test -vvv",
+    "contracts:lint":  "forge fmt --check",
+    "clean":           "forge clean"
+  },
+  "license": "BSL-1.1"
+}

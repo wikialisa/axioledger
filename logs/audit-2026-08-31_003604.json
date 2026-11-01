@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-08-31_003604",
+  "actor": "315885655+davictran76@users.noreply.github.com",
+  "orgs": {
+    "axioledger": {
+      "repos_count": 2,
+      "members_count": 2,
+      "hooks_count": 0,
+      "secrets_names": [],
+      "repos": [
+        {
+          "name": "axioledger",
+          "private": false,
+          "default_branch": "main"
+        },
+        {
+          "name": "axq-ans-sdk",
+          "private": false,
+          "default_branch": "main"
+        }
+      ]
+    },
+    "kinetoprotocol": {
+      "repos_count": 1,
+      "members_count": 2,
+      "hooks_count": 0,
+      "secrets_names": [],
+      "repos": [
+        {
+          "name": "kpx-amm-router",
+          "private": false,
+          "default_branch": "main"
+        }
+      ]
+    },
+    "sequentichain": {
+      "repos_count": 1,
+      "members_count": 2,
+      "hooks_count": 0,
+      "secrets_names": [],
+      "repos": [
+        {
+          "name": "sqx-rollup-core",
+          "private": false,
+          "default_branch": "main"
+        }
+      ]
+    },
+    "valiprecision": {
+      "repos_count": 1,
+      "members_count": 2,
+      "hooks_count": 0,
+      "secrets_names": [],
+      "repos": [
+        {
+          "name": "vpx-node-client",
+          "private": false,
+          "default_branch": "main"
+        }
+      ]
+    },
+    "veraciphers": {
+      "repos_count": 1,
+      "members_count": 2,
+      "hooks_count": 0,
+      "secrets_names": [],
+      "repos": [
+        {
+          "name": "vrq-zk-circuits",
+          "private": false,
+          "default_branch": "main"
+        }
+      ]
+    }
+  }
+}

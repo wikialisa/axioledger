@@ -1,0 +1,129 @@
+{
+  "genesis_time": "2026-08-31T10:22:20Z",
+  "chain_id": "axioledger-core-0",
+  "initial_height": "0",
+  "consensus_params": {
+    "block": {
+      "max_bytes": "22020096",
+      "max_gas": "600000000"
+    },
+    "evidence": {
+      "max_age_num_blocks": "100000",
+      "max_age_duration": "172800000000000"
+    },
+    "validator": {
+      "pub_key_types": ["zk_obft_dilithium"]
+    },
+    "zk_obft": {
+      "alpha": "0.6",
+      "beta": "0.4",
+      "gamma": "1000",
+      "micro_epoch_ms": "400",
+      "nakamoto_coefficient_min": "100",
+      "zk_proof_size_bytes": "284",
+      "voting_power_formula": "VP_i = S_i * (alpha * U_i + beta * ln(1 + gamma * B_i))"
+    },
+    "emission": {
+      "equation": "Emission(t) = kappa * ln(1 + dTVL_RWA) + mu * TxVolume(t) - Burn(t)",
+      "kappa": "0.03",
+      "mu": "0.001",
+      "auto_halt_on_zero_rwa": true
+    }
+  },
+  "app_state": {
+    "bank": {
+      "params": {
+        "send_enabled": [],
+        "default_send_enabled": true
+      },
+      "denom_metadata": [
+        {
+          "description": "Native staking and governance token of Axioledger Hub",
+          "denom_units": [
+            { "denom": "uaxq",  "exponent": 0, "aliases": ["microaxq"] },
+            { "denom": "maxq",  "exponent": 3, "aliases": ["milliaxq"] },
+            { "denom": "axq",   "exponent": 6, "aliases": []           }
+          ],
+          "base": "uaxq",
+          "display": "axq",
+          "name": "AXQ Token",
+          "symbol": "AXQ"
+        }
+      ],
+      "balances": [
+        {
+          "address": "axq1_kpx_rwa_vault",
+          "label": "RWA & Institutional Reserve (30%)",
+          "coins": [{ "denom": "uaxq", "amount": "3000000000000000000" }]
+        },
+        {
+          "address": "axq1_vpx_subsidy_pool",
+          "label": "Validator & VPX Mining Rewards (25%)",
+          "coins": [{ "denom": "uaxq", "amount": "2500000000000000000" }]
+        },
+        {
+          "address": "axq1_treasury_dao",
+          "label": "Treasury DAO & Public Goods (20%)",
+          "coins": [{ "denom": "uaxq", "amount": "2000000000000000000" }]
+        },
+        {
+          "address": "axq1_community_amm",
+          "label": "Community, Airdrop & AMM Bootstrap (15%)",
+          "coins": [{ "denom": "uaxq", "amount": "1500000000000000000" }]
+        },
+        {
+          "address": "axq1_core_team_vesting",
+          "label": "Core Team & Partners — 5yr cliff (10%)",
+          "coins": [{ "denom": "uaxq", "amount": "1000000000000000000" }]
+        }
+      ],
+      "supply": [{ "denom": "uaxq", "amount": "10000000000000000000" }],
+      "send_enabled": []
+    },
+    "staking": {
+      "params": {
+        "unbonding_time": "1814400s",
+        "max_validators": 5000,
+        "max_entries": 7,
+        "bond_denom": "uaxq",
+        "min_commission_rate": "0.000000000000000000"
+      }
+    },
+    "slashing": {
+      "params": {
+        "signed_blocks_window": "100",
+        "min_signed_per_window": "0.500000000000000000",
+        "downtime_jail_duration": "600s",
+        "slash_fraction_double_sign": "1.000000000000000000",
+        "slash_fraction_downtime": "0.010000000000000000"
+      },
+      "note": "Double-sign slash = 100% (Instant Slashing — Điều IV Bất Khả Xâm Phạm)"
+    },
+    "gov": {
+      "voting_params": { "voting_period": "172800s" },
+      "deposit_params": {
+        "min_deposit": [{ "denom": "uaxq", "amount": "10000000" }],
+        "max_deposit_period": "172800s"
+      },
+      "tally_params": {
+        "quorum":     "0.334000000000000000",
+        "threshold":  "0.500000000000000000",
+        "veto_threshold": "0.334000000000000000"
+      }
+    },
+    "emission": {
+      "kappa": "0.030000000000000000",
+      "mu":    "0.001000000000000000",
+      "epoch_duration_hours": "6",
+      "deflationary_threshold_year": "3"
+    }
+  },
+  "_meta": {
+    "schema": "axioledger-genesis/v1.0",
+    "recorded_by": "315885655+davictran76@users.noreply.github.com",
+    "devnode": "axioledger-devnode.axq",
+    "ip_lan": "192.168.0.47",
+    "ref_whitepaper": "docs/Whitepaper AXIOLEDGER ($AXQ).md §11.10",
+    "note": "1 AXQ = 10^6 uaxq. Total supply: 10,000,000,000,000 AXQ = 10,000,000,000,000,000,000 uaxq"
+  }
+}

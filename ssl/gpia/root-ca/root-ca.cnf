@@ -1,0 +1,22 @@
+[req]
+default_bits       = 4096
+prompt             = no
+default_md         = sha512
+distinguished_name = dn
+x509_extensions    = v3_root_ca
+string_mask        = utf8only
+
+[dn]
+C  = VN
+ST = Hanoi
+L  = Hanoi
+O  = Axioledger Global Payment Authority
+OU = GPIA Root Operations
+CN = AXIOLEDGER GLOBAL PAYMENT ROOT CA
+
+[v3_root_ca]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints       = critical, CA:TRUE
+keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
+nameConstraints        = critical, permitted;DNS:.axq,permitted;DNS:.vpx,permitted;DNS:.sqx,permitted;DNS:.kpx,permitted;DNS:.vrq,permitted;IP:192.168.0.0/255.255.255.0,permitted;IP:113.22.172.0/255.255.255.0

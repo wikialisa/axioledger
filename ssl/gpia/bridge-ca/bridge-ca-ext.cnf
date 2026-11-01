@@ -1,0 +1,7 @@
+basicConstraints       = critical, CA:TRUE, pathlen:1
+keyUsage               = critical, digitalSignature, cRLSign, keyCertSign
+extendedKeyUsage       = serverAuth, clientAuth, OCSPSigning
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+crlDistributionPoints  = URI:http://crl.axioledger.axq/root.crl
+authorityInfoAccess    = OCSP;URI:http://ocsp.axioledger.axq

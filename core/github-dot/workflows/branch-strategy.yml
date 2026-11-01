@@ -1,0 +1,38 @@
+# .github/workflows/branch-strategy.yml
+# AXIOLEDGER — Branch Naming Enforcement
+#
+# Enforces: {prefix}-* naming for all non-protected branches
+# Prefixes: feat/ fix/ chore/ docs/ security/ refactor/ test/
+
+name: Branch Strategy Enforcement
+
+on:
+  create:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  check-branch-name:
+    name: "Check Branch Name"
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'branch'
+    steps:
+      - name: Validate branch naming convention
+        run: |
+          BRANCH="${{ github.head_ref || github.ref_name }}"
+          PROTECTED="^(main|master|ledger|dev)$"
+
+          if echo "$BRANCH" | grep -qE "$PROTECTED"; then
+            echo "  [✓] Protected branch: $BRANCH"
+            exit 0
+          fi
+
+          VALID="^(feat|fix|chore|docs|security|refactor|test|release|hotfix)\/.+"
+          if echo "$BRANCH" | grep -qE "$VALID"; then
+            echo "  [✓] Branch name valid: $BRANCH"
+          else
+            echo "  [✗] Branch name invalid: $BRANCH"
+            echo "  Required: feat/fix/chore/docs/security/refactor/test/release/hotfix prefix"
+            echo "  Example: feat/vpx-validator-onboarding"
+            exit 1
+          fi

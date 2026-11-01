@@ -1,0 +1,12 @@
+{
+  "name": "@sequentichain/sqx-node",
+  "version": "0.0.1",
+  "description": "SQX Sequencer Node — L2 execution engine, SVM rollup, AF_XDP NIC bypass. STATUS: FROZEN (Phase 3).",
+  "private": true,
+  "scripts": {
+    "build": "echo 'sequentichain-node: frozen — resumes after KPX L1 stabilisation'",
+    "test":  "echo 'no tests yet'"
+  },
+  "license": "BSL-1.1",
+  "engines": { "node": ">=20.0.0" }
+}

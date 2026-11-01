@@ -1,0 +1,46 @@
+node_modules/
+.turbo/
+dist/
+out/
+.next/
+coverage/
+artifacts/
+cache/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.DS_Store
+skill
+# Foundry
+forge-cache/
+broadcast/
+passkey.txt
+# ── SWIFT Bridge — sensitive files (NEVER commit) ────────────────────────────
+# Config cleartext — must encrypt with bin/encrypt.sh; commit only .enc/.ks
+config-swift-mgw.yaml
+**/config-swift-mgw.yaml
+
+# Keystores, private keys, certificates (DP-4 RBAC)
+*.jks
+*.p12
+*.pem
+*.key
+
+# SDK JARs — installed via mvn install:install-file; not tracked in git
+packages/swift-bridge/lib/swift-security-sdk*.jar
+packages/swift-bridge/lib/swift-sdk*.jar
+packages/swift-bridge/target/sdk-outer/
+packages/swift-bridge/target/sdk-inner/
+
+# Maven build output
+packages/swift-bridge/target/
+
+# SSL / PKI directory (if ever added to monorepo — keys must NEVER be committed)
+ssl/**/*.key
+ssl/**/*.pem
+ssl/**/*.csr
+ssl/**/*.crt
+ssl/private/
+ssl/pki/
+keys/

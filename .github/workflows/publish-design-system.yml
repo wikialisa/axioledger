@@ -1,0 +1,97 @@
+name: Publish Design System
+
+on:
+  # Triggered by a version tag: @axioledger/axio-design-system@2.0.0
+  push:
+    tags:
+      - '@axioledger/axio-design-system@*'
+
+  # Also allow manual dispatch for hotfixes
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g. 2.0.1)'
+        required: true
+        type: string
+
+defaults:
+  run:
+    working-directory: design-system
+
+jobs:
+  publish:
+    name: Build → Test → Publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write   # Required to push to GitHub Packages
+
+    steps:
+      # ── Checkout ─────────────────────────────────────────────
+      - uses: actions/checkout@v4
+
+      # ── pnpm + Node ──────────────────────────────────────────
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: design-system/pnpm-lock.yaml
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@axioledger'
+
+      # ── Install ───────────────────────────────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── Typecheck ─────────────────────────────────────────────
+      - name: TypeScript check
+        run: pnpm typecheck
+
+      # ── Test ──────────────────────────────────────────────────
+      - name: Run tests
+        run: pnpm test
+
+      # ── Build ─────────────────────────────────────────────────
+      - name: Build library
+        run: pnpm build
+
+      # ── Bundle size gate ──────────────────────────────────────
+      - name: Check bundle size (< 50KB gzipped)
+        run: node scripts/check-bundle-size.js
+
+      # ── Bump version (manual dispatch only) ───────────────────
+      - name: Bump version
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      # ── Extract version from tag ──────────────────────────────
+      - name: Extract version from tag
+        if: github.event_name == 'push'
+        run: |
+          TAG="${{ github.ref_name }}"
+          VERSION="${TAG#@axioledger/axio-design-system@}"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      # ── Publish to GitHub Packages ────────────────────────────
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Create GitHub Release ─────────────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: '@axioledger/axio-design-system@${{ env.VERSION }}'
+          body_path: design-system/CHANGELOG.md
+          draft: false
+          prerelease: ${{ contains(env.VERSION, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

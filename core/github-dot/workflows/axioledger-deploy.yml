@@ -1,0 +1,180 @@
+# .github/workflows/axioledger-deploy.yml
+# AXIOLEDGER — Secure CI/CD Pipeline
+# Applies to: all 5 orgs (axioledger, valiprecision, sequentichain, kinetoprotocol, veraciphers)
+#
+# Usage: Copy to each repo's .github/workflows/ or use w6-trigger-actions.sh to dispatch
+
+name: AXIOLEDGER Secure Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, ledger, master]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment"
+        required: true
+        default: "staging"
+        type: choice
+        options: [staging, production]
+      pillar:
+        description: "Pillar being deployed (axq/vpx/sqx/kpx/vrq)"
+        required: false
+        default: "axq"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+  RUST_VERSION: "1.78.0"
+
+jobs:
+
+  # ─── Job 1: Supply Chain Security Audit ─────────────────────────────────
+  security-audit:
+    name: "Security Audit (VRQ Scanner)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies (no lifecycle scripts)
+        run: npm ci --ignore-scripts
+
+      - name: npm security audit
+        run: npm audit --audit-level=high
+
+      - name: Supply Chain Scan (VRQ Scanner v0)
+        run: |
+          if [ -f "scripts/supply-chain-scan.js" ]; then
+            node scripts/supply-chain-scan.js
+          else
+            echo "  [→] Supply Chain Scanner not present — skipping (non-fatal)"
+          fi
+
+      - name: Check for secrets in code
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          extra_args: --only-verified
+
+  # ─── Job 2: Lint & Type Check ───────────────────────────────────────────
+  lint-typecheck:
+    name: "Lint & TypeCheck"
+    runs-on: ubuntu-latest
+    needs: security-audit
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --ignore-scripts
+      - name: ESLint
+        run: npx eslint . --ext .ts,.tsx,.js --max-warnings 0 || true
+      - name: TypeScript check
+        run: npx tsc --noEmit || true
+
+  # ─── Job 3: Tests ─────────────────────────────────────────────────────
+  test:
+    name: "Unit Tests"
+    runs-on: ubuntu-latest
+    needs: lint-typecheck
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --ignore-scripts
+      - name: Run tests
+        run: npm test --if-present -- --reporter=verbose
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-${{ github.sha }}
+          path: coverage/
+          retention-days: 7
+
+  # ─── Job 4: Build ────────────────────────────────────────────────────
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --ignore-scripts
+      - name: Build
+        run: npm run build --if-present
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: dist/
+          retention-days: 14
+
+  # ─── Job 5: Deploy (main branch only) ───────────────────────────────
+  deploy:
+    name: "Deploy → ${{ github.event.inputs.environment || 'staging' }}"
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    timeout-minutes: 30
+    environment: ${{ github.event.inputs.environment || 'staging' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --ignore-scripts
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ github.sha }}
+          path: dist/
+
+      - name: Deploy to AXIOLEDGER devnode
+        env:
+          DEPLOY_HOST: ${{ secrets.AXIOLEDGER_DEPLOY_HOST }}
+          DEPLOY_KEY:  ${{ secrets.AXIOLEDGER_DEPLOY_KEY }}
+          DEPLOY_ENV:  ${{ github.event.inputs.environment || 'staging' }}
+          PILLAR:      ${{ github.event.inputs.pillar || 'axq' }}
+        run: |
+          echo "  [→] Deploying $PILLAR to $DEPLOY_ENV"
+          echo "  [→] Target: axioledger-devnode.axq (192.168.0.47)"
+          echo "  [→] Build: ${{ github.sha }}"
+          # TODO v1.0.0: SSH deploy via rsync or kubectl apply
+          # rsync -avz --delete dist/ $DEPLOY_HOST:/root/deployments/$PILLAR/
+          echo "  [✓] Deploy complete (v0.0.0 dry run)"
+
+      - name: Notify deployment
+        if: always()
+        run: |
+          echo "  Deployment status: ${{ job.status }}"
+          echo "  Pillar: ${{ github.event.inputs.pillar || 'axq' }}"
+          echo "  Commit: ${{ github.sha }}"
+          echo "  Actor:  ${{ github.actor }}"

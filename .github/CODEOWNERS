@@ -1,0 +1,41 @@
+# CODEOWNERS — Axioledger Monorepo
+#
+# Format: <path pattern>  <@github-user-or-team>
+# Rules are evaluated in order — the last matching rule wins.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# GitHub Teams referenced here must exist in the org before Branch Protection can enforce them.
+# Teams:   @axioledger/swift-core-team
+#          @axioledger/security-team
+#          @axioledger/sysadmin-team
+#          @axioledger/contract-auditors
+#          @axioledger/backend-team
+
+# ── Default: Lead Engineer reviews everything ─────────────────────────────
+*    @davictran76
+
+# ── SWIFT VRQ / AML pipeline — Security Engineer + Lead required (DP-3) ──
+packages/swift-bridge/src/main/java/com/axioledger/swift/vrq/    @davictran76 @axioledger/security-team
+packages/swift-bridge/src/test/java/com/axioledger/swift/vrq/    @davictran76 @axioledger/security-team
+
+# ── SWIFT GPI client — Backend Lead + Lead ────────────────────────────────
+packages/swift-bridge/src/main/java/com/axioledger/swift/gpi/    @davictran76 @axioledger/backend-team
+packages/swift-bridge/src/main/java/com/axioledger/swift/session/ @davictran76 @axioledger/backend-team
+packages/swift-bridge/src/main/java/com/axioledger/swift/mapper/  @davictran76 @axioledger/backend-team
+packages/swift-bridge/src/main/java/com/axioledger/swift/kpx/     @davictran76 @axioledger/backend-team
+
+# ── SWIFT Bridge pom.xml — Lead + Backend ─────────────────────────────────
+packages/swift-bridge/pom.xml    @davictran76 @axioledger/backend-team
+
+# ── Dedicated Server config & keys — SysAdmin + Security (DP-4) ──────────
+# NOTE: .enc and .ks files should never be committed; this rule is a safety net.
+swift-server/config/    @davictran76 @axioledger/sysadmin-team
+swift-server/keys/      @davictran76 @axioledger/security-team
+
+# ── GitHub Actions workflows — Lead + Security ────────────────────────────
+.github/workflows/    @davictran76 @axioledger/security-team
+.github/CODEOWNERS    @davictran76
+
+# ── Smart contracts — Lead + Contract Auditor ─────────────────────────────
+contracts/            @davictran76 @axioledger/contract-auditors
+smart-contracts/      @davictran76 @axioledger/contract-auditors

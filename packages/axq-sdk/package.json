@@ -1,0 +1,18 @@
+{
+  "name": "@axioledger/axq-sdk",
+  "version": "0.2.0",
+  "description": "AXQ SDK \u2014 TypeScript client for AXIOLEDGER protocol",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "echo \"CJS only \u2014 no build step required\"",
+    "test": "jest --forceExit",
+    "clean": "rm -rf dist"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "viem": "^2.17.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

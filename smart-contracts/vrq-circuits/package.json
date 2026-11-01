@@ -1,0 +1,12 @@
+{
+  "name": "@veraciphers/vrq-circuits",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VRQ ZK circuits — Groth16 KYC proofs, ERC-7579 passkey validator, on-chain verifier",
+  "scripts": {
+    "contracts:build": "forge build",
+    "contracts:test":  "forge test -vvv",
+    "clean":           "forge clean"
+  },
+  "license": "BSL-1.1"
+}

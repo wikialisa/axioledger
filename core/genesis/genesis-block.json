@@ -1,0 +1,64 @@
+{
+  "schema": "axioledger-genesis-block/v1.0",
+  "block": {
+    "number": 0,
+    "chain_id": "axioledger-mainnet-genesis",
+    "network_name": "AXIOLEDGER Hub $AXQ",
+    "timestamp_utc": "2026-08-31T09:41:34Z",
+    "timestamp_unix": 1788169294,
+    "human_readable": "Monday, August 31, 2026 — 09:41:34 UTC",
+    "hash_placeholder": "0x000000000000000000000000GENESIS_BLOCK_AXQ_HUB_2026_08_31",
+    "parent_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "state_root": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "finalized": false,
+    "note": "Genesis Block timestamp recorded. Smart contracts pending deploy (v0.1.0 milestone)."
+  },
+  "genesis_mint": {
+    "total_supply": "10000000000000",
+    "unit": "$AXQ",
+    "decimals": 18,
+    "minted_once": true,
+    "admin_key": null,
+    "remint_possible": false,
+    "distribution": [
+      { "group": "RWA & Institutional Reserve",  "pct": 30, "amount": "3000000000000", "contract": "RWAReserveVault.sol",    "lock": "smart_contract_controlled" },
+      { "group": "Validator & VPX Mining",        "pct": 25, "amount": "2500000000000", "contract": "ValidatorRewardPool.sol","lock": "50yr_logarithmic_decay"   },
+      { "group": "Treasury DAO",                  "pct": 20, "amount": "2000000000000", "contract": "TreasuryDAO.sol",         "lock": "on_chain_governance"       },
+      { "group": "Community & Airdrop",           "pct": 15, "amount": "1500000000000", "contract": "CommunityVault.sol",      "lock": "vesting_schedule"          },
+      { "group": "Core Team & Partners",          "pct": 10, "amount": "1000000000000", "contract": "TeamVestingVault.sol",    "lock": "5yr_cliff_vesting"         }
+    ]
+  },
+  "genesis_contracts": [
+    { "name": "RWAReserveVault",    "role": "RWA & Institutional Reserve lock", "allocation_pct": 30 },
+    { "name": "ValidatorRewardPool","role": "VPX staking rewards — 50yr decay", "allocation_pct": 25 },
+    { "name": "TreasuryDAO",        "role": "On-chain governance & public goods", "allocation_pct": 20 },
+    { "name": "CommunityVault",     "role": "Community airdrop & early adopters", "allocation_pct": 15 },
+    { "name": "TeamVestingVault",   "role": "Core team — 5yr cliff vesting",     "allocation_pct": 10 }
+  ],
+  "immutable_rules": {
+    "max_supply_hard_cap": "10000000000000",
+    "emission_equation": "Emission(t) = kappa * ln(1 + delta_TVL_RWA) + mu * TxVolume(t) - Burn(t)",
+    "auto_halt_on_zero_rwa": true,
+    "admin_key": null,
+    "upgrade_via": "TreasuryDAO governance vote only",
+    "8_inviolable_principles": "Encoded — see docs/Whitepaper AXIOLEDGER ($AXQ).md §8"
+  },
+  "network_params": {
+    "consensus": "ZK-OBFT",
+    "voting_power_formula": "VP_i(t) = S_i(t) * (alpha * U_i(t) + beta * ln(1 + gamma * B_i(t)))",
+    "micro_epoch_ms": 400,
+    "finality_target_sec": 180,
+    "max_tx_fee_usd": 0.001,
+    "nakamoto_coefficient_min": 100,
+    "tps_target": 600000,
+    "post_quantum": "CRYSTALS-Dilithium (NIST FIPS 205) — parallel track",
+    "zk_proof_size_bytes": 284
+  },
+  "devnode": {
+    "hostname": "axioledger-devnode.axq",
+    "ip_lan": "192.168.0.47",
+    "ip_wan": "113.22.172.197",
+    "pki": "GPIA 4-tier hierarchy",
+    "recorded_by": "315885655+davictran76@users.noreply.github.com"
+  }
+}

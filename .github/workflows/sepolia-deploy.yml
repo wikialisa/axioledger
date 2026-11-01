@@ -1,0 +1,302 @@
+# .github/workflows/sepolia-deploy.yml
+# AXIOLEDGER — Sepolia Testnet Deployment Pipeline
+#
+# Triggers:
+#   - Manual (workflow_dispatch) with confirmation input
+#   - Push to branch: release/sepolia-*
+#
+# Required Secrets (repository level):
+#   SEPOLIA_RPC_URL         — Alchemy Sepolia endpoint (https://eth-sepolia.g.alchemy.com/v2/<KEY>)
+#   SEPOLIA_DEPLOYER_PK     — Private key for DEPLOYER address in SepoliaConfig
+#   ETHERSCAN_API_KEY       — For contract verification on Etherscan
+#
+# Required: Deployer 0xAf3D0febB24706912706660FB41D48Fc89548A53 funded with >= 0.05 SepoliaETH ✅
+# Faucets:  https://sepoliafaucet.com  |  https://faucet.quicknode.com/ethereum/sepolia
+#
+# Jobs:
+#   preflight       Validate env, check deployer balance, dry-run simulation
+#   deploy-axq      Deploy AXQToken + AXQVestingVault + AXQGovernance
+#   genesis         Call genesisAllocate(), self-delegate, transfer ownership
+#   verify          Verify contracts on Etherscan
+#   post-deploy     Update identity-declaration.json, notify
+
+name: Sepolia Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type DEPLOY-SEPOLIA to confirm broadcast'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry-run only (no --broadcast)'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+
+  push:
+    branches:
+      - 'release/sepolia-*'
+
+concurrency:
+  group: sepolia-deploy-${{ github.ref }}
+  cancel-in-progress: false  # Never cancel an in-flight deploy
+
+env:
+  FOUNDRY_VERSION: stable
+  CHAIN_ID: 11155111
+  DEPLOYER_ADDRESS: "0xAf3D0febB24706912706660FB41D48Fc89548A53"
+
+jobs:
+  # ── Gate: confirm keyword required for manual dispatch ───────────────────────
+  preflight:
+    name: Preflight — validate inputs and deployer balance
+    runs-on: ubuntu-latest
+    outputs:
+      do_broadcast: ${{ steps.check.outputs.do_broadcast }}
+
+    steps:
+      - name: Validate confirmation keyword (manual trigger only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [[ "${{ github.event.inputs.confirm }}" != "DEPLOY-SEPOLIA" ]]; then
+            echo "::error::Confirmation input must be exactly 'DEPLOY-SEPOLIA'. Got: '${{ github.event.inputs.confirm }}'"
+            exit 1
+          fi
+          echo "Confirmation accepted."
+
+      - name: Determine broadcast flag
+        id: check
+        run: |
+          DRY="${{ github.event.inputs.dry_run }}"
+          # Push to release/* always does a real broadcast
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            DRY="false"
+          fi
+          echo "do_broadcast=$([ "$DRY" = "false" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "Broadcast: $([ "$DRY" = "false" ] && echo YES || echo NO — dry run)"
+
+      - name: Check deployer balance
+        env:
+          SEPOLIA_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
+        run: |
+          if [[ -z "$SEPOLIA_RPC_URL" ]]; then
+            echo "::warning::SEPOLIA_RPC_URL not set — skipping balance check"
+            exit 0
+          fi
+          BALANCE=$(curl -s -X POST "$SEPOLIA_RPC_URL" \
+            -H "Content-Type: application/json" \
+            -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["'"$DEPLOYER_ADDRESS"'","latest"],"id":1}' \
+            | python3 -c "import sys,json; r=json.load(sys.stdin); print(int(r['result'],16))" 2>/dev/null || echo "0")
+          echo "Deployer balance: $BALANCE wei"
+          MIN_BALANCE=20000000000000000  # 0.02 ETH
+          if (( BALANCE < MIN_BALANCE )); then
+            echo "::error::Deployer balance $BALANCE wei < 0.02 ETH minimum."
+            echo "::error::Fund 0xAf3D0febB24706912706660FB41D48Fc89548A53 at https://sepoliafaucet.com"
+            exit 1
+          fi
+          echo "Balance OK: $(python3 -c "print($BALANCE/1e18)") ETH"
+
+  # ── Deploy AXQ contracts ─────────────────────────────────────────────────────
+  deploy-axq:
+    name: Deploy AXQToken + Governance + Vesting
+    runs-on: ubuntu-latest
+    needs: preflight
+    outputs:
+      axq_token:      ${{ steps.parse.outputs.axq_token }}
+      axq_governance: ${{ steps.parse.outputs.axq_governance }}
+      axq_vesting:    ${{ steps.parse.outputs.axq_vesting }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: ${{ env.FOUNDRY_VERSION }}
+
+      - name: Build contracts
+        working-directory: smart-contracts/axioledger-system
+        run: forge build --silent
+
+      - name: Forge script — DeployAxqSepolia
+        id: forge
+        working-directory: smart-contracts/axioledger-system
+        env:
+          SEPOLIA_DEPLOYER_PK: ${{ secrets.SEPOLIA_DEPLOYER_PK }}
+          SEPOLIA_RPC_URL:     ${{ secrets.SEPOLIA_RPC_URL }}
+        run: |
+          BROADCAST_FLAG=""
+          if [[ "${{ needs.preflight.outputs.do_broadcast }}" == "true" ]]; then
+            BROADCAST_FLAG="--broadcast"
+          fi
+
+          forge script script/DeployAxqSepolia.s.sol:DeployAxqSepolia \
+            --rpc-url "$SEPOLIA_RPC_URL" \
+            --private-key "$SEPOLIA_DEPLOYER_PK" \
+            --chain-id ${{ env.CHAIN_ID }} \
+            $BROADCAST_FLAG \
+            -vvv 2>&1 | tee deploy-output.txt
+
+      - name: Parse deployed addresses
+        id: parse
+        working-directory: smart-contracts/axioledger-system
+        run: |
+          # Primary: parse stdout markers emitted by forge script (CI sandbox safe)
+          TOKEN=$(grep "DEPLOY_OUTPUT_TOKEN="      deploy-output.txt | tail -1 | sed 's/.*DEPLOY_OUTPUT_TOKEN=//')
+          VEST=$(grep  "DEPLOY_OUTPUT_VESTING="    deploy-output.txt | tail -1 | sed 's/.*DEPLOY_OUTPUT_VESTING=//')
+          GOV=$(grep   "DEPLOY_OUTPUT_GOVERNANCE=" deploy-output.txt | tail -1 | sed 's/.*DEPLOY_OUTPUT_GOVERNANCE=//')
+
+          # Fallback: try JSON file (works on local runs)
+          if [[ -z "$TOKEN" && -f "script/addresses-sepolia.json" ]]; then
+            TOKEN=$(jq -r '.contracts.axqToken'      script/addresses-sepolia.json)
+            GOV=$(jq   -r '.contracts.axqGovernance' script/addresses-sepolia.json)
+            VEST=$(jq  -r '.contracts.axqVesting'    script/addresses-sepolia.json)
+          fi
+
+          if [[ -n "$TOKEN" && "$TOKEN" != "null" ]]; then
+            echo "axq_token=$TOKEN"      >> "$GITHUB_OUTPUT"
+            echo "axq_governance=$GOV"   >> "$GITHUB_OUTPUT"
+            echo "axq_vesting=$VEST"     >> "$GITHUB_OUTPUT"
+            echo "AXQToken:      $TOKEN"
+            echo "AXQGovernance: $GOV"
+            echo "AXQVesting:    $VEST"
+          else
+            echo "::warning::No deployed addresses found — dry-run or broadcast failed"
+          fi
+
+      - name: Upload addresses artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sepolia-addresses
+          path: smart-contracts/axioledger-system/script/addresses-sepolia.json
+          if-no-files-found: warn
+
+  # ── Genesis: mint + delegate ─────────────────────────────────────────────────
+  genesis:
+    name: Genesis — mint 500B AXQ + delegate
+    runs-on: ubuntu-latest
+    needs: [preflight, deploy-axq]
+    if: needs.preflight.outputs.do_broadcast == 'true' && needs.deploy-axq.outputs.axq_token != ''
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: ${{ env.FOUNDRY_VERSION }}
+
+      - name: Forge script — DeployAxqSepoliaGenesis
+        working-directory: smart-contracts/axioledger-system
+        env:
+          SEPOLIA_DEPLOYER_PK: ${{ secrets.SEPOLIA_DEPLOYER_PK }}
+          SEPOLIA_RPC_URL:     ${{ secrets.SEPOLIA_RPC_URL }}
+          AXQ_TOKEN:      ${{ needs.deploy-axq.outputs.axq_token }}
+          AXQ_GOVERNANCE: ${{ needs.deploy-axq.outputs.axq_governance }}
+        run: |
+          forge script script/DeployAxqSepolia.s.sol:DeployAxqSepoliaGenesis \
+            --rpc-url "$SEPOLIA_RPC_URL" \
+            --private-key "$SEPOLIA_DEPLOYER_PK" \
+            --chain-id ${{ env.CHAIN_ID }} \
+            --broadcast \
+            -vvv
+
+  # ── Verify on Etherscan ───────────────────────────────────────────────────────
+  # Note: depends on deploy-axq only (not genesis) so it runs even when genesis
+  # is skipped (dry-run). Genesis skip does not propagate to verify.
+  verify:
+    name: Verify contracts on Etherscan
+    runs-on: ubuntu-latest
+    needs: [preflight, deploy-axq]
+    if: |
+      needs.preflight.outputs.do_broadcast == 'true' &&
+      needs.deploy-axq.outputs.axq_token != '' &&
+      needs.deploy-axq.outputs.axq_token != 'null'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: ${{ env.FOUNDRY_VERSION }}
+
+      - name: Verify AXQToken
+        working-directory: smart-contracts/axioledger-system
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          TOKEN="${{ needs.deploy-axq.outputs.axq_token }}"
+          if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then exit 0; fi
+          forge verify-contract \
+            --chain sepolia \
+            --etherscan-api-key "$ETHERSCAN_API_KEY" \
+            --watch \
+            "$TOKEN" src/AXQToken.sol:AXQToken || true
+
+      - name: Verify AXQGovernance
+        working-directory: smart-contracts/axioledger-system
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          GOV="${{ needs.deploy-axq.outputs.axq_governance }}"
+          if [[ -z "$GOV" || "$GOV" == "null" ]]; then exit 0; fi
+          forge verify-contract \
+            --chain sepolia \
+            --etherscan-api-key "$ETHERSCAN_API_KEY" \
+            --watch \
+            "$GOV" src/AXQGovernance.sol:AXQGovernance || true
+
+  # ── Post-deploy: update docs ──────────────────────────────────────────────────
+  post-deploy:
+    name: Post-deploy — update identity-declaration.json
+    runs-on: ubuntu-latest
+    needs: [deploy-axq]
+    if: needs.deploy-axq.outputs.axq_token != ''
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update identity-declaration.json with deployed addresses
+        env:
+          TOKEN: ${{ needs.deploy-axq.outputs.axq_token }}
+          GOV:   ${{ needs.deploy-axq.outputs.axq_governance }}
+          VEST:  ${{ needs.deploy-axq.outputs.axq_vesting }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os
+          with open('identity-declaration.json', 'r') as f:
+              doc = json.load(f)
+          for pillar in doc['intermediate_pillars']:
+              if pillar['ticker'] == '$AXQ':
+                  pillar['sepolia_status'] = 'deployed'
+                  pillar['sepolia_contracts'] = {
+                      'axqToken':      os.environ['TOKEN'],
+                      'axqGovernance': os.environ['GOV'],
+                      'axqVesting':    os.environ['VEST'],
+                      'network':       'sepolia',
+                      'chainId':       11155111,
+                  }
+                  break
+          with open('identity-declaration.json', 'w') as f:
+              json.dump(doc, f, indent=2)
+          print(f"Updated identity-declaration.json: AXQToken={os.environ['TOKEN']}")
+          PYEOF
+
+      - name: Commit updated identity-declaration.json
+        run: |
+          git config user.name  "Axioledger Core Maintainer"
+          git config user.email "315885655+davictran76@users.noreply.github.com"
+          git add identity-declaration.json
+          git diff --staged --quiet || \
+            git commit -m "chore(sepolia): record deployed AXQ contract addresses [skip ci]"
+          git push origin HEAD || echo "Push skipped (dry-run or no changes)"

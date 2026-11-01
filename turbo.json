@@ -1,0 +1,60 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs":  [
+        "src/**", "contracts/**", "*.ts", "*.json", "!**/*.test.*",
+        "tokens/**", "scripts/build-tokens.js", "scripts/generate-sprite.cjs"
+      ],
+      "outputs": ["dist/**", "out/**", ".next/**", "!.next/cache/**", "artifacts/**", "public/sprites/**"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs":  ["src/**", "test/**", "contracts/**"],
+      "outputs": ["coverage/**"],
+      "cache": false
+    },
+    "lint": {
+      "inputs":  ["src/**", "*.ts", ".eslintrc*", "eslint.config.*"],
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "inputs":  ["src/**", "tokens/**", "tsconfig*.json"],
+      "outputs": []
+    },
+    "build:tokens": {
+      "inputs":  ["tokens/*.json", "scripts/build-tokens.js"],
+      "outputs": ["tokens/variables.css", "tokens/tokens.gen.ts", "tokens/tailwind.gen.js"]
+    },
+    "prep:icons": {
+      "inputs":  ["scripts/generate-sprite.cjs"],
+      "outputs": ["public/sprites/icons.svg", "src/components/Icon/icon.types.ts"]
+    },
+    "check:hex": {
+      "dependsOn": ["^build"],
+      "inputs":  ["src/components/**/*.tsx", "src/components/**/*.css"],
+      "outputs": [],
+      "cache": false
+    },
+    "dev": {
+      "cache":     false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    },
+    "contracts:build": {
+      "inputs":  ["contracts/**", "src/**", "foundry.toml", "hardhat.config.*"],
+      "outputs": ["out/**", "artifacts/**", "typechain-types/**"]
+    },
+    "contracts:test": {
+      "dependsOn": ["contracts:build"],
+      "inputs":  ["test/**", "contracts/**"],
+      "outputs": [],
+      "cache": false
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@kinetoprotocol/kpx-liquidity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "KPX liquidity contracts — AMM router, LP pools, emission controller, cross-chain bridge",
+  "scripts": {
+    "contracts:build": "forge build",
+    "contracts:test":  "forge test -vvv",
+    "clean":           "forge clean"
+  },
+  "license": "BSL-1.1"
+}

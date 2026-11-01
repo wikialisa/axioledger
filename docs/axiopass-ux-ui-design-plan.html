@@ -1,0 +1,881 @@
+
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AxioPass — UX/UI Design Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 40px 24px 60px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  /* Header */
+  .doc-header { border-bottom: 2px solid #e5e7eb; padding-bottom: 20px; margin-bottom: 32px; }
+  .doc-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .doc-header .subtitle { color: #57606a; font-size: 13px; margin-top: 4px; }
+  .meta-row { display: flex; gap: 24px; margin-top: 14px; flex-wrap: wrap; }
+  .meta-item { font-size: 12px; color: #57606a; }
+  .meta-item strong { color: #1f2328; }
+
+  /* Phase badge */
+  .phase-strip { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .phase-badge {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    border: 1px solid #e5e7eb; background: #f7f8fa; color: #57606a;
+  }
+  .phase-badge.active { background: #3b82d4; color: #fff; border-color: #3b82d4; }
+
+  /* Timeline */
+  .timeline { margin-bottom: 40px; }
+  .timeline h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #57606a; margin-bottom: 14px; }
+  .timeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #e5e7eb; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; }
+  .tg-cell { background: #fff; padding: 12px; }
+  .tg-cell.header { background: #f7f8fa; font-weight: 600; font-size: 12px; color: #57606a; }
+  .tg-cell .phase-label { font-size: 11px; font-weight: 700; color: #3b82d4; margin-bottom: 4px; }
+  .tg-cell .week { font-size: 12px; font-weight: 600; }
+  .tg-cell .scope { font-size: 11px; color: #57606a; margin-top: 2px; }
+  .deliverable-tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 4px;
+    color: #57606a; margin-top: 4px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; margin-bottom: 16px;
+  }
+  .section-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #1f2328; color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .section-title { font-size: 15px; font-weight: 700; }
+  .section-tag { font-size: 11px; color: #57606a; margin-left: auto; }
+
+  /* Screen grid */
+  .screen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .screen-card {
+    border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 12px;
+    background: #fafafa;
+  }
+  .screen-card .sc-name { font-size: 12px; font-weight: 600; color: #1f2328; }
+  .screen-card .sc-desc { font-size: 11px; color: #57606a; margin-top: 2px; line-height: 1.4; }
+  .screen-card .sc-tag { font-size: 10px; margin-top: 5px; }
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .tag-new { background: #dbeafe; color: #1d4ed8; }
+  .tag-critical { background: #fee2e2; color: #b91c1c; }
+  .tag-edge { background: #fef3c7; color: #92400e; }
+  .tag-comp { background: #d1fae5; color: #065f46; }
+
+  /* Spec table */
+  .spec-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12px; }
+  .spec-table th { background: #f7f8fa; padding: 6px 10px; text-align: left; font-weight: 600; color: #57606a; border: 1px solid #e5e7eb; }
+  .spec-table td { padding: 6px 10px; border: 1px solid #e5e7eb; vertical-align: top; }
+  .spec-table tr:nth-child(even) td { background: #fafafa; }
+
+  /* Notes */
+  .note-box {
+    background: #f7f8fa; border-left: 3px solid #3b82d4;
+    padding: 10px 14px; border-radius: 0 6px 6px 0;
+    font-size: 12px; color: #57606a; margin-bottom: 14px;
+  }
+  .note-box strong { color: #1f2328; }
+  .warn-box {
+    background: #fffbeb; border-left: 3px solid #f59e0b;
+    padding: 10px 14px; border-radius: 0 6px 6px 0;
+    font-size: 12px; color: #78350f; margin-bottom: 14px;
+  }
+
+  /* Component inventory */
+  .comp-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .comp-chip {
+    font-size: 11px; padding: 3px 9px; border-radius: 20px;
+    border: 1px solid #e5e7eb; background: #fff; color: #1f2328;
+  }
+
+  /* Handoff checklist */
+  .checklist { list-style: none; margin-bottom: 10px; }
+  .checklist li { font-size: 12px; padding: 3px 0; color: #57606a; }
+  .checklist li::before { content: "□ "; color: #3b82d4; font-weight: 700; }
+
+  /* Priority matrix */
+  .priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .pq-box { border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; }
+  .pq-box .pq-label { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .pq-box .pq-label.p1 { color: #b91c1c; }
+  .pq-box .pq-label.p2 { color: #d97706; }
+  .pq-box .pq-label.p3 { color: #2563eb; }
+  .pq-box .pq-label.p4 { color: #57606a; }
+  .pq-box ul { list-style: none; }
+  .pq-box ul li { font-size: 11px; color: #57606a; padding: 1px 0; }
+  .pq-box ul li::before { content: "→ "; }
+
+  hr.section-sep { border: none; border-top: 1px solid #e5e7eb; margin: 32px 0; }
+
+  footer {
+    margin-top: 48px; padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center; font-size: 12px; color: #57606a;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  
+  <div class="doc-header">
+    <h1>AxioPass Wallet — UX/UI Design Plan</h1>
+    <div class="subtitle">Kế hoạch Wireframe &amp; UI Design · 8 phân khu · iOS-first · Fintech Grade</div>
+    <div class="meta-row">
+      <div class="meta-item"><strong>Phiên bản:</strong> 1.0 Draft</div>
+      <div class="meta-item"><strong>Platform:</strong> iOS 17+ (iPhone 14–16 Pro)</div>
+      <div class="meta-item"><strong>Design tool:</strong> Figma</div>
+      <div class="meta-item"><strong>Screens tổng:</strong> ~120 screens</div>
+      <div class="meta-item"><strong>Tiêu chuẩn:</strong> WCAG 2.1 AA · HIG iOS · PCI-DSS UI</div>
+    </div>
+  </div>
+
+  
+  <div class="phase-strip">
+    <span class="phase-badge active">Phase 1 — Foundation (W1–W3)</span>
+    <span class="phase-badge">Phase 2 — Core Flows (W4–W7)</span>
+    <span class="phase-badge">Phase 3 — Advanced (W8–W11)</span>
+    <span class="phase-badge">Phase 4 — Polish &amp; Handoff (W12)</span>
+  </div>
+
+  
+  <div class="timeline">
+    <h2>Lịch trình 12 tuần</h2>
+    <div class="timeline-grid">
+      <div class="tg-cell header">Giai đoạn</div>
+      <div class="tg-cell header">Tuần</div>
+      <div class="tg-cell header">Phân khu</div>
+      <div class="tg-cell header">Deliverable</div>
+
+      <div class="tg-cell"><div class="phase-label">Phase 1</div></div>
+      <div class="tg-cell"><div class="week">W1–W2</div></div>
+      <div class="tg-cell"><div class="scope">Design System + Onboarding + Auth</div></div>
+      <div class="tg-cell"><span class="deliverable-tag">Figma DS v1</span> <span class="deliverable-tag">Lo-fi Auth</span></div>
+
+      <div class="tg-cell"></div>
+      <div class="tg-cell"><div class="week">W3</div></div>
+      <div class="tg-cell"><div class="scope">KYC Full Flow</div></div>
+      <div class="tg-cell"><span class="deliverable-tag">Lo-fi KYC</span> <span class="deliverable-tag">Prototype</span></div>
+
+      <div class="tg-cell"><div class="phase-label">Phase 2</div></div>
+      <div class="tg-cell"><div class="week">W4–W5</div></div>
+      <div class="tg-cell"><div class="scope">Home · Card · Transfer</div></div>
+      <div class="tg-cell"><span class="deliverable-tag">Hi-fi Home</span> <span class="deliverable-tag">Card flows</span></div>
+
+      <div class="tg-cell"></div>
+      <div class="tg-cell"><div class="week">W6–W7</div></div>
+      <div class="tg-cell"><div class="scope">Crypto/Web3 · Payments</div></div>
+      <div class="tg-cell"><span class="deliverable-tag">Swap UI</span> <span class="deliverable-tag">Tx flows</span></div>
+
+      <div class="tg-cell"><div class="phase-label">Phase 3</div></div>
+      <div class="tg-cell"><div class="week">W8–W10</div></div>
+      <div class="tg-cell"><div class="scope">Profile · Settings · Edge Cases</div></div>
+      <div class="tg-cell"><span class="deliverable-tag">Hi-fi all screens</span></div>
+
+      <div class="tg-cell"><div class="phase-label">Phase 4</div></div>
+      <div class="tg-cell"><div class="week">W11–W12</div></div>
+      <div class="tg-cell"><div class="scope">Accessibility · Annotation · Dev Handoff</div></div>
+      <div class="tg-cell"><span class="deliverable-tag">Zeplin/Inspect</span> <span class="deliverable-tag">Motion spec</span></div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Onboarding &amp; Authentication</div>
+      <div class="section-tag">W1–W2 · 22 screens</div>
+    </div>
+
+    <div class="note-box"><strong>Design principle:</strong> First-impression trust. Mỗi màn hình Onboarding phải truyền tải <em>sự an toàn và tốc độ</em> — zero cognitive load, max 1 action per screen.</div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">Splash Main</div>
+        <div class="sc-desc">Logo center, skeleton shimmer 1.2s, version string muted bottom</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Force Update</div>
+        <div class="sc-desc">Full-screen blocker, CTA "Cập nhật ngay", non-dismissible bottom sheet</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">System Maintenance</div>
+        <div class="sc-desc">Illustration + ETA countdown timer + "Nhận thông báo khi xong"</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Onboarding 1–3</div>
+        <div class="sc-desc">Swipeable slides, progress dots, "Bỏ qua" top-right, last slide CTA primary</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Dynamic Onboarding</div>
+        <div class="sc-desc">UTM/deeplink param → slide content swap. Referral code pre-fill ở Register</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Terms Modal</div>
+        <div class="sc-desc">Bottom sheet, scrollable WebView, sticky "Đồng ý" disabled until scroll end</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Welcome / Select Mode</div>
+        <div class="sc-desc">2 large tap targets: Đăng nhập / Đăng ký. Social login options below divider</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Phone / Email Input</div>
+        <div class="sc-desc">Country code picker (+84 default), inline format validation, keyboard "Next"</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">OTP Input</div>
+        <div class="sc-desc">6-cell auto-advance, SMS autofill, 60s countdown Resend, "Gọi điện" fallback</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Create PIN</div>
+        <div class="sc-desc">Custom numpad (no iOS system), dot indicators, strength hint hidden</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Confirm PIN</div>
+        <div class="sc-desc">Shake + red flash on mismatch, max 3 attempts before reset flow</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Biometrics Prompt</div>
+        <div class="sc-desc">Native Face ID / Touch ID sheet + "Không, dùng PIN" secondary link</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <tr><th>Component</th><th>Spec kỹ thuật</th><th>Ghi chú</th></tr>
+      <tr><td>OTP Timer</td><td>CountdownTimer component, 60s, auto-request SMS fill</td><td>iOS SMS OTP API</td></tr>
+      <tr><td>PIN Pad</td><td>Custom UIView, random layout option, no screenshot</td><td>PCI-DSS compliant</td></tr>
+      <tr><td>Passkey</td><td>ASAuthorizationController, iCloud Keychain sync</td><td>iOS 16+</td></tr>
+      <tr><td>Biometric fallback</td><td>LAContext fallback → PIN after 2 failed attempts</td><td>LocalAuthentication</td></tr>
+    </table>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">KYC &amp; Compliance</div>
+      <div class="section-tag">W3 · 16 screens</div>
+    </div>
+
+    <div class="warn-box"><strong>Compliance note:</strong> Màn hình KYC phải pass AML/FATF checklist. Liveness detection phải đáp ứng ISO 30107-3 PAD Level 2. Toàn bộ ảnh tài liệu không được lưu local — encrypted upload ngay.</div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">KYC Overview</div>
+        <div class="sc-desc">Tier ladder (Tier 1/2/3), hạn mức từng tier, progress stepper 4 bước</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Country Selection</div>
+        <div class="sc-desc">Search + A–Z list, flag icon, blocked country state với lý do</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Doc Type Select</div>
+        <div class="sc-desc">3 options cards: CCCD / Hộ chiếu / Bằng lái. Disabled nếu quốc gia không hỗ trợ</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Doc Guidelines</div>
+        <div class="sc-desc">Bottom sheet với 4 ví dụ ảnh đúng/sai, animation frame guide</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Camera Scan</div>
+        <div class="sc-desc">Overlay frame, auto-capture khi đủ sáng, blur/glare detector realtime</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Image Quality Check</div>
+        <div class="sc-desc">Preview + quality badge (Tốt/Mờ/Chói), Chụp lại / Tiếp tục</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Liveness Detection</div>
+        <div class="sc-desc">Circle overlay, text instruction rotate (nhìn trái, nhìn phải, chớp mắt)</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Proof of Address</div>
+        <div class="sc-desc">Upload PDF/JPG hóa đơn, max 5MB, accepted file types shown</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">FATCA Declaration</div>
+        <div class="sc-desc">Radio: US Person / Non-US, TIN input field, disclaimer text</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">KYC Processing</div>
+        <div class="sc-desc">Lottie spinner, "Đang xác minh (~2 phút)", push notification opt-in</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">KYC Approved</div>
+        <div class="sc-desc">Confetti Lottie, tier badge reveal, CTA "Khám phá ngay"</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">KYC Rejected</div>
+        <div class="sc-desc">Reason code display, illustration, "Thử lại" button, CS chat link</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Home &amp; Dashboard</div>
+      <div class="section-tag">W4 · 10 screens</div>
+    </div>
+
+    <div class="note-box"><strong>Design principle:</strong> Information hierarchy: Balance → Quick Actions → Recent Transactions. Tất cả số liệu tài chính dùng SF Mono (tabular figures). Animation dưới 300ms.</div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">Home Main</div>
+        <div class="sc-desc">Hero card (balance), 4 quick action icons, transaction list infinite scroll</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Balance Details</div>
+        <div class="sc-desc">Multi-currency toggle (VND/USD/USDT), chart sparkline 7/30/90 ngày</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Hide Balance</div>
+        <div class="sc-desc">Tap eye icon → blur overlay, haptic feedback, persisted in UserDefaults</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Cashback Overview</div>
+        <div class="sc-desc">Total cashback card, history list, "Đổi quà" CTA, expiry countdown</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Loyalty Tier</div>
+        <div class="sc-desc">Progress bar đến tier tiếp theo, perks list, member since date</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Quick Actions Editor</div>
+        <div class="sc-desc">Drag-reorder grid, max 4 slots, add/remove from library (12 actions)</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Spending Analytics</div>
+        <div class="sc-desc">Donut chart by category, month picker, top 3 merchant logos</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <tr><th>Thành phần</th><th>Spec</th></tr>
+      <tr><td>Balance hero card</td><td>Glassmorphism subtle, gradient brand, 34px tabular SF Mono</td></tr>
+      <tr><td>Transaction row</td><td>56pt height, merchant logo 36px circle, amount right-aligned</td></tr>
+      <tr><td>Skeleton loading</td><td>ShimmerView 3 rows preloaded, fade-in 200ms khi data ready</td></tr>
+      <tr><td>Pull to refresh</td><td>Native UIRefreshControl với branded tint color</td></tr>
+    </table>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Card Management</div>
+      <div class="section-tag">W5 · 14 screens</div>
+    </div>
+
+    <div class="warn-box"><strong>Security note:</strong> CVV/PAN chỉ hiển thị sau Face ID confirm. Screen recording blocker bật khi màn hình card details active (UITextField.isSecureTextEntry + custom overlay).</div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">Card Center</div>
+        <div class="sc-desc">Carousel swipe cards (3D flip animation), add card FAB, status badges</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Issue Virtual Card</div>
+        <div class="sc-desc">3-step wizard: Loại thẻ → Skin picker → Confirm. Instant issue.</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Issue Physical Card</div>
+        <div class="sc-desc">Address input + map pin, delivery estimate, shipping fee display</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Top-up</div>
+        <div class="sc-desc">Amount input, method selector (bank/crypto), fee breakdown, Confirm</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Card Settings</div>
+        <div class="sc-desc">Toggle rows: Freeze, Online Txn, NFC. Spending limit stepper.</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Reveal Card Details</div>
+        <div class="sc-desc">Face ID gate → PAN / CVV / Expiry appear, 30s auto-hide, no screenshot</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">ATM PIN Setup</div>
+        <div class="sc-desc">Secure numpad, không hiển thị, confirm PIN step, success haptic</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Report Lost Card</div>
+        <div class="sc-desc">Destructive confirm sheet, auto-freeze → order replacement flow</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Add to Apple Wallet</div>
+        <div class="sc-desc">PKAddPassButton native, terms modal, success PKPass animation</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Crypto &amp; Web3 Ecosystem</div>
+      <div class="section-tag">W6 · 18 screens</div>
+    </div>
+
+    <div class="note-box"><strong>Design principle:</strong> Crypto screens phải cân bằng power-user depth với beginner clarity. Gas fee = always visible, never hidden. Network selector = prominent, lỗi sai network phải có warning rõ ràng.</div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">Portfolio Tracker</div>
+        <div class="sc-desc">Total value hero, 24h P&amp;L badge, asset list với mini sparkline mỗi row</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Asset Detail</div>
+        <div class="sc-desc">Price chart (1h/1d/7d/1m), volume bar, TradingView-lite embed</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Swap Interface</div>
+        <div class="sc-desc">From/To token pickers, invert button (rotate animation), rate display</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Slippage Settings</div>
+        <div class="sc-desc">Bottom sheet, 3 presets (0.5/1/3%) + custom input, risk badge &gt;5%</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Gas Fee Settings</div>
+        <div class="sc-desc">Slow/Standard/Fast tiles với USD estimate, ETA, custom gwei input</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Receive</div>
+        <div class="sc-desc">Large QR center, network pill selector, address copy button, share sheet</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Send</div>
+        <div class="sc-desc">Address input + QR scan icon, network selector (ERC20/TRC20/BEP20), amount</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Address Book</div>
+        <div class="sc-desc">Saved wallets list, add/edit/delete, ENS resolution, alias label</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Buy / Sell FIAT</div>
+        <div class="sc-desc">FIAT↔Crypto toggle, payment method picker, rate lock timer (30s)</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Staking List</div>
+        <div class="sc-desc">APY highlight card, duration options, locked/flexible badge</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Stake Flow</div>
+        <div class="sc-desc">Amount slider, projected earnings widget, T&amp;C checkbox, Confirm</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Wrong Network Warning</div>
+        <div class="sc-desc">Full-screen overlay with network mismatch illustration, Switch Network CTA</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Transfer &amp; Payments</div>
+      <div class="section-tag">W7 · 15 screens</div>
+    </div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">Transfer Hub</div>
+        <div class="sc-desc">3 category tabs: Nội bộ / Ngân hàng / Quốc tế. Recent recipients top.</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Recipient Select</div>
+        <div class="sc-desc">Search bar, contacts import, QR scan, manual input fallback</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Amount Input</div>
+        <div class="sc-desc">Large numpad, quick amounts (100k/500k/1M/All), available balance hint</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Tx Review</div>
+        <div class="sc-desc">Summary card: recipient, amount, fee, ETA. Edit pencil icon each row.</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Tx Auth</div>
+        <div class="sc-desc">Method selector: Face ID / PIN / SMS OTP. Hardware key for large amounts.</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Tx Processing</div>
+        <div class="sc-desc">Lottie spinner, estimated time, "Thêm vào Home Screen" deep link</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Tx Receipt</div>
+        <div class="sc-desc">Success illustration, transaction ID, share PDF button, rate transaction</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Tx Failed</div>
+        <div class="sc-desc">Error code + plain-language reason, Thử lại primary, CS Chat secondary</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Bill Payment Hub</div>
+        <div class="sc-desc">Provider grid (EVN, VNPT, FPT...), search, recent bills</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">QR Scanner</div>
+        <div class="sc-desc">Camera overlay, VietQR parse, auto-fill recipient + amount</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Auto-Pay Setup</div>
+        <div class="sc-desc">Recurring schedule picker (ngày/tuần/tháng), max amount cap, confirm</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Account, Profile &amp; Settings</div>
+      <div class="section-tag">W8–W9 · 14 screens</div>
+    </div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">Profile Overview</div>
+        <div class="sc-desc">Avatar, tên, KYC tier badge, referral code copy, member since</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Edit Profile</div>
+        <div class="sc-desc">Avatar picker (camera/gallery/emoji), display name, email (verify required)</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Security Center</div>
+        <div class="sc-desc">Security score gauge, change PIN/password, active sessions list, biometric toggle</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Active Sessions</div>
+        <div class="sc-desc">Device list, last seen, "Đăng xuất tất cả thiết bị khác" destructive action</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Linked Bank Accounts</div>
+        <div class="sc-desc">Bank logo list, account number masked, unlink swipe action, add new</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Language &amp; Region</div>
+        <div class="sc-desc">Language list (VI/EN/ZH), timezone picker, date/number format preview</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Appearance</div>
+        <div class="sc-desc">3-option segment: Light / Dark / System. Live preview card.</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Notifications</div>
+        <div class="sc-desc">Toggle matrix: Push × (Txn/Marketing/Security/Promo), Email toggles</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Help Center</div>
+        <div class="sc-desc">Searchable FAQ, topic categories, "Vẫn cần trợ giúp?" CTA bottom</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Live Chat</div>
+        <div class="sc-desc">In-app chat UI, agent avatar, typing indicator, file attach (image/PDF)</div>
+        <div class="sc-tag"><span class="tag tag-new">New</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div class="section-title">System States &amp; Edge Cases</div>
+      <div class="section-tag">W10 · 11 screens</div>
+    </div>
+
+    <div class="note-box"><strong>Design principle:</strong> Empty states phải có illustration + call-to-action rõ ràng, không bao giờ hiện màn hình trắng. Error messages phải plain language, không dùng error code raw.</div>
+
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="sc-name">No Internet</div>
+        <div class="sc-desc">Offline illustration, toast banner, cache data vẫn visible muted, retry button</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Server Error (500)</div>
+        <div class="sc-desc">Fun illustration, "Chúng tôi đang sửa", incident ID nhỏ, retry + status page link</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Session Expired</div>
+        <div class="sc-desc">Auto-logout modal after 5 min idle, "Đăng nhập lại" button, state preserved</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Empty Transaction</div>
+        <div class="sc-desc">Illustration "Chưa có giao dịch nào", CTA "Thực hiện giao dịch đầu tiên"</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Empty Portfolio</div>
+        <div class="sc-desc">Illustration, "Mua Crypto đầu tiên" CTA, market trending bar below</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Empty Cards</div>
+        <div class="sc-desc">Card outline dashed, "Phát hành thẻ đầu tiên" primary CTA</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Jailbreak Warning</div>
+        <div class="sc-desc">Full-screen blocker, không dismissible, contact support link only</div>
+        <div class="sc-tag"><span class="tag tag-critical">Critical path</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Account Blocked</div>
+        <div class="sc-desc">Reason summary, unblock guide steps, escalation CS button</div>
+        <div class="sc-tag"><span class="tag tag-edge">Edge case</span></div>
+      </div>
+      <div class="screen-card">
+        <div class="sc-name">Screenshot Blocked</div>
+        <div class="sc-desc">UITextField.isSecureTextEntry + custom black overlay khi screenshot detected</div>
+        <div class="sc-tag"><span class="tag tag-comp">Compliance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:#3b82d4">P</div>
+      <div class="section-title">Ma trận Ưu tiên Thiết kế</div>
+    </div>
+    <div class="priority-grid">
+      <div class="pq-box">
+        <div class="pq-label p1">P1 — Phải có (Sprint 1–2)</div>
+        <ul>
+          <li>Splash + Force Update</li>
+          <li>Auth full flow (Phone → OTP → PIN → Biometric)</li>
+          <li>KYC Camera Scan + Liveness</li>
+          <li>Home Main + Balance</li>
+          <li>Tx Review → Auth → Receipt → Failed</li>
+          <li>Reveal Card Details (Face ID gate)</li>
+          <li>Jailbreak Warning</li>
+          <li>No Internet + Server Error</li>
+        </ul>
+      </div>
+      <div class="pq-box">
+        <div class="pq-label p2">P2 — Nên có (Sprint 3–4)</div>
+        <ul>
+          <li>Dynamic Onboarding</li>
+          <li>KYC FATCA + Proof of Address</li>
+          <li>Card Issue Flow + Apple Wallet</li>
+          <li>Crypto Send/Receive/Swap</li>
+          <li>Transfer Hub + QR Scanner</li>
+          <li>Security Center + Active Sessions</li>
+          <li>Auto-Pay Setup</li>
+        </ul>
+      </div>
+      <div class="pq-box">
+        <div class="pq-label p3">P3 — Tốt nếu có (Sprint 5–6)</div>
+        <ul>
+          <li>Cashback + Loyalty Tier</li>
+          <li>Spending Analytics</li>
+          <li>Staking / Earn flows</li>
+          <li>Address Book</li>
+          <li>Quick Actions Editor</li>
+          <li>Live Chat Support</li>
+          <li>Notification Preferences matrix</li>
+        </ul>
+      </div>
+      <div class="pq-box">
+        <div class="pq-label p4">P4 — Tương lai</div>
+        <ul>
+          <li>TradingView chart embed</li>
+          <li>Voucher/Coupon Store</li>
+          <li>Multi-language &gt;2</li>
+          <li>Physical Card skin picker</li>
+          <li>Report Lost Card flow</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:#7c5cd8">DS</div>
+      <div class="section-title">Design System — Component Inventory</div>
+    </div>
+
+    <table class="spec-table">
+      <tr><th>Category</th><th>Components</th><th>Ghi chú</th></tr>
+      <tr><td>Foundations</td><td>Color tokens, Typography scale, Spacing 4px grid, Radius (4/8/12/16/full)</td><td>Light + Dark mode</td></tr>
+      <tr><td>Forms</td><td>TextInput (default/focus/error/disabled), PhoneInput, PINPad, OTPInput, Numpad</td><td>WCAG contrast AA</td></tr>
+      <tr><td>Buttons</td><td>Primary, Secondary, Ghost, Destructive, Icon-only, FAB, Loading state</td><td>44pt min tap target</td></tr>
+      <tr><td>Cards</td><td>BalanceCard, AssetRow, TransactionRow, ScreenCard, StatusCard</td><td>Skeleton variants</td></tr>
+      <tr><td>Navigation</td><td>TabBar (5 items), NavigationBar, Bottom Sheet (half/full/drag), Modal</td><td>Safe area aware</td></tr>
+      <tr><td>Feedback</td><td>Toast (success/error/warning/info), AlertDialog, ActionSheet, Haptics map</td><td>VoiceOver labeled</td></tr>
+      <tr><td>Data viz</td><td>SparkLine, LineChart, DonutChart, ProgressBar, GaugeMeter</td><td>Accessible colors</td></tr>
+      <tr><td>Security</td><td>BiometricPrompt wrapper, ScreenshotBlocker, SecureField overlay</td><td>PCI-DSS</td></tr>
+      <tr><td>Loading</td><td>ShimmerView (list/card/chart), SkeletonScreen, LottiePlayer</td><td>Lottie 4.x</td></tr>
+    </table>
+
+    <div class="comp-row">
+      <span class="comp-chip">SF Pro Display</span>
+      <span class="comp-chip">SF Mono (numbers)</span>
+      <span class="comp-chip">Dynamic Type</span>
+      <span class="comp-chip">4px base grid</span>
+      <span class="comp-chip">44pt tap targets</span>
+      <span class="comp-chip">Dark mode tokens</span>
+      <span class="comp-chip">Lottie animations</span>
+      <span class="comp-chip">Haptics map</span>
+      <span class="comp-chip">VoiceOver labels</span>
+    </div>
+  </div>
+
+  <hr class="section-sep" />
+
+  
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="background:#57606a">H</div>
+      <div class="section-title">Dev Handoff Checklist (W11–W12)</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">Figma Deliverables</div>
+        <ul class="checklist">
+          <li>All screens hi-fi với auto-layout</li>
+          <li>Component library published (Figma DS)</li>
+          <li>Interactive prototype (critical path flows)</li>
+          <li>Redline annotations (spacing/radius/color)</li>
+          <li>Asset export 1x/2x/3x + SVG icons</li>
+          <li>Motion spec (duration/easing/trigger)</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">QA &amp; Accessibility</div>
+        <ul class="checklist">
+          <li>WCAG 2.1 AA contrast audit</li>
+          <li>VoiceOver labels tất cả interactive elements</li>
+          <li>Dynamic Type test (xSmall → AX5)</li>
+          <li>Dark mode parity check</li>
+          <li>Safe area / notch / Dynamic Island test</li>
+          <li>iPhone SE (375pt) min layout test</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>AxioPass Wallet · UX/UI Design Plan v1.0 · ~120 screens · iOS 17+</div>
+    <div style="margin-top:4px">Made with IBM Bob</div>
+  </footer>
+
+</div>
+</body>
+</html>

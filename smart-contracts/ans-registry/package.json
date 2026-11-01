@@ -1,0 +1,12 @@
+{
+  "name": "@axioledger/ans-registry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ANS Registry contracts — .axq/.vpx/.sqx/.kpx/.vrq domain registration + resolver",
+  "scripts": {
+    "contracts:build": "forge build",
+    "contracts:test":  "forge test -vvv",
+    "clean":           "forge clean"
+  },
+  "license": "BSL-1.1"
+}

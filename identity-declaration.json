@@ -1,0 +1,192 @@
+{
+  "ecosystem": "AXIOLEDGER",
+  "version": "2.0.0",
+  "schema": "axioledger-identity/v2",
+  "timestamp": "2026-08-31T08:09:06Z",
+  "declaration_date": "2026-09-02T00:00:00Z",
+  "loc_target": 500000,
+  "valuation_vnd": "10,000,000,000,000",
+  "valuation_usd_approx": "390,000,000",
+  "root_authority": {
+    "name": "Axioledger Root CA",
+    "subject": "/C=VN/ST=Hanoi/L=Hanoi/O=Axioledger Foundation/OU=Core Settlement Hub/CN=Axioledger Root CA",
+    "algorithm": "RSA-4096 (self-signed)",
+    "serial": "4E9AF158A110D804F7BD69E32E0FAF1EB4DBDB6A",
+    "fingerprint_sha256": "01:5D:37:79:B6:33:AC:2B:19:CF:49:22:42:22:AD:B9:A8:74:1E:CA:04:57:3D:4F:A6:F1:B1:E0:FF:95:9A:F9",
+    "not_before": "2026-08-31T08:09:06Z",
+    "not_after": "2036-08-28T08:09:06Z",
+    "path": "ssl/pki/ca/axioledger-root-ca.crt"
+  },
+  "intermediate_pillars": [
+    {
+      "pillar": "Axioledger",
+      "ticker": "$AXQ",
+      "ans_tld": ".axq",
+      "org": "Axioledger Foundation",
+      "github_org": "axioledger",
+      "npm_scope": "@axioledger",
+      "cert_cn": "Axq Hub Intermediate CA",
+      "cert_file": "axq-intermediate.crt",
+      "serial": "1513E105F0E9DA5F094C778EE6B9602F166B1D3A",
+      "fingerprint_sha256": "88:AD:EA:0D:64:0D:35:11:60:E1:76:FE:81:AE:75:3E:95:AD:42:1A:1C:EB:48:BA:27:C0:BF:AC:5F:26:C0:AB",
+      "not_before": "2026-08-31T08:09:08Z",
+      "not_after": "2031-08-30T08:09:08Z",
+      "loc_allocation": 50000,
+      "license": "BSL-1.1",
+      "sepolia_deployer": "0xAf3D0febB24706912706660FB41D48Fc89548A53",
+      "deploy_script": "smart-contracts/axioledger-system/script/DeployAxqSepolia.s.sol",
+      "sepolia_status": "deployed",
+      "sepolia_contracts": {
+        "axqToken":      "0xE5b7C16c2724B9C5d7625b74FA8AD884A27Af432",
+        "axqGovernance": "0xACA9fEB74DFF1260f51827C114444511C3d27847",
+        "axqVesting":    "0x6d47Fb42D43ad381eC65bC005eB21532a704BB7e",
+        "rdTreasury":    "0x9B7AF512e3E5d2C27FFf9d53814883DAeca08AE4",
+        "kpxRouter":     "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+        "ansRegistry":   "",
+        "network":       "sepolia",
+        "chainId":       11155111,
+        "deployedAt":    "2026-09-03",
+        "genesis":       "genesisAllocate() called — 500B AXQ minted"
+      }
+    },
+    {
+      "pillar": "Valiprecision",
+      "ticker": "$VPX",
+      "ans_tld": ".vpx",
+      "org": "Valiprecision Network Ltd.",
+      "github_org": "valiprecision",
+      "npm_scope": "@valiprecision",
+      "cert_cn": "Valiprecision Intermediate CA",
+      "cert_file": "vpx-intermediate.crt",
+      "serial": "1513E105F0E9DA5F094C778EE6B9602F166B1D3B",
+      "fingerprint_sha256": "FC:DF:EA:02:0C:3B:80:F2:70:35:DF:8C:79:0F:F4:41:5F:3D:45:95:77:3D:AF:DA:C5:F5:23:EF:29:1F:A8:48",
+      "not_before": "2026-08-31T08:09:10Z",
+      "not_after": "2031-08-30T08:09:10Z",
+      "loc_allocation": 120000,
+      "license": "BSL-1.1",
+      "deployed": {
+        "network": "Sepolia",
+        "contract": "VPXOracleFeed",
+        "status": "live"
+      }
+    },
+    {
+      "pillar": "Sequentichain",
+      "ticker": "$SQX",
+      "ans_tld": ".sqx",
+      "org": "Sequentichain Infrastructure Inc.",
+      "github_org": "sequentichain",
+      "npm_scope": "@sequentichain",
+      "cert_cn": "Sequentichain Intermediate CA",
+      "cert_file": "sqx-intermediate.crt",
+      "serial": "1513E105F0E9DA5F094C778EE6B9602F166B1D3C",
+      "fingerprint_sha256": "89:FA:65:81:E7:27:14:B3:2C:53:B6:84:E8:85:72:E0:BE:85:CF:68:65:C3:02:EE:C6:00:EB:71:41:C2:DB:C5",
+      "not_before": "2026-08-31T08:09:11Z",
+      "not_after": "2031-08-30T08:09:11Z",
+      "loc_allocation": 150000,
+      "license": "BSL-1.1",
+      "status": "FROZEN \u2014 Phase 3"
+    },
+    {
+      "pillar": "Kinetoprotocol",
+      "ticker": "$KPX",
+      "ans_tld": ".kpx",
+      "org": "Kineto Protocol Foundation",
+      "github_org": "kinetoprotocol",
+      "npm_scope": "@kinetoprotocol",
+      "cert_cn": "Kinetoprotocol Intermediate CA",
+      "cert_file": "kpx-intermediate.crt",
+      "serial": "1513E105F0E9DA5F094C778EE6B9602F166B1D3D",
+      "fingerprint_sha256": "7F:B4:00:2F:2B:FE:17:37:98:25:26:55:BA:92:8B:0E:68:68:D5:A8:66:90:8D:06:66:67:C0:0A:BA:B4:F1:B1",
+      "not_before": "2026-08-31T08:09:13Z",
+      "not_after": "2031-08-30T08:09:13Z",
+      "loc_allocation": 80000,
+      "license": "BSL-1.1",
+      "deployed": {
+        "network": "Sepolia",
+        "contract": "KPXRouterGateway",
+        "status": "live"
+      }
+    },
+    {
+      "pillar": "Veraciphers",
+      "ticker": "$VRQ",
+      "ans_tld": ".vrq",
+      "org": "Veraciphers Cryptography Ltd.",
+      "github_org": "veraciphers",
+      "npm_scope": "@veraciphers",
+      "cert_cn": "Veraciphers Intermediate CA",
+      "cert_file": "vrq-intermediate.crt",
+      "serial": "1513E105F0E9DA5F094C778EE6B9602F166B1D3E",
+      "fingerprint_sha256": "75:4F:2E:EB:F9:32:CA:BF:62:87:EF:F0:96:7F:3A:EB:F3:A2:A1:E7:20:B0:EB:F7:0C:48:FA:81:2B:A7:E3:F2",
+      "not_before": "2026-08-31T08:09:15Z",
+      "not_after": "2031-08-30T08:09:15Z",
+      "loc_allocation": 100000,
+      "license": "BSL-1.1",
+      "deployed": {
+        "network": "Sepolia",
+        "contract": "VRQPasskeyValidator",
+        "status": "live"
+      }
+    }
+  ],
+  "code_author": {
+    "gpg_key_id": "B1EE6B2116DA203D",
+    "gpg_fingerprint": "D19C5C5D42834783A67EB8E1B1EE6B2116DA203D",
+    "gpg_uid": "Axioledger Core (Axioledger Core Protocol Inc.) <core@axqprotocol.axq>",
+    "gpg_algorithm": "ed25519",
+    "gpg_created": "2026-08-28"
+  },
+  "supported_domains": [
+    "axqprotocol.axq",
+    "axqchain.axq",
+    "vpxchain.vpx",
+    "vpx.it.com",
+    "sqxledger.sqx",
+    "sqx.world",
+    "kpxprotocol.kpx",
+    "kpx.world",
+    "vrqledger.vrq",
+    "vrq.world"
+  ],
+  "monorepo": {
+    "repository": "https://github.com/axioledger/axioledger",
+    "turborepo": true,
+    "package_manager": "pnpm@9.7.1",
+    "workspaces": [
+      "apps/axq-governance-ui",
+      "apps/axiopass-wallet",
+      "apps/kpx-dex-frontend",
+      "packages/axio-design-system",
+      "packages/axq-sdk",
+      "packages/ans-resolver",
+      "packages/zkp-crypto-lib",
+      "packages/evm-interop",
+      "core-nodes/valiprecision-node",
+      "core-nodes/sequentichain-node",
+      "smart-contracts/axioledger-system",
+      "smart-contracts/ans-registry",
+      "smart-contracts/kpx-liquidity",
+      "smart-contracts/vrq-circuits"
+    ]
+  },
+  "licensing": {
+    "core_protocol": "BSL-1.1 (Business Source License)",
+    "public_sdks": "MIT",
+    "public_libraries": "Apache-2.0",
+    "applications": "AGPL-3.0"
+  },
+  "legal_notice": "This declaration constitutes a legally binding statement of intellectual property ownership. The cryptographic fingerprints herein serve as tamper-evident proof of authorship under international IP law. Unauthorized commercial use of BSL-1.1 licensed components is prohibited without an explicit commercial license from Axioledger Foundation.",
+  "_proof": {
+    "sha256_payload": "ed67a1f2833f3c6c73237f0aefa6812faf1976efcf3249ecc37868599f268870",
+    "algorithm": "RSA-SHA256 signed with Axioledger Root CA private key (RSA-4096)",
+    "signed_by": "Axioledger Root CA \u2014 /C=VN/ST=Hanoi/L=Hanoi/O=Axioledger Foundation/OU=Core Settlement Hub/CN=Axioledger Root CA",
+    "cert_serial": "4E9AF158A110D804F7BD69E32E0FAF1EB4DBDB6A",
+    "cert_fingerprint_sha256": "01:5D:37:79:B6:33:AC:2B:19:CF:49:22:42:22:AD:B9:A8:74:1E:CA:04:57:3D:4F:A6:F1:B1:E0:FF:95:9A:F9",
+    "signature_base64": "YvfuAKPKrTdrEy9mBew0xoPWSfDOQO5cNZ5FOqvEoV2DrjgyhjWr8kymWXgqEsF+2yYhp/Lrs/KF7/knavj4tmmC14zFFkI8Zcttohwbvx1B8EC1j3a5/DM7Wpfc81bz5ldQYmegiH44BuYwQyDHSGETNL0qqk0T50Z2lAOPCsn8SRMm5Glk29h00ZDkSCH/wLT0RswOkkG/p0ItXVNLAkaw1/o4GX3eTBfpVF7v6bRe//1rD/5vg1XiL31QCh0FOCbWj69jYXbA1WMzyJ9nsuPfeYhghdjiPZmyQjkNlPb12EA3CsUcMEUTNs27dRMXWywuLXOC0flRWtB9LXDlLmH+tcNszh9sql6R/7fhfUdE5wwqG+dxul1QxNVUh/G9usnlLJPx7R5tED/TzGZNbpXnnrPHQ2b9+Pd6fm+npnCQ45m646Gzxp/KIBt5iu+gU4Vzg9kGb9GBwZ5mGj8e8Feb+Mg/l6RKIVL/s6Rfxe+JH9kR++of0ZxMT6disWbfgmxXA2MugD+dqMvk8/To+Nzj+KV+js9p4KExZvCwES2wIZtk1jw1YUnY+bx/luUF2MczlmsFOSurwLzz62gZNnBTRlKjqqCC0n/A3vMguokF13VqQ2Dw2EUbMuP9ztVSaNgdV+Z860j9LQeZzThwUlTZ2wxDbMggDsiJXRWzrww=",
+    "verification": "openssl dgst -sha256 -verify <(openssl x509 -in ssl/pki/ca/axioledger-root-ca.crt -pubkey -noout) -signature <(base64 -d <<< SIGNATURE_B64) identity-declaration.json",
+    "gpg_key_id": "B1EE6B2116DA203D",
+    "gpg_fingerprint": "D19C5C5D42834783A67EB8E1B1EE6B2116DA203D",
+    "note": "GPG signing available via: gpg --local-user core@axqprotocol.axq --armor --detach-sign identity-declaration.json"
+  }
+}

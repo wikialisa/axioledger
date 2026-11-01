@@ -1,0 +1,279 @@
+# .github/workflows/deploy-staging.yml
+# AXIOLEDGER Frontend Staging Deployment
+#
+# Deploys both apps to Cloudflare Pages on every push to `main`.
+# Optionally pins the build output to IPFS via web3.storage (Filecoin-backed).
+#
+# Architecture:
+#   GitHub Actions → build Next.js (static export) → Cloudflare Pages
+#                                                   → IPFS (web3.storage)
+#
+# Required Secrets (Settings → Secrets → Actions):
+#   CF_API_TOKEN          — Cloudflare API token with Pages:Edit permission
+#   CF_ACCOUNT_ID         — Cloudflare account ID (found in dashboard URL)
+#   W3S_TOKEN             — web3.storage API token (for IPFS pinning, optional)
+#   NODE_AUTH_TOKEN       — GitHub PAT read:packages (for @axioledger packages)
+#
+# Required Cloudflare Pages projects (create once in CF dashboard):
+#   axiopass-wallet        → Production domain: axiopass.pages.dev
+#   axio-governance        → Production domain: axio-governance.pages.dev
+#
+# Environment Variables injected at build time (set in CF Pages dashboard):
+#   NEXT_PUBLIC_NETWORK    = sepolia
+#   NEXT_PUBLIC_RPC_URL    = (set per-project in CF Pages env vars)
+#   NEXT_PUBLIC_AXQ_TOKEN  = (set per-project)
+#   ... (see .env.localnet for full list)
+
+name: "🚀 Deploy Staging"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'design-system/tokens/**'
+
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "Which app to deploy (both | axiopass-wallet | axq-governance-ui)"
+        required: false
+        default: "both"
+      environment:
+        description: "Target environment"
+        type: choice
+        options: [staging, production]
+        default: staging
+
+concurrency:
+  group: deploy-staging-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # ── Determine which apps changed ────────────────────────────────────────────
+  changes:
+    name: "🔍 Detect changes"
+    runs-on: ubuntu-latest
+    outputs:
+      wallet:     ${{ steps.filter.outputs.wallet }}
+      governance: ${{ steps.filter.outputs.governance }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            wallet:
+              - 'apps/axiopass-wallet/**'
+              - 'packages/**'
+              - 'design-system/tokens/**'
+            governance:
+              - 'apps/axq-governance-ui/**'
+              - 'packages/**'
+              - 'design-system/tokens/**'
+
+  # ── Build axiopass-wallet ───────────────────────────────────────────────────
+  build-wallet:
+    name: "🏗️ Build axiopass-wallet"
+    runs-on: ubuntu-latest
+    needs: changes
+    if: |
+      needs.changes.outputs.wallet == 'true' ||
+      github.event.inputs.app == 'axiopass-wallet' ||
+      github.event.inputs.app == 'both'
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@axioledger"
+          cache: "pnpm"
+
+      - name: "📦 Install"
+        run: pnpm install --no-frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN || 'dummy' }}
+
+      - name: "🏗️ Build (static export)"
+        run: pnpm --filter axiopass-wallet build
+        env:
+          # Sepolia staging values — override via CF Pages env vars in production
+          NEXT_PUBLIC_NETWORK:        sepolia
+          NEXT_PUBLIC_CHAIN_ID:       "11155111"
+          NEXT_PUBLIC_RPC_URL:        "https://eth-sepolia.g.alchemy.com/v2/demo"
+          NEXT_PUBLIC_AXQ_TOKEN:      ${{ vars.STAGING_AXQ_TOKEN       || '' }}
+          NEXT_PUBLIC_ANS_REGISTRY:   ${{ vars.STAGING_ANS_REGISTRY    || '' }}
+          NEXT_PUBLIC_AXQ_GOVERNANCE: ${{ vars.STAGING_AXQ_GOVERNANCE  || '' }}
+          NEXT_PUBLIC_VRQ_VALIDATOR:  ${{ vars.STAGING_VRQ_VALIDATOR   || '' }}
+          NEXT_PUBLIC_ENABLE_MOCK_PASSKEY: "false"
+
+      - name: "📤 Upload wallet build"
+        uses: actions/upload-artifact@v4
+        with:
+          name: wallet-build-${{ github.sha }}
+          path: apps/axiopass-wallet/.next/
+          retention-days: 3
+
+  # ── Build axq-governance-ui ─────────────────────────────────────────────────
+  build-governance:
+    name: "🏗️ Build axq-governance-ui"
+    runs-on: ubuntu-latest
+    needs: changes
+    if: |
+      needs.changes.outputs.governance == 'true' ||
+      github.event.inputs.app == 'axq-governance-ui' ||
+      github.event.inputs.app == 'both'
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@axioledger"
+          cache: "pnpm"
+
+      - name: "📦 Install"
+        run: pnpm install --no-frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN || 'dummy' }}
+
+      - name: "🏗️ Build"
+        run: pnpm --filter axq-governance-ui build
+        env:
+          NEXT_PUBLIC_NETWORK:        sepolia
+          NEXT_PUBLIC_CHAIN_ID:       "11155111"
+          NEXT_PUBLIC_RPC_URL:        "https://eth-sepolia.g.alchemy.com/v2/demo"
+          NEXT_PUBLIC_AXQ_TOKEN:      ${{ vars.STAGING_AXQ_TOKEN       || '' }}
+          NEXT_PUBLIC_ANS_REGISTRY:   ${{ vars.STAGING_ANS_REGISTRY    || '' }}
+          NEXT_PUBLIC_AXQ_GOVERNANCE: ${{ vars.STAGING_AXQ_GOVERNANCE  || '' }}
+
+      - name: "📤 Upload governance build"
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-build-${{ github.sha }}
+          path: apps/axq-governance-ui/.next/
+          retention-days: 3
+
+  # ── Deploy to Cloudflare Pages ───────────────────────────────────────────────
+  deploy-wallet-cf:
+    name: "☁️ CF Pages — axiopass-wallet"
+    runs-on: ubuntu-latest
+    needs: build-wallet
+    if: needs.build-wallet.result == 'success'
+    timeout-minutes: 10
+    environment:
+      name: staging-wallet
+      url: "https://axiopass.pages.dev"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "📥 Download wallet build"
+        uses: actions/download-artifact@v4
+        with:
+          name: wallet-build-${{ github.sha }}
+          path: apps/axiopass-wallet/.next/
+
+      - name: "🚀 Deploy to Cloudflare Pages"
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken:     ${{ secrets.CF_API_TOKEN }}
+          accountId:    ${{ secrets.CF_ACCOUNT_ID }}
+          projectName:  axiopass-wallet
+          directory:    apps/axiopass-wallet/.next/
+          gitHubToken:  ${{ secrets.GITHUB_TOKEN }}
+          branch:       ${{ github.event.inputs.environment == 'production' && 'main' || 'staging' }}
+
+  deploy-governance-cf:
+    name: "☁️ CF Pages — axq-governance-ui"
+    runs-on: ubuntu-latest
+    needs: build-governance
+    if: needs.build-governance.result == 'success'
+    timeout-minutes: 10
+    environment:
+      name: staging-governance
+      url: "https://axio-governance.pages.dev"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "📥 Download governance build"
+        uses: actions/download-artifact@v4
+        with:
+          name: governance-build-${{ github.sha }}
+          path: apps/axq-governance-ui/.next/
+
+      - name: "🚀 Deploy to Cloudflare Pages"
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken:     ${{ secrets.CF_API_TOKEN }}
+          accountId:    ${{ secrets.CF_ACCOUNT_ID }}
+          projectName:  axio-governance
+          directory:    apps/axq-governance-ui/.next/
+          gitHubToken:  ${{ secrets.GITHUB_TOKEN }}
+          branch:       ${{ github.event.inputs.environment == 'production' && 'main' || 'staging' }}
+
+  # ── IPFS Pinning (optional — set W3S_TOKEN secret to enable) ────────────────
+  ipfs-pin:
+    name: "📡 IPFS Pin (Filecoin)"
+    runs-on: ubuntu-latest
+    needs: [build-wallet, build-governance]
+    if: |
+      (needs.build-wallet.result == 'success' || needs.build-governance.result == 'success') &&
+      secrets.W3S_TOKEN != ''
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+
+      - name: "📥 Download builds"
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*-build-${{ github.sha }}"
+          path: staging-builds/
+          merge-multiple: true
+
+      - name: "📡 Pin to IPFS via web3.storage"
+        run: |
+          npx w3 up staging-builds/ --name "axioledger-staging-${{ github.sha }}" \
+            2>&1 | tee /tmp/ipfs-out.txt
+          CID=$(grep -oE 'bafy[a-z0-9]+' /tmp/ipfs-out.txt | head -1)
+          echo "## 📡 IPFS Published" >> $GITHUB_STEP_SUMMARY
+          echo "CID: \`$CID\`" >> $GITHUB_STEP_SUMMARY
+          echo "Gateway: https://w3s.link/ipfs/$CID" >> $GITHUB_STEP_SUMMARY
+        env:
+          W3_PRINCIPAL: ${{ secrets.W3S_TOKEN }}
+
+  # ── Deployment summary ───────────────────────────────────────────────────────
+  summary:
+    name: "📋 Deployment Summary"
+    runs-on: ubuntu-latest
+    needs: [deploy-wallet-cf, deploy-governance-cf]
+    if: always()
+    steps:
+      - name: "Write summary"
+        run: |
+          echo "## 🚀 Staging Deployment — ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| App | Status | URL |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| axiopass-wallet | ${{ needs.deploy-wallet-cf.result }} | https://axiopass.pages.dev |" >> $GITHUB_STEP_SUMMARY
+          echo "| axq-governance-ui | ${{ needs.deploy-governance-cf.result }} | https://axio-governance.pages.dev |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Triggered by: **${{ github.actor }}** on \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY

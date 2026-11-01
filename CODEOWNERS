@@ -1,0 +1,47 @@
+# CODEOWNERS
+# Axioledger Monorepo — SWIFT Integration Layer & Smart Contracts
+#
+# Format: <pattern>  <owner1> <owner2> ...
+# Owners are GitHub usernames or team slugs (@org/team-name).
+# All listed owners must approve before merge (Branch Protection: Require CODEOWNERS review).
+#
+# Reference: Mục VIII.8.3 — KẾ HOẠCH TÍCH HỢP SWIFT v3.1
+
+# ── Default: Lead Engineer reviews everything ─────────────────────────────
+*                                               @davictran76
+
+# ── SWIFT Bridge — PII-critical files (DP-3) ─────────────────────────────
+# SwiftVrqAmlChecker and ZK-related code: Security Engineer bắt buộc
+packages/swift-bridge/src/main/java/com/axioledger/swift/vrq/   @davictran76 @security-lead
+packages/swift-bridge/src/main/java/com/axioledger/swift/gpi/   @davictran76 @backend-lead
+packages/swift-bridge/src/main/java/com/axioledger/swift/session/ @davictran76 @backend-lead
+packages/swift-bridge/src/main/java/com/axioledger/swift/kpx/   @davictran76 @backend-lead
+packages/swift-bridge/pom.xml                                    @davictran76 @backend-lead
+
+# ── SWIFT Server config (DP-4) ────────────────────────────────────────────
+# SysAdmin + Security Engineer bắt buộc — KHÔNG có cleartext config
+swift-server/                                   @davictran76 @sysadmin-lead @security-lead
+
+# ── GitHub Workflows ──────────────────────────────────────────────────────
+# CI changes: Lead + Security phải approve
+.github/workflows/                              @davictran76 @security-lead
+.github/pull_request_template.md                @davictran76
+CODEOWNERS                                      @davictran76 @security-lead
+
+# ── Smart Contracts ───────────────────────────────────────────────────────
+# Contract auditor bắt buộc cho mọi thay đổi Solidity
+smart-contracts/                                @davictran76 @contract-auditor
+smart-contracts/axioledger-system/              @davictran76 @contract-auditor
+smart-contracts/kpx-liquidity/                  @davictran76 @contract-auditor
+smart-contracts/vrq-circuits/                   @davictran76 @contract-auditor @security-lead
+
+# ── ZK Crypto Library ─────────────────────────────────────────────────────
+packages/zkp-crypto-lib/                        @davictran76 @security-lead
+
+# ── KPX / Cross-chain Bridge ──────────────────────────────────────────────
+packages/axq-sdk/                               @davictran76 @backend-lead
+packages/evm-interop/                           @davictran76 @backend-lead
+
+# ── Design System ─────────────────────────────────────────────────────────
+packages/axio-design-system/                    @davictran76
+design-system/                                  @davictran76

@@ -1,0 +1,7 @@
+[user]
+	name = Axioledger Core Maintainer
+	email = core@axqprotocol.axq
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input

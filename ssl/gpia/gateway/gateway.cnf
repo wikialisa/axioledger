@@ -1,0 +1,40 @@
+[req]
+default_bits       = 2048
+prompt             = no
+default_md         = sha256
+distinguished_name = dn
+req_extensions     = v3_gateway
+
+[dn]
+C  = VN
+ST = Hanoi
+O  = Axioledger Global Payment Authority
+OU = Payment Gateway Services
+CN = AXIOLEDGER PAYMENT GATEWAY
+
+[v3_gateway]
+subjectKeyIdentifier = hash
+basicConstraints     = CA:FALSE
+keyUsage             = critical, digitalSignature, keyEncipherment
+extendedKeyUsage     = serverAuth, clientAuth
+subjectAltName       = @alt_gw
+crlDistributionPoints = URI:http://crl.axioledger.axq/gateway.crl
+authorityInfoAccess   = OCSP;URI:http://ocsp.axioledger.axq
+
+[alt_gw]
+DNS.1  = axqprotocol.axq
+DNS.2  = axqchain.axq
+DNS.3  = api.axioledger.axq
+DNS.4  = rpc.axioledger.axq
+DNS.5  = ws.axioledger.axq
+DNS.6  = vpxchain.vpx
+DNS.7  = rpc.valiprecision.vpx
+DNS.8  = sqxledger.sqx
+DNS.9  = rpc.sequentichain.sqx
+DNS.10 = kpxprotocol.kpx
+DNS.11 = amm.kinetoprotocol.kpx
+DNS.12 = vrqledger.vrq
+DNS.13 = did.veraciphers.vrq
+DNS.14 = axioledger-devnode.axq
+IP.1   = 192.168.0.47
+IP.2   = 113.22.172.197
