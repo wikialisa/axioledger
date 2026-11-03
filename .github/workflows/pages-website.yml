@@ -67,7 +67,9 @@ jobs:
       - name: "📦 Install dependencies"
         # --filter axioledger-website installs only the website and its deps.
         # The website has no workspace cross-dependencies, so this is fast.
-        run: pnpm install --filter axioledger-website --frozen-lockfile
+        # --no-frozen-lockfile: lockfile may drift after workspace additions;
+        # frozen-lockfile is enforced separately by the monorepo CI workflow.
+        run: pnpm install --filter axioledger-website --no-frozen-lockfile
 
       - name: "⚙️ Configure GitHub Pages"
         id: pages
