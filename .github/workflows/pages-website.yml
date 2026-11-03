@@ -11,7 +11,7 @@
 #      → Workflow permissions → "Read and write permissions"
 #
 # The workflow triggers on:
-#   - Push to main that touches apps/website/** or design-system/tokens/**
+#   - Push to master that touches apps/website/** or design-system/tokens/**
 #   - Manual dispatch from the Actions tab
 #
 # No secrets required — the site is fully static and contains no credentials.
@@ -20,7 +20,7 @@ name: "🌐 Deploy Website to GitHub Pages"
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master", "main"]
     paths:
       - "apps/website/**"
       - "design-system/tokens/**"
