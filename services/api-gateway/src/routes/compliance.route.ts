@@ -39,12 +39,16 @@ complianceRouter.get("/nd284/audit-log", requireAdmin, (req, res) => {
 });
 
 // ─── POST /api/v1/compliance/aml/verify ──────────────────────────────────────
-complianceRouter.post("/aml/verify", async (req, res) => {
+// requireCompliance: only compliance officers may trigger AML checks on arbitrary transactions.
+// userId is taken from the authenticated JWT (req.user.sub), not from the request body,
+// to prevent IDOR — callers cannot check risk scores for other users' transactions.
+complianceRouter.post("/aml/verify", requireCompliance, async (req, res) => {
   const body = req.body as AMLVerifyRequest;
-  if (!body.transactionId || !body.userId || !body.amount || !body.asset) {
+  if (!body.transactionId || !body.amount || !body.asset) {
     fail(res, "Thiếu thông tin AML check", 400, "VALIDATION_ERROR");
     return;
   }
+  const userId = req.user!.sub;
   const amount = parseFloat(body.amount);
   // Simple rule-based scoring — replace with Chainalysis/TRM integration
   let riskScore = 0;

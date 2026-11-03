@@ -1,19 +1,65 @@
 packages:
-  # ─── Apps (user-facing frontends & wallets) ────────────────────────────────
-  - "apps/*"
+  # ════════════════════════════════════════════════════════════════════
+  #  LAYER 0 — KERNEL  (foundation primitives — no upstream deps)
+  # ════════════════════════════════════════════════════════════════════
+  - "libraries/core"            # runtime helpers: lodash, tslib
+  - "libraries/validation"      # schema engine: zod
+  - "libraries/network"         # HTTP client: axios + zod
+  - "libraries/ui-runtime"      # VDOM binding: react (peer)
+  - "libraries/server-runtime"  # HTTP server: express + helmet + cors
+  - "libraries/cli-engine"      # CLI toolkit: commander + inquirer + chalk
 
-  # ─── Design System (Unified v6 — single source of truth) ──────────────────
-  - "design-system"
-
-  # ─── Shared packages (libraries, SDKs) ────────────────────────────────────
-  # NOTE: packages/axio-design-system has been removed (superseded by design-system/).
-  #       Remaining packages: axq-sdk, evm-interop, swift-bridge.
+  # ════════════════════════════════════════════════════════════════════
+  #  LAYER 1 — DOMAIN PACKAGES  (depend on libraries/*, never on apps)
+  # ════════════════════════════════════════════════════════════════════
+  # — Existing / legacy domain SDKs —
   - "packages/axq-sdk"
   - "packages/evm-interop"
   - "packages/swift-bridge"
+  - "packages/ans-resolver"
+  - "packages/zkp-crypto-lib"
+  - "packages/config"
+  - "packages/types"
+  - "packages/db"
+  - "packages/core-sdk"
+  - "packages/ui-kit"
+  - "packages/merchant-sdk"
+  - "packages/sdk-internal"
+  - "packages/sdk-swift"
+  - "packages/swift-adapter"
+  - "packages/contracts"
 
-  # ─── Core nodes (validator, sequencer — non-JS stubs / FFI bindings) ───────
+  # — New architecture domain packages —
+  - "packages/frontend"         # UI component kit  → ui-runtime, network
+  - "packages/backend"          # Core controllers  → server-runtime, validation
+  - "packages/cli"              # Binary tooling    → cli-engine, core
+  - "packages/docs"             # Auto-doc engine   → frontend, cli-engine
+  - "packages/css"              # Design tokens     → frontend
+  - "packages/testing"          # Test harness      → core, server-runtime
+  - "packages/coverage"         # Quality gates     → cli-engine
+  - "packages/mobile"           # Cross-platform    → ui-runtime, network
+  - "packages/frameworks"       # Plugin loader     → core, validation
+  - "packages/iot"              # MQTT/telemetry    → network, validation
+  - "packages/robotics"         # HAL + kinematics  → math, iot
+  - "packages/math"             # Vec/Mat/fixed-pt  → core
+
+  # ════════════════════════════════════════════════════════════════════
+  #  LAYER 2 — DESIGN SYSTEM  (single source of truth for all UI)
+  # ════════════════════════════════════════════════════════════════════
+  - "design-system"
+
+  # ════════════════════════════════════════════════════════════════════
+  #  LAYER 3 — APPLICATIONS  (user-facing; may depend on any layer)
+  # ════════════════════════════════════════════════════════════════════
+  - "apps/*"
+
+  # ════════════════════════════════════════════════════════════════════
+  #  LAYER 4 — PROTOCOL NODES  (validator, sequencer — FFI / non-JS)
+  # ════════════════════════════════════════════════════════════════════
   - "core-nodes/*"
 
-  # ─── Smart contracts (Solidity / Forge workspaces) ─────────────────────────
+  # ════════════════════════════════════════════════════════════════════
+  #  LAYER 5 — ON-CHAIN  (Solidity / Foundry / Anchor Rust)
+  # ════════════════════════════════════════════════════════════════════
   - "smart-contracts/*"
+  - "programs/*"

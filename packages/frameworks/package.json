@@ -1,0 +1,25 @@
+{
+  "name": "@axioledger/frameworks",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SDK connector, plugin loader, dynamic module loader — meta-framework orchestration layer",
+  "license": "BSL-1.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/runtime/node.ts",
+    "./browser": "./src/runtime/browser.ts"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@axioledger/core": "workspace:*",
+    "@axioledger/validation": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

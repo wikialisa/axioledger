@@ -1,0 +1,354 @@
+# docker-compose.apps.yml — AXIOLEDGER Frontend Applications
+#
+# Quản lý riêng 15 Next.js apps. Chạy cùng với docker-compose.yml (backend stack):
+#
+#   docker compose \
+#     -f tooling/deploy/docker/docker-compose.yml \
+#     -f tooling/deploy/docker/docker-compose.apps.yml \
+#     up -d
+#
+# Port mapping (host:container):
+#   3000 — website
+#   3001 — id-fiat-gateway
+#   3002 — pay-portal
+#   3003 — explorer-vnkrscan
+#   3004 — swap-dex
+#   3005 — dao-portal
+#   3006 — holding-admin-portal
+#   3007 — axiopass-wallet
+#   3008 — axq-governance-ui
+#   3009 — kpx-dex-frontend
+#   3010 — app-web
+#   3011 — merchant-portal
+#   3012 — sandbox-dashboard
+#   3013 — kyc-portal
+#   3014 — digital-twin-engine (worker — no HTTP port)
+
+version: "3.9"
+
+x-app-build: &app-build
+  context: ../..
+  args:
+    NODE_ENV: production
+
+x-app-defaults: &app-defaults
+  restart: unless-stopped
+  env_file:
+    - ../../.env
+  networks:
+    - AXVN-network
+
+services:
+
+  # ── axioledger-website [website.${BRAND_DOMAIN}] ───────────────────────────
+  website:
+    build:
+      <<: *app-build
+      dockerfile: apps/website/Dockerfile
+      args:
+        APP_NAME: axioledger-website
+    image: axvn/website:${TAG:-latest}
+    container_name: AXVN-website
+    <<: *app-defaults
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── id-fiat-gateway [id.${BRAND_DOMAIN}] ──────────────────────────────────
+  id-fiat-gateway:
+    build:
+      <<: *app-build
+      dockerfile: apps/id-fiat-gateway/Dockerfile
+      args:
+        APP_NAME: id-fiat-gateway
+    image: axvn/id-fiat-gateway:${TAG:-latest}
+    container_name: AXVN-id-fiat-gateway
+    <<: *app-defaults
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── pay-portal [pay.${BRAND_DOMAIN}] ──────────────────────────────────────
+  pay-portal:
+    build:
+      <<: *app-build
+      dockerfile: apps/pay-portal/Dockerfile
+      args:
+        APP_NAME: pay-portal
+    image: axvn/pay-portal:${TAG:-latest}
+    container_name: AXVN-pay-portal
+    <<: *app-defaults
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3002/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── explorer-vnkrscan [scan.${BRAND_DOMAIN}] ──────────────────────────────
+  explorer-vnkrscan:
+    build:
+      <<: *app-build
+      dockerfile: apps/explorer-vnkrscan/Dockerfile
+      args:
+        APP_NAME: explorer-vnkrscan
+    image: axvn/explorer-vnkrscan:${TAG:-latest}
+    container_name: AXVN-explorer-vnkrscan
+    <<: *app-defaults
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+      NEXT_PUBLIC_APPCHAIN_RPC: ${APPCHAIN_RPC:-http://localhost:8545}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3003/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── swap-dex [swap.${BRAND_DOMAIN}] ───────────────────────────────────────
+  swap-dex:
+    build:
+      <<: *app-build
+      dockerfile: apps/swap-dex/Dockerfile
+      args:
+        APP_NAME: swap-dex
+    image: axvn/swap-dex:${TAG:-latest}
+    container_name: AXVN-swap-dex
+    <<: *app-defaults
+    ports:
+      - "3004:3004"
+    environment:
+      PORT: 3004
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3004/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── dao-portal [dao.${BRAND_DOMAIN}] ──────────────────────────────────────
+  dao-portal:
+    build:
+      <<: *app-build
+      dockerfile: apps/dao-portal/Dockerfile
+      args:
+        APP_NAME: dao-portal
+    image: axvn/dao-portal:${TAG:-latest}
+    container_name: AXVN-dao-portal
+    <<: *app-defaults
+    ports:
+      - "3005:3005"
+    environment:
+      PORT: 3005
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3005/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── holding-admin-portal [holding.${BRAND_DOMAIN}] ────────────────────────
+  holding-admin-portal:
+    build:
+      <<: *app-build
+      dockerfile: apps/holding-admin-portal/Dockerfile
+      args:
+        APP_NAME: holding-admin-portal
+    image: axvn/holding-admin-portal:${TAG:-latest}
+    container_name: AXVN-holding-admin-portal
+    <<: *app-defaults
+    ports:
+      - "3006:3006"
+    environment:
+      PORT: 3006
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3006/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── axiopass-wallet [wallet.${BRAND_DOMAIN}] ──────────────────────────────
+  axiopass-wallet:
+    build:
+      <<: *app-build
+      dockerfile: apps/axiopass-wallet/Dockerfile
+      args:
+        APP_NAME: axiopass-wallet
+    image: axvn/axiopass-wallet:${TAG:-latest}
+    container_name: AXVN-axiopass-wallet
+    <<: *app-defaults
+    ports:
+      - "3007:3007"
+    environment:
+      PORT: 3007
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3007/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── axq-governance-ui [gov.${BRAND_DOMAIN}] ───────────────────────────────
+  axq-governance-ui:
+    build:
+      <<: *app-build
+      dockerfile: apps/axq-governance-ui/Dockerfile
+      args:
+        APP_NAME: axq-governance-ui
+    image: axvn/axq-governance-ui:${TAG:-latest}
+    container_name: AXVN-axq-governance-ui
+    <<: *app-defaults
+    ports:
+      - "3008:3008"
+    environment:
+      PORT: 3008
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3008/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── kpx-dex-frontend [dex.${BRAND_DOMAIN}] ────────────────────────────────
+  kpx-dex-frontend:
+    build:
+      <<: *app-build
+      dockerfile: apps/kpx-dex-frontend/Dockerfile
+      args:
+        APP_NAME: kpx-dex-frontend
+    image: axvn/kpx-dex-frontend:${TAG:-latest}
+    container_name: AXVN-kpx-dex-frontend
+    <<: *app-defaults
+    ports:
+      - "3009:3009"
+    environment:
+      PORT: 3009
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3009/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── app-web [app.${BRAND_DOMAIN}] ─────────────────────────────────────────
+  app-web:
+    build:
+      <<: *app-build
+      dockerfile: apps/app-web/Dockerfile
+      args:
+        APP_NAME: app-web
+    image: axvn/app-web:${TAG:-latest}
+    container_name: AXVN-app-web
+    <<: *app-defaults
+    ports:
+      - "3010:3010"
+    environment:
+      PORT: 3010
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3010/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── merchant-portal [merchant.${BRAND_DOMAIN}] ────────────────────────────
+  merchant-portal:
+    build:
+      <<: *app-build
+      dockerfile: apps/merchant-portal/Dockerfile
+      args:
+        APP_NAME: merchant-portal
+    image: axvn/merchant-portal:${TAG:-latest}
+    container_name: AXVN-merchant-portal
+    <<: *app-defaults
+    ports:
+      - "3011:3011"
+    environment:
+      PORT: 3011
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3011/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── sandbox-dashboard [sandbox.${BRAND_DOMAIN}] ───────────────────────────
+  sandbox-dashboard:
+    build:
+      <<: *app-build
+      dockerfile: apps/sandbox-dashboard/Dockerfile
+      args:
+        APP_NAME: sandbox-dashboard
+    image: axvn/sandbox-dashboard:${TAG:-latest}
+    container_name: AXVN-sandbox-dashboard
+    <<: *app-defaults
+    ports:
+      - "3012:3012"
+    environment:
+      PORT: 3012
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3012/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── kyc-portal [kyc.${BRAND_DOMAIN}] ──────────────────────────────────────
+  kyc-portal:
+    build:
+      <<: *app-build
+      dockerfile: apps/kyc-portal/Dockerfile
+      args:
+        APP_NAME: kyc-portal
+    image: axvn/kyc-portal:${TAG:-latest}
+    container_name: AXVN-kyc-portal
+    <<: *app-defaults
+    ports:
+      - "3013:3013"
+    environment:
+      PORT: 3013
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3013/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── digital-twin-engine (worker — no HTTP) ────────────────────────────────
+  digital-twin-engine:
+    build:
+      <<: *app-build
+      dockerfile: apps/digital-twin-engine/Dockerfile
+      args:
+        APP_NAME: digital-twin-engine
+    image: axvn/digital-twin-engine:${TAG:-latest}
+    container_name: AXVN-digital-twin-engine
+    <<: *app-defaults
+    environment:
+      NODE_ENV: production
+      APPCHAIN_RPC: ${APPCHAIN_RPC:-http://localhost:8545}
+
+networks:
+  AXVN-network:
+    external: true

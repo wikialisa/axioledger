@@ -1,0 +1,24 @@
+{
+  "name": "@axioledger/css",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design token system, CSS variables engine, typography & layout resets",
+  "license": "BSL-1.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens": "./src/tokens.ts",
+    "./reset": "./src/reset.css"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@axioledger/frontend": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

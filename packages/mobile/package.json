@@ -1,0 +1,25 @@
+{
+  "name": "@axioledger/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cross-platform runtime adapter — native storage bridge, React Native compatibility layer",
+  "license": "BSL-1.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/runtime/node.ts",
+    "./browser": "./src/runtime/browser.ts"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@axioledger/ui-runtime": "workspace:*",
+    "@axioledger/network": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

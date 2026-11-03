@@ -1,7 +1,7 @@
 import Ajv, { type ValidateFunction } from "ajv";
 import fs from "node:fs";
 import path from "node:path";
-import { execSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 /** Default path to the JSON schema bundled with the SWIFT vendor SDK */
 const DEFAULT_SCHEMA_PATH = path.resolve(
@@ -99,10 +99,7 @@ export class SwiftConfigManager {
       options?.jarPath ??
       path.join(path.dirname(this.schemaPath), "file-encryptor-decryptor-2.17.1-3.jar");
 
-    execSync(
-      `java -jar "${jar}" encrypt -i "${inputYaml}" -o "${outputEncrypted}" -k "${secretKey}"`,
-      { stdio: "inherit" }
-    );
+    this._runJar(jar, ["encrypt", "-i", inputYaml, "-o", outputEncrypted, "-k", secretKey]);
   }
 
   /**
@@ -118,10 +115,20 @@ export class SwiftConfigManager {
       options?.jarPath ??
       path.join(path.dirname(this.schemaPath), "file-encryptor-decryptor-2.17.1-3.jar");
 
-    execSync(
-      `java -jar "${jar}" decrypt -i "${inputEncrypted}" -o "${outputYaml}" -k "${secretKey}"`,
-      { stdio: "inherit" }
-    );
+    this._runJar(jar, ["decrypt", "-i", inputEncrypted, "-o", outputYaml, "-k", secretKey]);
+  }
+
+  /**
+   * Run the vendor JAR with the given args using spawnSync (no shell expansion).
+   * stdio: "pipe" keeps secretKey out of process-list log collectors.
+   */
+  private _runJar(jar: string, args: string[]): void {
+    const result = spawnSync("java", ["-jar", jar, ...args], { stdio: "pipe" });
+    if (result.error) throw result.error;
+    if (result.status !== 0) {
+      const stderr = result.stderr?.toString().trim() ?? "";
+      throw new Error(`SwiftConfigManager JAR exited ${result.status}: ${stderr}`);
+    }
   }
 
   // ─── Template helpers ───────────────────────────────────────────────────────

@@ -1,8 +1,14 @@
 import jwt from "jsonwebtoken";
 
-const ACCESS_SECRET = process.env.JWT_SECRET ?? "change_me_in_production";
-const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET ?? "change_refresh_me";
-const ACCESS_EXPIRE = process.env.JWT_EXPIRE ?? "15m";
+function requireEnv(name: string): string {
+  const val = process.env[name];
+  if (!val) throw new Error(`Missing required environment variable: ${name}`);
+  return val;
+}
+
+const ACCESS_SECRET  = requireEnv("JWT_SECRET");
+const REFRESH_SECRET = requireEnv("REFRESH_TOKEN_SECRET");
+const ACCESS_EXPIRE  = process.env.JWT_EXPIRE ?? "15m";
 const REFRESH_EXPIRE = process.env.REFRESH_TOKEN_EXPIRE ?? "7d";
 
 export interface JWTPayload {

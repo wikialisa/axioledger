@@ -1,47 +1,171 @@
-# CODEOWNERS
-# Axioledger Monorepo — SWIFT Integration Layer & Smart Contracts
+# CODEOWNERS — AXIOLEDGER Monorepo
 #
-# Format: <pattern>  <owner1> <owner2> ...
-# Owners are GitHub usernames or team slugs (@org/team-name).
-# All listed owners must approve before merge (Branch Protection: Require CODEOWNERS review).
+# Tổ chức theo 6-layer kiến trúc + 5-Pillar governance.
+# Mỗi tầng có một nhóm phụ trách bắt buộc review.
+# Tất cả thay đổi đều phải qua @wikialisa (Lead Architect).
 #
-# Reference: Mục VIII.8.3 — KẾ HOẠCH TÍCH HỢP SWIFT v3.1
+# Format : <glob-pattern>    <@github-user-or-@org/team>
+# Docs   : https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# ══════════════════════════════════════════════════════════════════════════════
+#  DEFAULT — Lead Architect reviews everything
+# ══════════════════════════════════════════════════════════════════════════════
+*                                                   @wikialisa
 
-# ── Default: Lead Engineer reviews everything ─────────────────────────────
-*                                               @davictran76
+# ══════════════════════════════════════════════════════════════════════════════
+#  LAYER 0 — KERNEL  (libraries/)
+#  Owner: @kernel-team
+#  Kỹ năng: TypeScript compiler internals, runtime binding, zero-dep design
+# ══════════════════════════════════════════════════════════════════════════════
+libraries/                                          @wikialisa @kernel-team
+libraries/core/                                     @wikialisa @kernel-team
+libraries/validation/                               @wikialisa @kernel-team
+libraries/network/                                  @wikialisa @kernel-team @backend-lead
+libraries/ui-runtime/                               @wikialisa @kernel-team @frontend-lead
+libraries/server-runtime/                           @wikialisa @kernel-team @backend-lead
+libraries/cli-engine/                               @wikialisa @kernel-team @devtools-lead
 
-# ── SWIFT Bridge — PII-critical files (DP-3) ─────────────────────────────
-# SwiftVrqAmlChecker and ZK-related code: Security Engineer bắt buộc
-packages/swift-bridge/src/main/java/com/axioledger/swift/vrq/   @davictran76 @security-lead
-packages/swift-bridge/src/main/java/com/axioledger/swift/gpi/   @davictran76 @backend-lead
-packages/swift-bridge/src/main/java/com/axioledger/swift/session/ @davictran76 @backend-lead
-packages/swift-bridge/src/main/java/com/axioledger/swift/kpx/   @davictran76 @backend-lead
-packages/swift-bridge/pom.xml                                    @davictran76 @backend-lead
+# ══════════════════════════════════════════════════════════════════════════════
+#  LAYER 1 — DOMAIN PACKAGES  (packages/)
+#  Sub-owners theo domain, @wikialisa luôn là default approver cuối
+# ══════════════════════════════════════════════════════════════════════════════
 
-# ── SWIFT Server config (DP-4) ────────────────────────────────────────────
-# SysAdmin + Security Engineer bắt buộc — KHÔNG có cleartext config
-swift-server/                                   @davictran76 @sysadmin-lead @security-lead
+# — New Architecture Domain Packages —
+packages/frontend/                                  @wikialisa @frontend-lead
+packages/backend/                                   @wikialisa @backend-lead
+packages/cli/                                       @wikialisa @devtools-lead
+packages/docs/                                      @wikialisa @devtools-lead @frontend-lead
+packages/css/                                       @wikialisa @frontend-lead @design-lead
+packages/testing/                                   @wikialisa @qa-lead
+packages/coverage/                                  @wikialisa @qa-lead @devtools-lead
+packages/mobile/                                    @wikialisa @mobile-lead
+packages/frameworks/                                @wikialisa @kernel-team @backend-lead
+packages/iot/                                       @wikialisa @iot-lead @backend-lead
+packages/robotics/                                  @wikialisa @iot-lead
+packages/math/                                      @wikialisa @kernel-team
 
-# ── GitHub Workflows ──────────────────────────────────────────────────────
-# CI changes: Lead + Security phải approve
-.github/workflows/                              @davictran76 @security-lead
-.github/pull_request_template.md                @davictran76
-CODEOWNERS                                      @davictran76 @security-lead
+# — Domain SDKs (existing) —
+packages/axq-sdk/                                   @wikialisa @backend-lead
+packages/evm-interop/                               @wikialisa @backend-lead @contract-auditor
+packages/ans-resolver/                              @wikialisa @backend-lead
+packages/zkp-crypto-lib/                            @wikialisa @security-lead
+packages/swift-bridge/                              @wikialisa @backend-lead @security-lead
+packages/swift-adapter/                             @wikialisa @backend-lead @security-lead
+packages/sdk-swift/                                 @wikialisa @backend-lead
+packages/sdk-internal/                              @wikialisa @backend-lead @security-lead
+packages/merchant-sdk/                              @wikialisa @backend-lead
+packages/core-sdk/                                  @wikialisa @backend-lead
+packages/ui-kit/                                    @wikialisa @frontend-lead @design-lead
+packages/types/                                     @wikialisa @kernel-team
+packages/config/                                    @wikialisa @backend-lead @sysadmin-lead
+packages/db/                                        @wikialisa @backend-lead
+packages/contracts/                                 @wikialisa @contract-auditor
 
-# ── Smart Contracts ───────────────────────────────────────────────────────
-# Contract auditor bắt buộc cho mọi thay đổi Solidity
-smart-contracts/                                @davictran76 @contract-auditor
-smart-contracts/axioledger-system/              @davictran76 @contract-auditor
-smart-contracts/kpx-liquidity/                  @davictran76 @contract-auditor
-smart-contracts/vrq-circuits/                   @davictran76 @contract-auditor @security-lead
+# ══════════════════════════════════════════════════════════════════════════════
+#  LAYER 2 — DESIGN SYSTEM  (design-system/)
+#  Owner: @design-lead + @frontend-lead
+# ══════════════════════════════════════════════════════════════════════════════
+design-system/                                      @wikialisa @design-lead @frontend-lead
+design-system/tokens/                               @wikialisa @design-lead
+design-system/src/components/                       @wikialisa @frontend-lead @design-lead
 
-# ── ZK Crypto Library ─────────────────────────────────────────────────────
-packages/zkp-crypto-lib/                        @davictran76 @security-lead
+# ══════════════════════════════════════════════════════════════════════════════
+#  LAYER 3 — APPLICATIONS  (apps/)
+#  Owner theo product vertical
+# ══════════════════════════════════════════════════════════════════════════════
+apps/                                               @wikialisa @frontend-lead
+apps/app-web/                                       @wikialisa @frontend-lead
+apps/axiopass-wallet/                               @wikialisa @security-lead @frontend-lead
+apps/axq-governance-ui/                             @wikialisa @frontend-lead @contract-auditor
+apps/dao-portal/                                    @wikialisa @frontend-lead @contract-auditor
+apps/kpx-dex-frontend/                              @wikialisa @frontend-lead
+apps/kyc-portal/                                    @wikialisa @frontend-lead @security-lead
+apps/merchant-portal/                               @wikialisa @frontend-lead
+apps/pay-portal/                                    @wikialisa @frontend-lead
+apps/id-fiat-gateway/                               @wikialisa @frontend-lead @security-lead
+apps/explorer-vnkrscan/                             @wikialisa @frontend-lead @backend-lead
+apps/swap-dex/                                      @wikialisa @frontend-lead
+apps/holding-admin-portal/                          @wikialisa @frontend-lead @security-lead
+apps/sandbox-dashboard/                             @wikialisa @frontend-lead @devtools-lead
+apps/digital-twin-engine/                           @wikialisa @iot-lead
 
-# ── KPX / Cross-chain Bridge ──────────────────────────────────────────────
-packages/axq-sdk/                               @davictran76 @backend-lead
-packages/evm-interop/                           @davictran76 @backend-lead
+# ══════════════════════════════════════════════════════════════════════════════
+#  LAYER 4 — PROTOCOL NODES  (core-nodes/)
+#  Owner: @sqx-kernel-dev + @vpx-node-lead
+#  Kỹ năng: Rust/Go systems programming, consensus, P2P networking
+# ══════════════════════════════════════════════════════════════════════════════
+core-nodes/                                         @wikialisa @sqx-kernel-dev @vpx-node-lead
+core-nodes/valiprecision-node/                      @wikialisa @vpx-node-lead
+core-nodes/sequentichain-node/                      @wikialisa @sqx-kernel-dev
 
-# ── Design System ─────────────────────────────────────────────────────────
-packages/axio-design-system/                    @davictran76
-design-system/                                  @davictran76
+# ══════════════════════════════════════════════════════════════════════════════
+#  LAYER 5 — ON-CHAIN  (smart-contracts/ + programs/)
+#  Contract auditor BẮTBUỘC cho mọi thay đổi Solidity / Anchor Rust
+#  Kỹ năng: Solidity, Foundry, Anchor, formal verification, audit methodology
+# ══════════════════════════════════════════════════════════════════════════════
+smart-contracts/                                    @wikialisa @contract-auditor
+smart-contracts/axioledger-system/                  @wikialisa @contract-auditor @axq-core-dev
+smart-contracts/ans-registry/                       @wikialisa @contract-auditor @axq-core-dev
+smart-contracts/kpx-liquidity/                      @wikialisa @contract-auditor @kpx-defi-lead
+smart-contracts/vrq-circuits/                       @wikialisa @contract-auditor @security-lead @vrq-cipher-dev
+
+programs/                                           @wikialisa @contract-auditor
+programs/VNKR-amm-swap/                             @wikialisa @contract-auditor @kpx-defi-lead
+programs/VNKR-mint-governance/                      @wikialisa @contract-auditor @axq-core-dev
+programs/VNKR-p2p-escrow/                           @wikialisa @contract-auditor
+programs/VNKR-swift-bridge/                         @wikialisa @contract-auditor @security-lead
+programs/VNKR-treasury-rbs/                         @wikialisa @contract-auditor @axq-core-dev
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  SERVICES  (services/)
+#  Kỹ năng: Node.js microservices, REST/WebSocket, Docker, message queues
+# ══════════════════════════════════════════════════════════════════════════════
+services/                                           @wikialisa @backend-lead
+services/api-gateway/                               @wikialisa @backend-lead @security-lead
+services/fiat-connector-api/                        @wikialisa @backend-lead @security-lead
+services/swift-gateway/                             @wikialisa @backend-lead @security-lead
+services/swift-chain-bridge/                        @wikialisa @backend-lead @contract-auditor @security-lead
+services/swift-server/                              @wikialisa @sysadmin-lead @security-lead
+services/indexer-subgraph/                          @wikialisa @backend-lead
+services/otc-liquidity-engine/                      @wikialisa @backend-lead @security-lead
+services/role-engine/                               @wikialisa @backend-lead @security-lead
+services/mock-mgw/                                  @wikialisa @backend-lead
+services/dune-alert-bots/                           @wikialisa @devtools-lead
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  TOOLING  (tooling/)
+#  Kỹ năng: Docker, Terraform, K8s Helm, Nginx, CI/CD pipeline design
+# ══════════════════════════════════════════════════════════════════════════════
+tooling/                                            @wikialisa @sysadmin-lead
+tooling/deploy/                                     @wikialisa @sysadmin-lead
+tooling/deploy/terraform/                           @wikialisa @sysadmin-lead @security-lead
+tooling/deploy/kubernetes/                          @wikialisa @sysadmin-lead
+tooling/scripts/                                    @wikialisa @sysadmin-lead @devtools-lead
+tooling/ssl/                                        @wikialisa @sysadmin-lead @security-lead
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  TESTS  (tests/)
+#  Kỹ năng: Playwright, Jest, E2E test design, CI integration
+# ══════════════════════════════════════════════════════════════════════════════
+tests/                                              @wikialisa @qa-lead
+tests/e2e/                                          @wikialisa @qa-lead @frontend-lead
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  INFRA  (infra/)
+#  Cấu hình hạ tầng nội bộ, tài liệu kỹ thuật
+# ══════════════════════════════════════════════════════════════════════════════
+infra/                                              @wikialisa @sysadmin-lead
+infra/community/                                    @wikialisa
+infra/core/                                         @wikialisa @sysadmin-lead
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  CI / SECURITY PERIMETER  (.github/workflows/, root configs)
+#  Kỹ năng: GitHub Actions, supply-chain security, SAST, dependency audit
+# ══════════════════════════════════════════════════════════════════════════════
+.github/workflows/                                  @wikialisa @security-lead
+.github/                                            @wikialisa @security-lead
+CODEOWNERS                                          @wikialisa @security-lead
+.env.example                                        @wikialisa @sysadmin-lead
+pnpm-workspace.yaml                                 @wikialisa @kernel-team
+turbo.json                                          @wikialisa @kernel-team @devtools-lead
+package.json                                        @wikialisa @kernel-team

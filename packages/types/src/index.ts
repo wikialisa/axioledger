@@ -731,7 +731,8 @@ export interface AuditLogEntry {
 
 export interface AMLVerifyRequest {
   transactionId:        string;
-  userId:               string;
+  /** @deprecated Ignored by the server — caller identity is taken from the JWT (req.user.sub). */
+  userId?:              string;
   amount:               string;
   asset:                string;
   direction:            "IN" | "OUT";

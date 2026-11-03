@@ -498,7 +498,7 @@ bash swift-server/bin/health-check.sh <apikey>   # Xác nhận HEALTHY
 | `.github/workflows/swift-bridge-ci.yml` | 3 jobs: Security Gate + Build/Test + Foundry |
 | `.github/workflows/zk-circuits-ci.yml` | DP-3 PII audit + Circom compile + lib test |
 | `.github/pull_request_template.md` | Checklist bảo mật DP-3/DP-4, CODEOWNERS routing |
-| `CODEOWNERS` | `@davictran76` + team routing theo path |
+| `CODEOWNERS` | `@wikialisa` + team routing theo path |
 
 ### 9.4 Việc còn lại để hoàn tất Giai đoạn A
 

@@ -1,0 +1,25 @@
+{
+  "name": "@axioledger/robotics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hardware Abstraction Layer (HAL), trajectory & motor control interfaces, kinematics",
+  "license": "BSL-1.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/runtime/node.ts",
+    "./browser": "./src/runtime/browser.ts"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@axioledger/math": "workspace:*",
+    "@axioledger/iot": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

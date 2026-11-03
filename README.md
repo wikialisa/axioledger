@@ -2,40 +2,177 @@
 
 > **500,000 LOC · Hub & 4 Pillars · BSL-1.1 Core · MIT/Apache-2.0 SDKs**
 
-The canonical monorepo for the AXIOLEDGER protocol — a high-performance, privacy-preserving, multi-chain financial operating system. Managed with [Turborepo](https://turbo.build) + [pnpm workspaces](https://pnpm.io/workspaces).
+The canonical monorepo for the **AXIOLEDGER** protocol — a high-performance, privacy-preserving, multi-chain financial operating system.
+Managed with [Turborepo](https://turbo.build) + [pnpm workspaces](https://pnpm.io/workspaces).
 
 ---
 
-## 📐 Architecture: Hub & 4 Pillars
+## 📐 Architecture: 6-Layer Monorepo
+
+The repository follows a **strict top-down dependency graph**. Higher layers may depend on lower ones; the reverse is never permitted.
 
 ```
-axioledger-monorepo/ (~500k LOC)
+axioledger-monorepo/                              (~500k LOC)
 │
-├── apps/                        # User-facing applications
-│   ├── axq-governance-ui/       # DAO voting + treasury dashboard   (~15k LOC)
-│   ├── axiopass-wallet/         # Passkey-native smart wallet (PWA)  (~20k LOC)
-│   ├── kpx-dex-frontend/        # KPX DEX — gasless swaps UI        (~12k LOC)
-│   └── kpx-dex-frontend2/       # Next iteration DEX UI              (~8k LOC)
+│  ╔══════════════════════════════════════════════════════════╗
+│  ║  LAYER 0 — KERNEL  (libraries/)                         ║
+│  ║  Foundation primitives. Zero internal cross-deps.        ║
+│  ╠══════════════════════════════════════════════════════════╣
+│  ║                                                          ║
+├──║── libraries/                                             ║
+│  ║   ├── core/            tslib · lodash                   ║
+│  ║   ├── validation/      zod                              ║
+│  ║   ├── network/         axios + zod                      ║
+│  ║   ├── ui-runtime/      react (peer)                     ║
+│  ║   ├── server-runtime/  express · helmet · cors          ║
+│  ║   └── cli-engine/      commander · inquirer · chalk     ║
+│  ╚══════════════════════════════════════════════════════════╝
 │
-├── packages/                    # Shared libraries & SDKs
-│   ├── axio-design-system/      # @veraciphers/axio-design-system    (~18k LOC)
-│   ├── axq-sdk/                 # @axioledger/axq-sdk (TS client)    (~10k LOC)
-│   ├── ans-resolver/            # ANS Domain resolver SDK            (~8k LOC)
-│   ├── zkp-crypto-lib/          # ZK proof utilities (Wasm bindings) (~20k LOC)
-│   └── evm-interop/             # EVM ABI codegen + wagmi hooks      (~10k LOC)
+│  ╔══════════════════════════════════════════════════════════╗
+│  ║  LAYER 1 — DOMAIN PACKAGES  (packages/)                 ║
+│  ║  Depend on libraries/*. Never depend on apps/            ║
+│  ╠══════════════════════════════════════════════════════════╣
+│  ║                                                          ║
+├──║── packages/                                              ║
+│  ║   │                                                      ║
+│  ║   ├── ── New Architecture Packages ──                   ║
+│  ║   ├── frontend/        ui-runtime + network             ║
+│  ║   ├── backend/         server-runtime + validation      ║
+│  ║   ├── cli/             cli-engine + core  [bin: axq]    ║
+│  ║   ├── docs/            frontend + cli-engine            ║
+│  ║   ├── css/             frontend (design tokens)         ║
+│  ║   ├── testing/         core + server-runtime            ║
+│  ║   ├── coverage/        cli-engine (quality gates)       ║
+│  ║   ├── mobile/          ui-runtime + network             ║
+│  ║   ├── frameworks/      core + validation (plugin sys)   ║
+│  ║   ├── iot/             network + validation (MQTT)      ║
+│  ║   ├── robotics/        math + iot (HAL / kinematics)    ║
+│  ║   ├── math/            core (Vec/Mat/fixed-point)       ║
+│  ║   │                                                      ║
+│  ║   └── ── Domain SDKs (existing) ──                      ║
+│  ║       ├── axq-sdk/         @axioledger/axq-sdk          ║
+│  ║       ├── evm-interop/     ABI codegen + wagmi hooks    ║
+│  ║       ├── ans-resolver/    ANS domain resolver SDK      ║
+│  ║       ├── zkp-crypto-lib/  ZK proof Wasm bindings       ║
+│  ║       ├── swift-bridge/    SWIFT ↔ on-chain bridge      ║
+│  ║       ├── swift-adapter/   SWIFT Alliance SDK           ║
+│  ║       ├── sdk-swift/       High-level SWIFT SDK         ║
+│  ║       ├── sdk-internal/    Internal builders + events   ║
+│  ║       ├── merchant-sdk/    Payment gateway SDK          ║
+│  ║       ├── core-sdk/        Solana + EVM Web3 wrapper    ║
+│  ║       ├── ui-kit/          Design system components     ║
+│  ║       ├── types/           Shared TS interfaces         ║
+│  ║       ├── config/          RPC endpoints + IDs          ║
+│  ║       ├── db/              Database adapters            ║
+│  ║       └── contracts/       EVM Solidity contracts       ║
+│  ╚══════════════════════════════════════════════════════════╝
 │
-├── core-nodes/                  # Protocol infrastructure
-│   ├── valiprecision-node/      # VPX Oracle — price feed daemon     (~120k LOC)
-│   └── sequentichain-node/      # SQX L2 sequencer + rollup engine  (~150k LOC)
+│  ╔══════════════════════════════════════════════════════════╗
+│  ║  LAYER 2 — DESIGN SYSTEM  (design-system/)              ║
+│  ║  Single source of truth for UI tokens, components        ║
+│  ╠══════════════════════════════════════════════════════════╣
+│  ║                                                          ║
+├──║── design-system/                                         ║
+│  ║   ├── src/components/   Button · Input · Modal · Chart  ║
+│  ║   ├── tokens/           colors · typography · spacing   ║
+│  ║   └── .storybook/       Interactive component docs      ║
+│  ╚══════════════════════════════════════════════════════════╝
 │
-└── smart-contracts/             # On-chain logic (Solidity / Foundry)
-    ├── axioledger-system/       # $AXQ governance, DAO, treasury     (~15k LOC)
-    ├── ans-registry/            # ANS domain registry (.axq/.vpx/…)  (~12k LOC)
-    ├── kpx-liquidity/           # AMM router, LP pools, bridge       (~25k LOC)
-    └── vrq-circuits/            # ZK circuits, passkey validator     (~35k LOC)
+│  ╔══════════════════════════════════════════════════════════╗
+│  ║  LAYER 3 — APPLICATIONS  (apps/)                        ║
+│  ║  User-facing; may depend on any lower layer              ║
+│  ╠══════════════════════════════════════════════════════════╣
+│  ║                                                          ║
+├──║── apps/                                                   ║
+│  ║   ├── app-web/              Mobile-first PWA (main)     ║
+│  ║   ├── axiopass-wallet/      Passkey smart wallet (PWA)  ║
+│  ║   ├── axq-governance-ui/    DAO voting + treasury       ║
+│  ║   ├── dao-portal/           DAO governance portal       ║
+│  ║   ├── kpx-dex-frontend/     KPX DEX (gasless swaps)    ║
+│  ║   ├── kyc-portal/           KYC officer dashboard       ║
+│  ║   ├── merchant-portal/      Merchant management UI      ║
+│  ║   ├── pay-portal/           Checkout / POS terminal     ║
+│  ║   ├── id-fiat-gateway/      eKYC + Fiat on/off-ramp    ║
+│  ║   ├── explorer-vnkrscan/    Block explorer + PoR        ║
+│  ║   ├── swap-dex/             DEX AMM + analytics         ║
+│  ║   ├── holding-admin-portal/ Holding admin (IP, capital) ║
+│  ║   ├── sandbox-dashboard/    Developer + school sandbox  ║
+│  ║   └── digital-twin-engine/  Digital twin / AI Labs      ║
+│  ╚══════════════════════════════════════════════════════════╝
+│
+│  ╔══════════════════════════════════════════════════════════╗
+│  ║  LAYER 4 — PROTOCOL NODES  (core-nodes/)                ║
+│  ║  Validator + sequencer — FFI bindings, non-JS stubs      ║
+│  ╠══════════════════════════════════════════════════════════╣
+│  ║                                                          ║
+├──║── core-nodes/                                            ║
+│  ║   ├── valiprecision-node/   VPX Oracle price daemon     ║
+│  ║   └── sequentichain-node/   SQX L2 sequencer + rollup  ║
+│  ╚══════════════════════════════════════════════════════════╝
+│
+│  ╔══════════════════════════════════════════════════════════╗
+│  ║  LAYER 5 — ON-CHAIN  (smart-contracts/ + programs/)     ║
+│  ║  Solidity/Foundry + Solana Anchor Rust                   ║
+│  ╠══════════════════════════════════════════════════════════╣
+│  ║                                                          ║
+├──║── smart-contracts/                                       ║
+│  ║   ├── axioledger-system/    $AXQ governance + DAO       ║
+│  ║   ├── ans-registry/         ANS domain registry         ║
+│  ║   ├── kpx-liquidity/        AMM router + LP pools       ║
+│  ║   └── vrq-circuits/         ZK circuits + passkey       ║
+│  ║                                                          ║
+├──║── programs/   (Solana Anchor)                            ║
+│  ║   ├── VNKR-amm-swap/        x*y=k AMM with fee tiers   ║
+│  ║   ├── VNKR-mint-governance/ Controlled token minting    ║
+│  ║   ├── VNKR-p2p-escrow/      P2P fiat↔token escrow      ║
+│  ║   ├── VNKR-swift-bridge/    SWIFT ↔ Solana bridge      ║
+│  ║   └── VNKR-treasury-rbs/    DAO treasury + RBS          ║
+│  ╚══════════════════════════════════════════════════════════╝
+│
+│  ┌──────────────────────────────────────────────────────────┐
+│  │  SERVICES  (services/)  — Backend microservices           │
+│  ├──────────────────────────────────────────────────────────┤
+├──┤  services/                                                │
+│  │  ├── api-gateway/          Auth · rate-limit · audit log │
+│  │  ├── fiat-connector-api/   Bank webhook · Fiat matching  │
+│  │  ├── swift-gateway/        SWIFT MGW proxy · LAU auth    │
+│  │  ├── swift-chain-bridge/   Blockchain relayer            │
+│  │  ├── swift-server/         SWIFT server binary / bin     │
+│  │  ├── indexer-subgraph/     Helius/Subgraph indexer       │
+│  │  ├── otc-liquidity-engine/ OTC institutional liquidity   │
+│  │  ├── role-engine/          RBAC / on-chain roles         │
+│  │  ├── mock-mgw/             Mock SWIFT MGW (dev/test)     │
+│  │  └── dune-alert-bots/      Telegram / Discord analytics  │
+│  └──────────────────────────────────────────────────────────┘
+│
+│  ┌──────────────────────────────────────────────────────────┐
+│  │  TOOLING  (tooling/)  — Build, deploy, scripts            │
+│  ├──────────────────────────────────────────────────────────┤
+├──┤  tooling/                                                 │
+│  │  ├── deploy/               Docker · K8s · Nginx · Terraform │
+│  │  ├── scripts/              localnet · brand apply · PKI  │
+│  │  ├── ssl/                  TLS certificates              │
+│  │  └── github-push.sh        CI release push script        │
+│  └──────────────────────────────────────────────────────────┘
+│
+│  ┌──────────────────────────────────────────────────────────┐
+│  │  TESTS  (tests/)  — Integration & E2E test suites         │
+│  ├──────────────────────────────────────────────────────────┤
+├──┤  tests/                                                   │
+│  │  └── e2e/                  Playwright · Jest E2E suites  │
+│  └──────────────────────────────────────────────────────────┘
+│
+│  ┌──────────────────────────────────────────────────────────┐
+│  │  INFRA  (infra/)  — Platform configuration & docs         │
+│  ├──────────────────────────────────────────────────────────┤
+└──┤  infra/                                                   │
+   │  ├── core/                 API · banking · genesis · SDK │
+   │  ├── community/            Open-source ecosystem repo    │
+   │  ├── asset/                Brand assets, icons, fonts    │
+   │  ├── audit/                UI audit reports & screenshots│
+   │  └── logs/                 Deployment / runtime logs     │
+   └──────────────────────────────────────────────────────────┘
 ```
-
-**Total allocated: ~538k LOC** across 14 workspaces.
 
 ---
 
@@ -48,6 +185,51 @@ axioledger-monorepo/ (~500k LOC)
 | `kinetoprotocol` | DeFi Liquidity | `$KPX` | AMM Router, Bridge, RWA Logic, DEX Frontend |
 | `valiprecision` | Oracle Network | `$VPX` | Price Feeds, Consensus Engine, P2P Client |
 | `sequentichain` | Scaling Layer | `$SQX` | L2 Execution, SVM Rollup, AF_XDP Bypass |
+
+---
+
+## 🧱 Dependency Graph (Kernel → Domain → Apps)
+
+```mermaid
+graph LR
+  subgraph L0["Layer 0 — Kernel (libraries/)"]
+    core["core\ntslib·lodash"]
+    valid["validation\nzod"]
+    net["network\naxios·zod"]
+    ui["ui-runtime\nreact"]
+    srv["server-runtime\nexpress·helmet"]
+    cli["cli-engine\ncommander·chalk"]
+  end
+
+  subgraph L1["Layer 1 — Domain Packages (packages/)"]
+    frontend --> ui
+    frontend --> net
+    backend  --> srv
+    backend  --> valid
+    pkgcli["cli"]  --> cli
+    pkgcli  --> core
+    math    --> core
+    iot     --> net
+    iot     --> valid
+    robotics --> math
+    robotics --> iot
+    mobile  --> ui
+    mobile  --> net
+    frameworks --> core
+    frameworks --> valid
+  end
+
+  subgraph L2["Layer 2 — Design System"]
+    ds["design-system"]
+  end
+
+  subgraph L3["Layer 3 — Apps (apps/)"]
+    apps["apps/*"]
+    apps --> frontend
+    apps --> backend
+    apps --> ds
+  end
+```
 
 ---
 
@@ -69,12 +251,6 @@ cd axioledger-monorepo
 pnpm install
 ```
 
-### Auth for `@veraciphers` packages
-
-```bash
-echo "//npm.pkg.github.com/:_authToken=YOUR_READ_PACKAGES_PAT" >> ~/.npmrc
-```
-
 ### Build all
 
 ```bash
@@ -85,6 +261,14 @@ pnpm build
 
 ```bash
 pnpm test
+pnpm test:e2e        # Jest E2E (tests/e2e/)
+pnpm test:e2e:pw     # Playwright
+```
+
+### Localnet
+
+```bash
+pnpm localnet        # bash tooling/scripts/localnet-setup.sh
 ```
 
 ### Run a specific workspace
@@ -94,10 +278,7 @@ pnpm --filter kpx-dex-frontend dev
 pnpm --filter @axioledger/axq-sdk build
 pnpm --filter axioledger-system forge test
 ```
-```bash 
-export GITHUB_TOKEN=ghp_your_token_here
-python3 community/packages/swift-adapter/publish-ghpkg.py 
-```
+
 ---
 
 ## 🗺️ 7-Phase Execution Roadmap
@@ -123,32 +304,29 @@ python3 community/packages/swift-adapter/publish-ghpkg.py
 ### Phase 4 — Building Infrastructure ✅
 - [x] Design System published → `@veraciphers/axio-design-system@4.0.0`
 - [x] `VRQPasskeyValidator` deployed → Sepolia
-- [x] `KPXRouterGateway` CI pipeline → green on `feat/kpx-amm-router-scaffold`
+- [x] `KPXRouterGateway` CI pipeline → green
 - [x] VPX Oracle node implemented + tested
 - [ ] Internal PKI: Root CA + 5 Intermediate CAs for ANS domains
 - [ ] RBAC/IAM: SysAdmin / Node Operator / Treasury Engine roles
 
 ### Phase 5 — Harvesting & Integration 🔄
 - [x] `@axioledger/axq-sdk` v0.2.0 — real viem calls to AXQToken + ANSRegistry
-- [x] `@axioledger/evm-interop` v0.2.0 — full ABI catalogue + wagmi hook factories
-- [x] `axq-governance-ui` — wired to AXQGovernance: propose / castVote / queue / execute
-- [x] `axiopass-wallet` — VRQPasskeyValidator install flow, passkey registration, P256 key extraction
+- [x] `@axioledger/evm-interop` v0.2.0 — full ABI catalogue + wagmi hooks
+- [x] `axq-governance-ui` — wired to AXQGovernance: propose / castVote / execute
+- [x] `axiopass-wallet` — VRQPasskeyValidator install + P256 key extraction
 - [ ] AMM liquidity pools + Emission Controller
 - [ ] Cross-chain bridge (KPX ↔ SQX)
 - [ ] RWA Treasury activation
-- [ ] Namespace Security Guard (anti-squatting)
 
 ### Phase 6 — Testing & SecOps ⏳
 - [ ] `supply-chain-audit.yml` GitHub Actions
 - [ ] GPG commit signing enforcement
-- [ ] Cron: Node health (5min), Treasury sweep (1h), FIM (nightly)
 - [ ] 100k TPS stress test on devnet
 
 ### Phase 7 — Success & Endgame 🏆
 - [ ] > 600,000 TPS throughput
 - [ ] < 100ms soft confirmation latency
 - [ ] Nakamoto Coefficient > 50
-- [ ] Validator cost < 0.1 $AXQ/day
 - [ ] ZK-Proof user data protection: 100%
 - [ ] Genesis Block mainnet + Upgrade Authority → DAO
 
@@ -167,16 +345,6 @@ python3 community/packages/swift-adapter/publish-ghpkg.py
 
 ---
 
-## 🔐 Security & Licensing
-
-- **Core Protocol** (`smart-contracts/`, `core-nodes/`): [BSL 1.1](./LICENSE) — source-available, no production fork without commercial license
-- **SDKs & Design System** (`packages/`): MIT / Apache-2.0
-- **Applications** (`apps/`): AGPL-3.0
-
-Security vulnerabilities: see [`SECURITY.md`](./SECURITY.md)
-
----
-
 ## 📋 Status Matrix
 
 | Workspace | Status | CI | Testnet |
@@ -186,14 +354,24 @@ Security vulnerabilities: see [`SECURITY.md`](./SECURITY.md)
 | `smart-contracts/kpx-liquidity` | ✅ v1 scaffold | ✅ Green | ⏳ Pending |
 | `core-nodes/valiprecision-node` | ✅ v1 implemented | ✅ Green | ⏳ Pending |
 | `core-nodes/sequentichain-node` | ❄️ Frozen (Phase 3) | — | — |
-| `packages/axio-design-system` | ✅ v4.0.0 published | ✅ Green | N/A |
-| `packages/axq-sdk` | ✅ v0.2.0 — viem on-chain client | ✅ Green | N/A |
-| `packages/ans-resolver` | ✅ v1 — 15 tests, 85.7% coverage | ✅ Green | N/A |
+| `packages/axq-sdk` | ✅ v0.2.0 | ✅ Green | N/A |
+| `packages/ans-resolver` | ✅ v1 — 85.7% cov. | ✅ Green | N/A |
+| `packages/evm-interop` | ✅ v0.2.0 | — | N/A |
 | `packages/zkp-crypto-lib` | 🔄 Scaffolded | — | — |
-| `packages/evm-interop` | ✅ v0.2.0 — ABIs + wagmi hooks | — | N/A |
+| `design-system` | ✅ v4.0.0 published | ✅ Green | N/A |
 | `apps/kpx-dex-frontend` | ✅ Scaffold | 🔄 Running | — |
-| `apps/axiopass-wallet` | ✅ v1 — VRQPasskeyValidator wired | — | — |
-| `apps/axq-governance-ui` | ✅ v1 — AXQGovernance wired | — | — |
+| `apps/axiopass-wallet` | ✅ v1 — VRQPasskey | — | — |
+| `apps/axq-governance-ui` | ✅ v1 — AXQGov | — | — |
+
+---
+
+## 🔐 Security & Licensing
+
+- **Core Protocol** (`smart-contracts/`, `core-nodes/`): [BSL 1.1](./LICENSE) — source-available, no production fork without commercial license
+- **SDKs** (`packages/`, `libraries/`): MIT / Apache-2.0
+- **Applications** (`apps/`): AGPL-3.0
+
+Security vulnerabilities → [`SECURITY.md`](./SECURITY.md)
 
 ---
 

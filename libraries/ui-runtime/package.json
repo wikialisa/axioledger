@@ -1,0 +1,29 @@
+{
+  "name": "@axioledger/ui-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Base component context, reconciler binding and shared state primitives for all UI packages",
+  "license": "BSL-1.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/runtime/node.ts",
+    "./browser": "./src/runtime/browser.ts"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.5.4"
+  }
+}

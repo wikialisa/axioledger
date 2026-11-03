@@ -26,7 +26,7 @@
 - [ ] `🔷 Solidity Contracts` ✅ (nếu thay đổi `smart-contracts/`)
 
 ## Reviewer cần thiết (theo CODEOWNERS)
-- [ ] @davictran76 — Lead Engineer (bắt buộc mọi PR)
+- [ ] @wikialisa — Lead Engineer (bắt buộc mọi PR)
 - [ ] @security-lead — bắt buộc nếu thay đổi `vrq/`, `keys/`, `config/`, `.github/workflows/`
 - [ ] @contract-auditor — bắt buộc nếu thay đổi `smart-contracts/`
 - [ ] @sysadmin-lead — bắt buộc nếu thay đổi `swift-server/`
