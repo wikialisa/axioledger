@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# github-push.sh — quick helper to stage, commit and push updates to axioledger/axioledger
+# github-push.sh — quick helper to stage, commit and push updates to wikialisa/axioledger
 # Usage:  ./github-push.sh "your commit message"
 
 set -euo pipefail
@@ -11,6 +11,6 @@ cd "$(dirname "$0")"
 
 git add -A
 git commit -m "$MSG"
-git push origin main
+git push origin master
 
 echo "✓ Pushed: $MSG"
