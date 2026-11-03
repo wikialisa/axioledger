@@ -1,0 +1,92 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: color-mix(in srgb, var(--axq-dark-0) 90%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--site-border);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 60px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--site-text);
+}
+
+.ticker {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--site-accent);
+  background: color-mix(in srgb, var(--axq-teal) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--axq-teal) 30%, transparent);
+  border-radius: var(--axq-r-pill);
+  padding: 1px 7px;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  display: block;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--site-muted);
+  border-radius: var(--axq-r-md);
+  transition: color 0.15s, background-color 0.15s;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--site-text);
+  background-color: var(--axq-dark-2);
+  text-decoration: none;
+}
+
+.ctaButton {
+  margin-left: auto;
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--axq-dark-0);
+  background-color: var(--site-accent);
+  border-radius: var(--axq-r-pill);
+  text-decoration: none;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.ctaButton:hover {
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+/* Mobile: hide nav links, keep logo + CTA */
+@media (max-width: 680px) {
+  .navList {
+    display: none;
+  }
+}

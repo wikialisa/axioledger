@@ -1,0 +1,118 @@
+/*
+ * AXIOLEDGER Website — Global Styles
+ * Tokens sourced from design-system/tokens/primitive.css
+ * No external dependencies — zero runtime cost.
+ */
+
+/* ── AXQ Design Tokens (subset) ─────────────────────────────────────────── */
+:root {
+  /* Greyscale */
+  --axq-grey-900: #000000;
+  --axq-grey-800: #101426;
+  --axq-grey-700: #151A30;
+  --axq-grey-600: #192038;
+  --axq-grey-500: #222B45;
+  --axq-grey-400: #2E3A59;
+  --axq-grey-300: #8F9BB3;
+  --axq-grey-200: #C5CEE0;
+  --axq-grey-100: #E4E9F2;
+  --axq-grey-50:  #EDF1F7;
+  --axq-white:    #FFFFFF;
+
+  /* Brand accents */
+  --axq-teal:   #49DBC8;
+  --axq-green:  #BEFF6C;
+  --axq-orange: #FC7339;
+  --axq-purple: #AF96FB;
+  --axq-yellow: #FFF172;
+
+  /* Dark-mode palette */
+  --axq-dark-0:      #0D1117;
+  --axq-dark-1:      #161B22;
+  --axq-dark-2:      #1C2128;
+  --axq-dark-3:      #22272E;
+  --axq-dark-border: #30363D;
+  --axq-dark-muted:  #484F58;
+  --axq-dark-text-1: #E6EDF3;
+  --axq-dark-text-2: #8B949E;
+  --axq-dark-blue:   #58A6FF;
+
+  /* Status */
+  --axq-info:    #0095FF;
+  --axq-success: #00D68F;
+  --axq-warning: #FFAA00;
+  --axq-error:   #FF3D71;
+
+  /* Radius */
+  --axq-r-sm:   4px;
+  --axq-r-md:   8px;
+  --axq-r-lg:   12px;
+  --axq-r-xl:   16px;
+  --axq-r-2xl:  24px;
+  --axq-r-pill: 9999px;
+
+  /* Typography */
+  --axq-font: 'Work Sans', 'Inter', system-ui, sans-serif;
+
+  /* Site-level semantic aliases */
+  --site-bg:       var(--axq-dark-0);
+  --site-surface:  var(--axq-dark-1);
+  --site-surface2: var(--axq-dark-2);
+  --site-border:   var(--axq-dark-border);
+  --site-text:     var(--axq-dark-text-1);
+  --site-muted:    var(--axq-dark-text-2);
+  --site-accent:   var(--axq-teal);
+  --site-accent2:  var(--axq-green);
+}
+
+/* ── Reset ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--axq-font);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--site-bg);
+  color: var(--site-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--site-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Layout helpers ───────────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 2.5rem);
+}
+
+/* ── Focus ring (accessibility) ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--site-accent);
+  outline-offset: 3px;
+  border-radius: var(--axq-r-sm);
+}

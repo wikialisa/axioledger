@@ -1,0 +1,104 @@
+# .github/workflows/pages-website.yml
+#
+# Build and deploy apps/website/ to GitHub Pages.
+#
+# Published URL (fork):  https://wikialisa.github.io/axioledger/
+# Published URL (upstream, if Pages enabled):  https://axioledger.github.io/axioledger/
+#
+# Setup checklist (do this once in the GitHub repository settings):
+#   1. Settings → Pages → Source → "GitHub Actions"
+#   2. Ensure the workflow has write permission: Settings → Actions → General
+#      → Workflow permissions → "Read and write permissions"
+#
+# The workflow triggers on:
+#   - Push to main that touches apps/website/** or design-system/tokens/**
+#   - Manual dispatch from the Actions tab
+#
+# No secrets required — the site is fully static and contains no credentials.
+
+name: "🌐 Deploy Website to GitHub Pages"
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "apps/website/**"
+      - "design-system/tokens/**"
+
+  workflow_dispatch:
+
+# Allow only one concurrent deployment; do not cancel in-progress runs.
+concurrency:
+  group: "pages-website"
+  cancel-in-progress: false
+
+# Minimal permissions: read code + write Pages + id-token for OIDC deploy
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+env:
+  NODE_VERSION: "20"
+  # basePath used by Next.js static export — matches the repo name
+  NEXT_PUBLIC_BASE_PATH: "/axioledger"
+
+jobs:
+  # ── Build ──────────────────────────────────────────────────────────────────
+  build:
+    name: "🏗️ Build static site"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+
+      - name: "📦 Setup pnpm"
+        uses: pnpm/action-setup@v4
+        # version is read from packageManager in package.json
+
+      - name: "🟢 Setup Node ${{ env.NODE_VERSION }}"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: "📦 Install dependencies"
+        # --filter axioledger-website installs only the website and its deps.
+        # The website has no workspace cross-dependencies, so this is fast.
+        run: pnpm install --filter axioledger-website --frozen-lockfile
+
+      - name: "⚙️ Configure GitHub Pages"
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: "🔨 Build static export"
+        run: pnpm --filter axioledger-website build
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ env.NEXT_PUBLIC_BASE_PATH }}
+          # configure-pages may override basePath via NEXT_PUBLIC_BASE_PATH
+          # if using a custom domain — leave this env var here so it can be
+          # overridden by repository variables (Settings → Variables).
+
+      - name: "📤 Upload Pages artifact"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # next build with output:export writes to ./out by default
+          path: apps/website/out
+
+  # ── Deploy ─────────────────────────────────────────────────────────────────
+  deploy:
+    name: "🚀 Deploy to GitHub Pages"
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 5
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: "🚀 Deploy"
+        id: deployment
+        uses: actions/deploy-pages@v4
