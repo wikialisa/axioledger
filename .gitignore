@@ -44,3 +44,6 @@ ssl/**/*.crt
 ssl/private/
 ssl/pki/
 keys/
+website.zip
+# Author config — contains personal information, never commit
+author.config.json

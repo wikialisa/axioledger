@@ -10,13 +10,16 @@
 
 ## PHẦN I: THÔNG TIN TÁC GIẢ / AUTHOR INFORMATION
 
-| Mục | Thông tin |
-|-----|-----------|
-| **Tên tác giả / Author name** | TRẦN ĐỨC NHÂN |
-| **Quốc tịch / Nationality** | Việt Nam |
-| **Địa chỉ / Address** | 16A/11/20 Nguyễn Tuyển, Bình Trưng Tây, TP. Thủ Đức, TP.HCM |
-| **Số CCCD** | *(điền tay khi ký trước công chứng)* |
-| **Email liên hệ kỹ thuật** | core@axqprotocol.axq |
+*(Thông tin dưới đây được nạp động qua API cấu hình tác giả. Khi fork, tạo file `author.config.json`
+hoặc khai báo biến môi trường `.env` để tự động điền thông tin cá nhân — xem `docs/AUTHOR-CONFIG.md`.)*
+
+| Mục | Biến cấu hình (`author.config.json` / `.env`) | Giá trị mặc định |
+|-----|----------------------------------------------|------------------|
+| **Tên tác giả / Author name** | `API_AUTHOR_NAME` | NGUYỄN THỊ THU HƯƠNG *(hoặc tên Người Fork)* |
+| **Quốc tịch / Nationality** | `API_AUTHOR_NATIONALITY` | Việt Nam |
+| **Địa chỉ / Address** | `API_AUTHOR_ADDRESS` | Thôn Thái Hà, xã Ia Hrung, Gia Lai |
+| **Số CCCD** | `API_AUTHOR_ID_NUMBER` | *(điền tay khi ký trước công chứng)* |
+| **Email liên hệ kỹ thuật** | `API_AUTHOR_EMAIL` | core@axvn.vn |
 
 **Tư cách pháp nhân / Legal capacity:** Tác giả đồng thời là chủ sở hữu quyền tác giả (tự sáng tác, không theo hợp đồng thuê viết).
 
@@ -114,11 +117,11 @@ Root CA RSA-4096 ký 5 Intermediate CA tương ứng 5 trụ cột, cấp phát 
 
 ## PHẦN IV: TUYÊN BỐ TÍNH NGUYÊN GỐC / ORIGINALITY STATEMENT
 
-Tôi, **TRẦN ĐỨC NHÂN**, tuyên bố rằng:
+Tôi, **`{API_AUTHOR_NAME}`** (được cấu hình tự động từ hệ thống fork), tuyên bố rằng:
 
 1. Toàn bộ mã nguồn của Hệ sinh thái AXIOLEDGER được sáng tác **độc lập**, không sao chép từ bất kỳ phần mềm độc quyền nào.
 2. Các thư viện mã nguồn mở được sử dụng (OpenZeppelin, ethers.js, Next.js, v.v.) đều có giấy phép tương thích (MIT/Apache-2.0) và được ghi nhận đầy đủ.
-3. Kiến trúc "1 Hub & 4 Pillars", hệ thống ANS 5-TLD, và mô hình Tokenomics 500 tỷ $AXQ là **sáng kiến độc bản** của tác giả.
+3. Kiến trúc "1 Hub & 4 Pillars", hệ thống ANS 5-TLD, và mô hình Tokenomics 500 tỷ $AXQ là **sáng kiến độc bản** của tác giả/nhà phát triển.
 4. Định giá IP lõi ước tính: **10.000.000.000.000 VNĐ** (mười nghìn tỷ đồng).
 
 ---
