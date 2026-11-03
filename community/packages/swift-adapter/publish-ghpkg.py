@@ -6,7 +6,7 @@ Run from packages/swift-adapter/:
 """
 import base64, hashlib, json, os, subprocess, urllib.request, urllib.error
 
-TOKEN   = "GH_TOKEN"
+TOKEN   = os.environ["GITHUB_TOKEN"]  # set via: export GITHUB_TOKEN=ghp_...
 NAME    = "@${BRAND_NPM_SCOPE}/swift-adapter"
 VER     = "1.0.0"
 TGZ     = "vnkrvietnam-swift-adapter-1.0.0.tgz"
