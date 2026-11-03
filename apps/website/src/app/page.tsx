@@ -53,42 +53,42 @@ const PRODUCTS = [
     name: 'Axiopass Wallet',
     type: 'PWA · Smart Wallet',
     description: 'Passkey-native smart wallet. FaceID / TouchID replaces seed phrase. VRQPasskeyValidator deployed on Sepolia.',
-    href: 'https://github.com/axioledger/axioledger/tree/main/apps/axiopass-wallet',
+    href: 'https://github.com/axioledger/axioledger/tree/master/apps/axiopass-wallet',
     status: 'v1 on Sepolia',
   },
   {
     name: 'Governance UI',
     type: 'DAO Dashboard',
     description: 'On-chain DAO voting, proposal lifecycle and treasury dashboard wired to AXQGovernance contracts.',
-    href: 'https://github.com/axioledger/axioledger/tree/main/apps/axq-governance-ui',
+    href: 'https://github.com/axioledger/axioledger/tree/master/apps/axq-governance-ui',
     status: 'v1 live',
   },
   {
     name: 'KPX DEX',
     type: 'Decentralised Exchange',
     description: 'Gasless swap UI on KPX AMM router. Liquidity pool management and cross-chain routing interface.',
-    href: 'https://github.com/axioledger/axioledger/tree/main/apps/kpx-dex-frontend',
+    href: 'https://github.com/axioledger/axioledger/tree/master/apps/kpx-dex-frontend',
     status: 'Scaffold',
   },
   {
     name: 'AXQ SDK',
     type: 'TypeScript SDK',
     description: 'Client library for on-chain interactions: AXQToken, ANSRegistry, and wagmi hook factories for EVM.',
-    href: 'https://github.com/axioledger/axioledger/tree/main/packages/axq-sdk',
+    href: 'https://github.com/axioledger/axioledger/tree/master/packages/axq-sdk',
     status: 'v0.2.0',
   },
   {
     name: 'ANS Resolver',
     type: 'Domain SDK',
     description: 'Resolve and register .axq / .vpx / .sqx / .kpx / .vrq domains. 15 tests, 85.7% coverage.',
-    href: 'https://github.com/axioledger/axioledger/tree/main/packages/ans-resolver',
+    href: 'https://github.com/axioledger/axioledger/tree/master/packages/ans-resolver',
     status: 'v1',
   },
   {
     name: 'Design System',
     type: 'Component Library',
     description: '@veraciphers/axio-design-system v4.0.0 — tokens, components and guidelines for all AXIOLEDGER apps.',
-    href: 'https://github.com/axioledger/axioledger/tree/main/design-system',
+    href: 'https://github.com/axioledger/axioledger/tree/master/design-system',
     status: 'v4.0.0',
   },
 ];
@@ -97,22 +97,22 @@ const DOCS = [
   {
     title: 'Official Charter',
     description: 'Founding principles, 1 Hub & 4 Pillars architecture, governance structure and roadmap.',
-    href: 'https://github.com/axioledger/axioledger/blob/main/docs/AXIOLEDGER-OFFICIAL-CHARTER.md',
+    href: 'https://github.com/axioledger/axioledger/blob/master/docs/AXIOLEDGER-OFFICIAL-CHARTER.md',
   },
   {
     title: 'Whitepaper ($AXQ)',
     description: 'Economic model, tokenomics (500B $AXQ), validator incentives and deflationary mechanics.',
-    href: 'https://github.com/axioledger/axioledger/blob/main/docs/Whitepaper%20AXIOLEDGER%20(%24AXQ).md',
+    href: 'https://github.com/axioledger/axioledger/blob/master/docs/Whitepaper%20AXIOLEDGER%20(%24AXQ).md',
   },
   {
     title: 'Technical Blueprint',
     description: 'Deep dive into ZK-OBFT consensus, SVM rollup design, AF_XDP bypass and smart contract architecture.',
-    href: 'https://github.com/axioledger/axioledger/blob/main/docs/AXIOLEDGER_TECHNICAL_BLUEPRINT.md',
+    href: 'https://github.com/axioledger/axioledger/blob/master/docs/AXIOLEDGER_TECHNICAL_BLUEPRINT.md',
   },
   {
     title: 'Software Technical Spec',
     description: 'Interface specs, API contracts, ABI catalogue and cross-package dependency map.',
-    href: 'https://github.com/axioledger/axioledger/blob/main/docs/SOFTWARE-TECHNICAL-SPEC.md',
+    href: 'https://github.com/axioledger/axioledger/blob/master/docs/SOFTWARE-TECHNICAL-SPEC.md',
   },
 ];
 
@@ -303,7 +303,7 @@ export default function HomePage() {
                   axioledger/axioledger ↗
                 </a>
                 <a
-                  href="https://github.com/axioledger/axioledger/blob/main/CONTRIBUTING.md"
+                  href="https://github.com/axioledger/axioledger/blob/master/CONTRIBUTING.md"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.btnSecondary}

@@ -7,26 +7,26 @@ const FOOTER_LINKS = [
     heading: 'Protocol',
     links: [
       { label: 'GitHub',      href: 'https://github.com/axioledger/axioledger' },
-      { label: 'Whitepaper',  href: 'https://github.com/axioledger/axioledger/blob/main/docs/Whitepaper%20AXIOLEDGER%20(%24AXQ).md' },
-      { label: 'Charter',     href: 'https://github.com/axioledger/axioledger/blob/main/docs/AXIOLEDGER-OFFICIAL-CHARTER.md' },
-      { label: 'Blueprint',   href: 'https://github.com/axioledger/axioledger/blob/main/docs/AXIOLEDGER_TECHNICAL_BLUEPRINT.md' },
+      { label: 'Whitepaper',  href: 'https://github.com/axioledger/axioledger/blob/master/docs/Whitepaper%20AXIOLEDGER%20(%24AXQ).md' },
+      { label: 'Charter',     href: 'https://github.com/axioledger/axioledger/blob/master/docs/AXIOLEDGER-OFFICIAL-CHARTER.md' },
+      { label: 'Blueprint',   href: 'https://github.com/axioledger/axioledger/blob/master/docs/AXIOLEDGER_TECHNICAL_BLUEPRINT.md' },
     ],
   },
   {
     heading: 'Applications',
     links: [
-      { label: 'Axiopass Wallet',  href: 'https://github.com/axioledger/axioledger/tree/main/apps/axiopass-wallet' },
-      { label: 'Governance UI',    href: 'https://github.com/axioledger/axioledger/tree/main/apps/axq-governance-ui' },
-      { label: 'KPX DEX',         href: 'https://github.com/axioledger/axioledger/tree/main/apps/kpx-dex-frontend' },
+      { label: 'Axiopass Wallet',  href: 'https://github.com/axioledger/axioledger/tree/master/apps/axiopass-wallet' },
+      { label: 'Governance UI',    href: 'https://github.com/axioledger/axioledger/tree/master/apps/axq-governance-ui' },
+      { label: 'KPX DEX',         href: 'https://github.com/axioledger/axioledger/tree/master/apps/kpx-dex-frontend' },
     ],
   },
   {
     heading: 'Project',
     links: [
-      { label: 'Contributing',    href: 'https://github.com/axioledger/axioledger/blob/main/CONTRIBUTING.md' },
-      { label: 'Security Policy', href: 'https://github.com/axioledger/axioledger/blob/main/SECURITY.md' },
-      { label: 'License (BSL 1.1)', href: 'https://github.com/axioledger/axioledger/blob/main/LICENSE' },
-      { label: 'Code of Conduct', href: 'https://github.com/axioledger/axioledger/blob/main/CODE_OF_CONDUCT.md' },
+      { label: 'Contributing',    href: 'https://github.com/axioledger/axioledger/blob/master/CONTRIBUTING.md' },
+      { label: 'Security Policy', href: 'https://github.com/axioledger/axioledger/blob/master/SECURITY.md' },
+      { label: 'License (BSL 1.1)', href: 'https://github.com/axioledger/axioledger/blob/master/LICENSE' },
+      { label: 'Code of Conduct', href: 'https://github.com/axioledger/axioledger/blob/master/CODE_OF_CONDUCT.md' },
     ],
   },
 ];
@@ -63,7 +63,7 @@ export default function Footer() {
           <p className={styles.copyright}>
             © {YEAR} AXIOLEDGER contributors. Core licensed under{' '}
             <a
-              href="https://github.com/axioledger/axioledger/blob/main/LICENSE"
+              href="https://github.com/axioledger/axioledger/blob/master/LICENSE"
               target="_blank"
               rel="noopener noreferrer"
             >
