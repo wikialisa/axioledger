@@ -1,0 +1,16 @@
+{
+  "_comment": "Brand / Identity configuration for community forks. Fill in your own values and run scripts/apply-brand.js to substitute throughout the codebase. Never commit secrets here.",
+
+  "BRAND_DOMAIN":      "your-project.vn",
+  "BRAND_DOMAIN_FULL": "your-project-full-name.com",
+  "BRAND_NPM_SCOPE":   "your-npm-org",
+  "BRAND_ORG_FULL":    "Your Organisation Full Name",
+  "BRAND_ORG_FINTECH": "Your FinTech Division Name",
+  "BRAND_ORG_MENA":    "Your MENA Division Name",
+  "BRAND_TOKEN_SYMBOL":"YOUR_TOKEN",
+
+  "DOCKER_SERVICE_FIAT":  "your-fiat-connector-api",
+  "DOCKER_SERVICE_SWIFT": "your-swift-gateway",
+
+  "SWIFT_BIC_CODE":    "YOURBICXXXX"
+}
