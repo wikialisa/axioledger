@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024–2026 AXIOLEDGER Core Engineering
+Copyright (c) 2026 AXIOLEDGER Core Engineering
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
----
+--------------------------------------------------------------------------------
+FINANCIAL INSTITUTION REGULATORY & PROPRIETARY INTEGRATION NOTICE
+--------------------------------------------------------------------------------
 
-NOTICE: This package integrates with the SWIFT Security SDK, which is
-proprietary software owned by S.W.I.F.T. SCRL. The SWIFT SDK itself is NOT
-covered by this MIT license and is subject to the SWIFT Developer License
-Agreement. The SDK is not distributed with this repository and must be
-installed separately.
+1. PROPRIETARY DEPENDENCIES & THIRD-PARTY COMPLIANCE:
+   This Software contains integration interfaces designed to interoperate with 
+   the SWIFT Security SDK and related financial messaging infrastructure owned 
+   by S.W.I.F.T. SCRL. 
 
-See THIRD-PARTY-LICENSES.md at the repository root for full third-party
-attribution.
+   - The SWIFT Security SDK is proprietary software and is EXCLUDED from this 
+     MIT License.
+   - Access to and use of SWIFT software or networks require a separate, valid 
+     license agreement directly with S.W.I.F.T. SCRL.
+   - The authors and copyright holders of this Software make no warranty 
+     regarding the compliance, approval, or endorsement of this integration 
+     by S.W.I.F.T. SCRL or any regulatory authority.
+
+2. FINANCIAL REGULATORY DISCLAIMER:
+   This Software is provided solely as a technical framework. Deploying 
+   entities (including financial institutions, banks, or payment service 
+   providers) are strictly responsible for ensuring that their deployment, 
+   configuration, and use of this Software comply with all applicable local 
+   and international banking, financial regulations, anti-money laundering 
+   (AML), and know-your-customer (KYC) laws.
+
+3. THIRD-PARTY ATTRIBUTION:
+   Please refer to THIRD-PARTY-LICENSES.md in the repository root for complete 
+   third-party components and license disclosures.

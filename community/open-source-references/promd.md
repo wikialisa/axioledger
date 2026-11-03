@@ -5,26 +5,26 @@ Dựa trên cấu trúc cây thư mục `/var/www/open-source-references/apps/` 
 | `app-web` | App ví / Web App chính | • [Metamask Mobile/Web](https://github.com/MetaMask/metamask-extension)<br>
 
 <br>• [Rainbow Wallet](https://github.com/rainbow-me/rainbow) |
-| `dao-portal` | Cổng quản trị DAO & Biểu quyết | • [Snapshot](https://www.google.com/search?q=https://github.com/snapshot-labs/snapshot)<br>
+| `dao-portal` | Cổng quản trị DAO & Biểu quyết | • [Snapshot](https://github.com/snapshot-labs/snapshot)<br>
 
-<br>• [Aragon Client](https://www.google.com/search?q=https://github.com/aragon/aragon) |
+<br>• [Aragon Client](https://github.com/aragon/aragon) |
 | `digital-twin-engine` | Engine mô phỏng / Mô hình hóa dữ liệu | • [Threeml / Three.js Ecosystem](https://github.com/mrdoob/three.js/)<br>
 
-<br>• [IOWorlds](https://www.google.com/search?q=https://github.com/iankit/digital-twin) |
+<br>• [IOWorlds](https://github.com/iankit/digital-twin) |
 | `explorer-YOUR_INFRAscan` | Trình khám phá khối (Block Explorer) | • [Blockscout](https://github.com/blockscout/blockscout) *(Chuẩn nhất cho EVM)*<br>
 
-<br>• [Otterscan](https://www.google.com/search?q=https://github.com/wmitsuda/otterscan) |
+<br>• [Otterscan](https://github.com/wmitsuda/otterscan) |
 | `holding-admin-portal` | Trang quản trị hệ thống / Admin | • [Refine](https://github.com/refinedev/refine) *(React/Next.js Admin)*<br>
 
 <br>• [Ant Design Pro](https://github.com/ant-design/ant-design-pro) |
 | `id-fiat-gateway` | Cổng nạp/rút Tiền pháp định (Fiat On/Off Ramp) | • [Superfluid Gateways](https://github.com/superfluid-finance)<br>
 
 <br>• [BtcPayServer](https://github.com/btcpayserver/btcpayserver) |
-| `kyc-portal` | Xác minh danh tính người dùng | • [Selfkey KYC](https://www.google.com/search?q=https://github.com/SelfKey/selfkey-wallet)<br>
+| `kyc-portal` | Xác minh danh tính người dùng | • [Selfkey KYC](https://github.com/SelfKey/selfkey-wallet)<br>
 
 <br>• [KILT Protocol Frontend](https://github.com/KILTprotocol) |
 | `merchant-portal` | Cổng quản lý cho Thương gia / Cửa hàng | • [WooCommerce Crypto Payment Gateway](https://github.com/woocommerce/woocommerce) |
-| `pay-portal` | Cổng thanh toán Crypto / POS | • [Solana Pay](https://www.google.com/search?q=https://github.com/solana-labs/solana-pay)<br>
+| `pay-portal` | Cổng thanh toán Crypto / POS | • [Solana Pay](https://github.com/solana-labs/solana-pay)<br>
 
 <br>• [Crypto.com Pay Merchant Portal](https://github.com/crypto-com) |
 | `sandbox-dashboard` | Môi trường thử nghiệm API / Developer Console | • [Swagger UI React](https://github.com/swagger-api/swagger-ui)<br>
@@ -32,7 +32,7 @@ Dựa trên cấu trúc cây thư mục `/var/www/open-source-references/apps/` 
 <br>• [Postman Developer Portal Templates](https://github.com/postmanlabs) |
 | `swap-dex` | Sàn giao dịch phi tập trung (DEX) | • [Uniswap Interface v3/v4](https://github.com/Uniswap/interface)<br>
 
-<br>• [Pancake Frontend](https://www.google.com/search?q=https://github.com/pancakeswap/pancake-frontend) |
+<br>• [Pancake Frontend](https://github.com/pancakeswap/pancake-frontend) |
 
 ---
 

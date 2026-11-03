@@ -1,0 +1,7 @@
+# ─── Helm Chart: AXVN-services ────────────────────────────────────────────────
+apiVersion: v2
+name: AXVN-services
+description: Kubernetes Helm chart for AXVN TECH HOLDING microservices
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

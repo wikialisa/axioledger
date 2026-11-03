@@ -94,7 +94,10 @@ pnpm --filter kpx-dex-frontend dev
 pnpm --filter @axioledger/axq-sdk build
 pnpm --filter axioledger-system forge test
 ```
-
+```bash 
+export GITHUB_TOKEN=ghp_your_token_here
+python3 community/packages/swift-adapter/publish-ghpkg.py 
+```
 ---
 
 ## 🗺️ 7-Phase Execution Roadmap

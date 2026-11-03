@@ -1,0 +1,57 @@
+{
+  "name": "project-contracts",
+  "version": "1.0.1",
+  "description": "Bophades Modular Smart Contracts — AXVN Reserve Currency, Governance, Treasury, VASP & Compliance (NQ-05/NĐ-284)",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./addresses": "./exports/addresses.json",
+    "./abi/*": "./exports/abi/*.json"
+  },
+  "files": [
+    "dist",
+    "exports",
+    "contracts"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:forge": "forge test -vvv",
+    "deploy:local": "hardhat run scripts/deploy-kernel.ts --network localhost",
+    "deploy:testnet": "hardhat run scripts/deploy-kernel.ts --network testnet",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
+    "project-types": "workspace:*",
+    "project-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AXVNvietnam/AXVN-packages.git"
+  }
+}
