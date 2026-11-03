@@ -16,20 +16,20 @@ walletRouter.use(authenticate);
 walletRouter.get("/balance", (_req, res) => {
   // TODO: aggregate from DB per authenticated user
   ok(res, {
-    vnd:    { available: "2500000",   locked: "0" },
-    vnkr:   { available: "2500000",   locked: "0" },
+    vnd: { available: "2500000", locked: "0" },
+    YOUR_TOKEN: { available: "2500000", locked: "0" },
     crypto: [
-      { asset: "BTC",  network: "ERC20", available: "0.0842",  locked: "0",       usdEquivalent: "5680.04" },
-      { asset: "ETH",  network: "ERC20", available: "1.25",    locked: "0",       usdEquivalent: "4275.00" },
-      { asset: "SOL",  network: "SOL",   available: "12.5",    locked: "0",       usdEquivalent: "1850.00" },
-      { asset: "USDT", network: "TRC20", available: "500.00",  locked: "100.00",  usdEquivalent: "500.00"  },
+      { asset: "BTC", network: "ERC20", available: "0.0842", locked: "0", usdEquivalent: "5680.04" },
+      { asset: "ETH", network: "ERC20", available: "1.25", locked: "0", usdEquivalent: "4275.00" },
+      { asset: "SOL", network: "SOL", available: "12.5", locked: "0", usdEquivalent: "1850.00" },
+      { asset: "USDT", network: "TRC20", available: "500.00", locked: "100.00", usdEquivalent: "500.00" },
     ],
   });
 });
 
 // ─── GET /api/v1/wallet/transactions ─────────────────────────────────────────
 walletRouter.get("/transactions", (req, res) => {
-  const page  = Number(req.query["page"])  || 1;
+  const page = Number(req.query["page"]) || 1;
   const limit = Number(req.query["limit"]) || 20;
   // TODO: fetch paginated from DB for authenticated user
   paginated(res, [], 0, page, limit);
@@ -37,7 +37,7 @@ walletRouter.get("/transactions", (req, res) => {
 
 // ─── POST /api/v1/wallet/transfer ────────────────────────────────────────────
 /**
- * Internal wallet transfer (VND / VNKR between VNKR users).
+ * Internal wallet transfer (VND / YOUR_TOKEN between YOUR_TOKEN users).
  * For cross-border SWIFT transfers use POST /api/v1/swift/transfer.
  */
 walletRouter.post("/transfer", async (req, res) => {

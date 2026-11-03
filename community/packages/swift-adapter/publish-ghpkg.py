@@ -9,7 +9,7 @@ import base64, hashlib, json, os, subprocess, urllib.request, urllib.error
 TOKEN   = os.environ["GITHUB_TOKEN"]  # set via: export GITHUB_TOKEN=ghp_...
 NAME    = "@${BRAND_NPM_SCOPE}/swift-adapter"
 VER     = "1.0.0"
-TGZ     = "vnkrvietnam-swift-adapter-1.0.0.tgz"
+TGZ     = "AXVNvietnam-swift-adapter-1.0.0.tgz"
 
 here = os.path.dirname(os.path.abspath(__file__))
 tgz_path = os.path.join(here, TGZ)
@@ -26,14 +26,14 @@ length     = len(raw)
 body = {
     "_id": NAME,
     "name": NAME,
-    "description": "SWIFT SDK wrapper — MT103/MT202 builder, ISO 20022 parser, LAU signing for VNKR institutional banking",
+    "description": "SWIFT SDK wrapper — MT103/MT202 builder, ISO 20022 parser, LAU signing for YOUR_INFRA institutional banking",
     "dist-tags": {"latest": VER},
     "versions": {
         VER: {
             "_id": f"{NAME}@{VER}",
             "name": NAME,
             "version": VER,
-            "description": "SWIFT SDK wrapper — MT103/MT202 builder, ISO 20022 parser, LAU signing for VNKR institutional banking",
+            "description": "SWIFT SDK wrapper — MT103/MT202 builder, ISO 20022 parser, LAU signing for YOUR_INFRA institutional banking",
             "main": "./dist/index.js",
             "module": "./dist/index.mjs",
             "types": "./dist/index.d.ts",

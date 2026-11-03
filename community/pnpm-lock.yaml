@@ -394,7 +394,7 @@ importers:
         specifier: ^5.6.0
         version: 5.9.3
 
-  apps/explorer-vnkrscan:
+  apps/explorer-YOUR_INFRAscan:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.9.0

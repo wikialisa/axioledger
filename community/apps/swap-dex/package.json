@@ -2,7 +2,7 @@
   "name": "swap-dex",
   "version": "0.1.0",
   "private": true,
-  "description": "[swap.${BRAND_DOMAIN}] AMM DEX & Cross-chain Liquidity Router — VNKR Global Ventures Pte. Ltd.",
+  "description": "[swap.your-project.vn] AMM DEX & Cross-chain Liquidity Router — YOUR_TOKEN Global Ventures Pte. Ltd.",
   "scripts": {
     "dev": "next dev -p 3004",
     "build": "next build",

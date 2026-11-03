@@ -2,25 +2,25 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title:       "VNKR — Wallet & Crypto",
-  description: "Ví điện tử, P2P, Crypto và Cashback — VNKR FinTech",
-  manifest:    "/manifest.json",
-  icons:       { icon: "/favicon.ico", apple: "/apple-touch-icon.png" },
+  title: "YOUR_TOKEN — Wallet & Crypto",
+  description: "Ví điện tử, P2P, Crypto và Cashback — YOUR_TOKEN FinTech",
+  manifest: "/manifest.json",
+  icons: { icon: "/favicon.ico", apple: "/apple-touch-icon.png" },
   openGraph: {
-    title:       "VNKR App",
+    title: "YOUR_TOKEN App",
     description: "Ví điện tử thế hệ mới",
-    url:         "https://app.${BRAND_DOMAIN}",
-    siteName:    "VNKR",
-    locale:      "vi_VN",
-    type:        "website",
+    url: "https://app.your-project.vn",
+    siteName: "YOUR_TOKEN",
+    locale: "vi_VN",
+    type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  width:              "device-width",
-  initialScale:       1,
-  maximumScale:       1,
-  themeColor:         "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#000000",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

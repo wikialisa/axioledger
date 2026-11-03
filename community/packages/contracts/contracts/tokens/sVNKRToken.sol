@@ -4,17 +4,17 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// ─── sVNKRToken.sol — Staked Rebase Token ────────────────────────────────────
-// Staked VNKR (ERC-20 Rebase).
+// ─── sYOUR_TOKENToken.sol — Staked Rebase Token ────────────────────────────────────
+// Staked YOUR_TOKEN (ERC-20 Rebase).
 // Tự động tích lũy lãi kép từ lợi nhuận Kho bạc sau mỗi Epoch (8 giờ).
 // Số dư tăng dần nhờ cơ chế gons — không cần giao dịch.
 // ─────────────────────────────────────────────────────────────────────────────
 
-error SVNKRToken_NotAuthorized(address caller);
-error SVNKRToken_RebaseTooSoon(uint256 nextEpochTime);
-error SVNKRToken_InvalidRate();
+error SYOUR_TOKENToken_NotAuthorized(address caller);
+error SYOUR_TOKENToken_RebaseTooSoon(uint256 nextEpochTime);
+error SYOUR_TOKENToken_InvalidRate();
 
-contract SVNKRToken is ERC20, Ownable {
+contract SYOUR_TOKENToken is ERC20, Ownable {
     uint256 public constant EPOCH_DURATION = 8 hours;
     uint256 public constant MAX_REBASE_BPS = 500;
 
@@ -34,7 +34,7 @@ contract SVNKRToken is ERC20, Ownable {
     event StakingPolicyUpdated(address indexed prev, address indexed next);
 
     constructor(address admin_)
-        ERC20("Staked VNKR", "sVNKR")
+        ERC20("Staked YOUR_TOKEN", "sAXVN")
         Ownable(admin_)
     {
         _gonsPerToken      = TOTAL_GONS / INITIAL_SUPPLY;
@@ -48,13 +48,13 @@ contract SVNKRToken is ERC20, Ownable {
     }
 
     modifier onlyStaking() {
-        if (msg.sender != stakingPolicy) revert SVNKRToken_NotAuthorized(msg.sender);
+        if (msg.sender != stakingPolicy) revert SYOUR_TOKENToken_NotAuthorized(msg.sender);
         _;
     }
 
     function rebase(uint256 rebaseBps_) external onlyStaking returns (uint256 newTotalSupply) {
-        if (block.timestamp < nextEpochTime) revert SVNKRToken_RebaseTooSoon(nextEpochTime);
-        if (rebaseBps_ == 0 || rebaseBps_ > MAX_REBASE_BPS) revert SVNKRToken_InvalidRate();
+        if (block.timestamp < nextEpochTime) revert SYOUR_TOKENToken_RebaseTooSoon(nextEpochTime);
+        if (rebaseBps_ == 0 || rebaseBps_ > MAX_REBASE_BPS) revert SYOUR_TOKENToken_InvalidRate();
         uint256 delta  = (_totalSupplyTokens * rebaseBps_) / 10_000;
         newTotalSupply = _totalSupplyTokens + delta;
         _gonsPerToken  = TOTAL_GONS / newTotalSupply;
@@ -70,7 +70,7 @@ contract SVNKRToken is ERC20, Ownable {
 
     function burn(address from_, uint256 amount_) external onlyStaking {
         uint256 gons = amount_ * _gonsPerToken;
-        require(_gonBalances[from_] >= gons, "sVNKR: insufficient");
+        require(_gonBalances[from_] >= gons, "sAXVN: insufficient");
         _gonBalances[from_]  -= gons;
         _totalSupplyTokens   -= amount_;
     }

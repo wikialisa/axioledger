@@ -10,7 +10,7 @@ COPY packages/config   ./packages/config
 COPY services/dune-alert-bots ./services/dune-alert-bots
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @vnkr/dune-alert-bots build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/dune-alert-bots build
 
 FROM node:20-alpine AS runner
 WORKDIR /app

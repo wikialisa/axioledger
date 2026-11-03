@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  VNKR — Nginx Config (HTTP-only, dùng TRƯỚC khi cấp SSL)
-#  Domain  : merchant.${BRAND_DOMAIN}
+#  YOUR_INFRA — Nginx Config (HTTP-only, dùng TRƯỚC khi cấp SSL)
+#  Domain  : merchant.your-project.vn
 #  Upstream: localhost:3011 (Next.js 14 — production)
 #  NOTE    : Sau khi certbot cấp cert → chạy setup-ssl.sh để switch HTTPS
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -13,7 +13,7 @@ upstream merchant {
 server {
     listen 80;
     listen [::]:80;
-    server_name merchant.${BRAND_DOMAIN};
+    server_name merchant.your-project.vn;
 
     # ACME challenge (Let's Encrypt HTTP-01)
     location /.well-known/acme-challenge/ {
@@ -47,6 +47,6 @@ server {
         proxy_busy_buffers_size    32k;
     }
 
-    access_log /var/log/nginx/merchant.${BRAND_DOMAIN}.access.log;
-    error_log  /var/log/nginx/merchant.${BRAND_DOMAIN}.error.log warn;
+    access_log /var/log/nginx/merchant.your-project.vn.access.log;
+    error_log  /var/log/nginx/merchant.your-project.vn.error.log warn;
 }

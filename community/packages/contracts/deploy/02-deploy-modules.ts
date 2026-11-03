@@ -10,8 +10,8 @@ const Actions = { InstallModule: 0 };
 
 async function main() {
   const network = (await ethers.provider.getNetwork()).name;
-  const net     = _load(network);
-  const kernel  = await ethers.getContractAt("Kernel", net.KERNEL);
+  const net = _load(network);
+  const kernel = await ethers.getContractAt("Kernel", net.KERNEL);
   console.log(`\n🔧  [02] Deploy Modules — Kernel: ${net.KERNEL}\n`);
 
   // ROLES
@@ -20,24 +20,24 @@ async function main() {
   await kernel.executeAction(Actions.InstallModule, await roles.getAddress());
   console.log(`  ✅ ROLESv1  → ${await roles.getAddress()}`);
 
-  // TRSRY v2 (cần VNKR address để tính Floor Price)
-  const trsry = await (await ethers.getContractFactory("TRSRYv2")).deploy(net.KERNEL, net.VNKR_TOKEN);
+  // TRSRY v2 (cần YOUR_TOKEN address để tính Floor Price)
+  const trsry = await (await ethers.getContractFactory("TRSRYv2")).deploy(net.KERNEL, net.YOUR_TOKEN_TOKEN);
   await trsry.waitForDeployment();
   await kernel.executeAction(Actions.InstallModule, await trsry.getAddress());
   console.log(`  ✅ TRSRYv2  → ${await trsry.getAddress()}`);
 
-  // MINTR v1 (cần VNKR + TRSRY address để kiểm tra Backing Ratio)
+  // MINTR v1 (cần YOUR_TOKEN + TRSRY address để kiểm tra Backing Ratio)
   const mintr = await (await ethers.getContractFactory("MINTRv1")).deploy(
-    net.KERNEL, net.VNKR_TOKEN, await trsry.getAddress()
+    net.KERNEL, net.YOUR_TOKEN_TOKEN, await trsry.getAddress()
   );
   await mintr.waitForDeployment();
   await kernel.executeAction(Actions.InstallModule, await mintr.getAddress());
-  // Chuyển mint authority của VNKRToken sang MINTR
-  const vnkr = await ethers.getContractAt("VNKRToken", net.VNKR_TOKEN);
-  await vnkr.setMintAuthority(await mintr.getAddress());
+  // Chuyển mint authority của YOUR_TOKENToken sang MINTR
+  const YOUR_TOKEN = await ethers.getContractAt("YOUR_TOKENToken", net.YOUR_TOKEN_TOKEN);
+  await YOUR_TOKEN.setMintAuthority(await mintr.getAddress());
   console.log(`  ✅ MINTRv1  → ${await mintr.getAddress()}`);
 
-  // RANGE v1 — dải giá VNKR/VND mặc định [20k, 22k, 28k, 30k] VND
+  // RANGE v1 — dải giá YOUR_TOKEN/VND mặc định [20k, 22k, 28k, 30k] VND
   const range = await (await ethers.getContractFactory("RANGEv1")).deploy(
     net.KERNEL,
     ethers.parseUnits("20000", 18),
@@ -56,11 +56,11 @@ async function main() {
   console.log(`  ✅ COMPLv1  → ${await compl.getAddress()}`);
 
   _save(network, {
-    ROLES_MODULE:  await roles.getAddress(),
-    TRSRY_MODULE:  await trsry.getAddress(),
-    MINTR_MODULE:  await mintr.getAddress(),
-    RANGE_MODULE:  await range.getAddress(),
-    COMPL_MODULE:  await compl.getAddress(),
+    ROLES_MODULE: await roles.getAddress(),
+    TRSRY_MODULE: await trsry.getAddress(),
+    MINTR_MODULE: await mintr.getAddress(),
+    RANGE_MODULE: await range.getAddress(),
+    COMPL_MODULE: await compl.getAddress(),
   });
 }
 

@@ -1,11 +1,11 @@
 "use client";
 /**
  * /splash — Splash Screen
- * Full-screen black, VNKR logo centered, auto-navigate after 2s
+ * Full-screen black, YOUR_TOKEN logo centered, auto-navigate after 2s
  */
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { VnkrLogo } from "ui-kit";
+import { AXVNLogo } from "ui-kit";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -17,23 +17,23 @@ export default function SplashPage() {
 
   return (
     <div style={{
-      minHeight:      "100vh",
-      background:     "#000000",
-      display:        "flex",
-      flexDirection:  "column",
-      alignItems:     "center",
+      minHeight: "100vh",
+      background: "#000000",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       justifyContent: "center",
-      position:       "relative",
-      fontFamily:     "'Work Sans', sans-serif",
+      position: "relative",
+      fontFamily: "'Work Sans', sans-serif",
     }}>
       {/* Center content */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-        <VnkrLogo variant="light" size={80} />
+        <AXVNLogo variant="light" size={80} />
         <p style={{
-          margin:     0,
-          fontSize:   "1rem",
+          margin: 0,
+          fontSize: "1rem",
           fontWeight: 500,
-          color:      "#BEFF6C",
+          color: "#BEFF6C",
           letterSpacing: "0.02em",
         }}>
           Ví điện tử thế hệ mới
@@ -43,8 +43,8 @@ export default function SplashPage() {
       {/* Loading spinner at bottom */}
       <div style={{
         position: "absolute",
-        bottom:   48,
-        display:  "flex",
+        bottom: 48,
+        display: "flex",
         alignItems: "center",
         justifyContent: "center",
       }}>

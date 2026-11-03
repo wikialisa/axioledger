@@ -6,15 +6,15 @@ x-common-build: &common-build
     NODE_ENV: production
 
 services:
-  # ── VNKR Infra — PostgreSQL 16 ───────────────────────────────────────────
+  # ── YOUR_INFRA Infra — PostgreSQL 16 ───────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
-    container_name: vnkr-postgres
+    container_name: YOUR_INFRA-postgres
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB:       vnkr
+      POSTGRES_DB:       YOUR_INFRA
       POSTGRES_USER:     postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-YOUR_POSTGRES_PASSWORD}
       PGDATA:            /var/lib/postgresql/data/pgdata
@@ -25,26 +25,26 @@ services:
       - ../../deploy/db/03_views.sql:/docker-entrypoint-initdb.d/03_views.sql:ro
       - ../../deploy/db/04_roles.sql:/docker-entrypoint-initdb.d/04_roles.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d vnkr"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d YOUR_INFRA"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
 
-  # ── VNKR Infra — PgBouncer (connection pooler) ────────────────────────────
+  # ── YOUR_INFRA Infra — PgBouncer (connection pooler) ────────────────────────────
   pgbouncer:
     image: bitnami/pgbouncer:latest
-    container_name: vnkr-pgbouncer
+    container_name: YOUR_INFRA-pgbouncer
     restart: unless-stopped
     ports:
       - "5433:5432"
     environment:
       POSTGRESQL_HOST:           postgres
       POSTGRESQL_PORT:           5432
-      POSTGRESQL_DATABASE:       vnkr
+      POSTGRESQL_DATABASE:       YOUR_INFRA
       POSTGRESQL_USERNAME:       postgres
       POSTGRESQL_PASSWORD:       ${POSTGRES_PASSWORD:-YOUR_POSTGRES_PASSWORD}
-      PGBOUNCER_DATABASE:        vnkr
+      PGBOUNCER_DATABASE:        YOUR_INFRA
       PGBOUNCER_POOL_MODE:       transaction
       PGBOUNCER_MAX_CLIENT_CONN: 200
       PGBOUNCER_DEFAULT_POOL_SIZE: 20
@@ -58,10 +58,10 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── VNKR Infra — Redis Event Bus ─────────────────────────────────────────
+  # ── YOUR_INFRA Infra — Redis Event Bus ─────────────────────────────────────────
   redis:
     image: redis:7-alpine
-    container_name: vnkr-redis
+    container_name: YOUR_INFRA-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
@@ -74,23 +74,23 @@ services:
       timeout: 3s
       retries: 5
 
-  # ── ${BRAND_ORG_FINTECH} — Fiat Connector API [dev-api.${BRAND_DOMAIN}] ──────────────────
+  # ── Your FinTech Division Name — Fiat Connector API [dev-api.your-project.vn] ──────────────────
   fiat-connector-api:
     build:
       <<: *common-build
       dockerfile: deploy/docker/Dockerfile.fiat-connector-api
-    image: vnkr/fiat-connector-api:${TAG:-latest}
-    container_name: ${DOCKER_SERVICE_FIAT}
+    image: your-registry/fiat-connector-api:${TAG:-latest}
+    container_name: your-fiat-connector-api
     ports:
       - "4001:4001"
     environment:
       NODE_ENV: production
       BANK_WEBHOOK_SECRET: ${BANK_WEBHOOK_SECRET}
-      DEFAULT_API_ENDPOINT: ${DEFAULT_API_ENDPOINT:-https://dev-api.${BRAND_DOMAIN}}
+      DEFAULT_API_ENDPOINT: ${DEFAULT_API_ENDPOINT:-https://dev-api.your-project.vn}
       TRON_FULL_HOST: ${TRON_FULL_HOST:-https://api.trongrid.io}
       TRON_PRIVATE_KEY: ${TRON_PRIVATE_KEY}
-      REDIS_URL: redis://vnkr-redis:6379
-      DATABASE_URL: postgresql://vnkr_fiat_connector:${DB_PASS_FIAT:-CHANGE_ME_fiat_connector_2026}@pgbouncer:5432/vnkr
+      REDIS_URL: redis://YOUR_INFRA-redis:6379
+      DATABASE_URL: postgresql://your_infra_fiat_connector:${DB_PASS_FIAT:-CHANGE_ME_fiat_connector_2026}@pgbouncer:5432/YOUR_INFRA
     env_file:
       - ../../.env
     restart: unless-stopped
@@ -105,21 +105,21 @@ services:
       timeout: 5s
       retries: 3
 
-  # ── ${BRAND_ORG_MENA} — OTC Liquidity Engine [otc.${BRAND_DOMAIN}] ───────────────────────
+  # ── Your MENA Division Name — OTC Liquidity Engine [otc.your-project.vn] ───────────────────────
   otc-liquidity-engine:
     build:
       <<: *common-build
       dockerfile: deploy/docker/Dockerfile.otc-liquidity-engine
-    image: vnkr/otc-liquidity-engine:${TAG:-latest}
-    container_name: vnkr-otc-liquidity-engine
+    image: your-registry/otc-liquidity-engine:${TAG:-latest}
+    container_name: YOUR_INFRA-otc-liquidity-engine
     ports:
       - "4002:4002"
     environment:
       NODE_ENV: production
       SOLANA_RPC_MAINNET: ${SOLANA_RPC_MAINNET:-https://api.mainnet-beta.solana.com}
-      APPCHAIN_RPC: ${APPCHAIN_RPC:-https://rpc.${BRAND_DOMAIN}}
-      REDIS_URL: redis://vnkr-redis:6379
-      DATABASE_URL: postgresql://vnkr_otc:${DB_PASS_OTC:-CHANGE_ME_otc_2026}@pgbouncer:5432/vnkr
+      APPCHAIN_RPC: ${APPCHAIN_RPC:-https://rpc.your-project.vn}
+      REDIS_URL: redis://YOUR_INFRA-redis:6379
+      DATABASE_URL: postgresql://your_infra_otc:${DB_PASS_OTC:-CHANGE_ME_otc_2026}@pgbouncer:5432/YOUR_INFRA
     env_file:
       - ../../.env
     restart: unless-stopped
@@ -134,20 +134,20 @@ services:
       timeout: 5s
       retries: 3
 
-  # ── VNKR Infra — Subgraph Indexer [treasury-subgraph-api.${BRAND_DOMAIN}] ─────────
+  # ── YOUR_INFRA Infra — Subgraph Indexer [treasury-subgraph-api.your-project.vn] ─────────
   indexer-subgraph:
     build:
       <<: *common-build
       dockerfile: deploy/docker/Dockerfile.indexer-subgraph
-    image: vnkr/indexer-subgraph:${TAG:-latest}
-    container_name: vnkr-indexer-subgraph
+    image: your-registry/indexer-subgraph:${TAG:-latest}
+    container_name: YOUR_INFRA-indexer-subgraph
     ports:
       - "4003:4003"
     environment:
       NODE_ENV: production
-      APPCHAIN_RPC: ${APPCHAIN_RPC:-https://rpc.${BRAND_DOMAIN}}
+      APPCHAIN_RPC: ${APPCHAIN_RPC:-https://rpc.your-project.vn}
       APPCHAIN_CHAIN_ID: ${APPCHAIN_CHAIN_ID:-1}
-      DATABASE_URL: postgresql://vnkr_indexer:${DB_PASS_INDEXER:-CHANGE_ME_indexer_2026}@pgbouncer:5432/vnkr
+      DATABASE_URL: postgresql://your_infra_indexer:${DB_PASS_INDEXER:-CHANGE_ME_indexer_2026}@pgbouncer:5432/YOUR_INFRA
     env_file:
       - ../../.env
     restart: unless-stopped
@@ -160,10 +160,10 @@ services:
       timeout: 5s
       retries: 3
 
-  # ── VNKR Infra — Stalwart Mail Server [mail.${BRAND_DOMAIN}] ─────────────────────
+  # ── YOUR_INFRA Infra — Stalwart Mail Server [mail.your-project.vn] ─────────────────────
   mail-server:
     image: stalwartlabs/mail-server:latest
-    container_name: vnkr-mail-server
+    container_name: YOUR_INFRA-mail-server
     restart: unless-stopped
     ports:
       - "25:25"       # SMTP
@@ -175,7 +175,7 @@ services:
       - stalwart-data:/opt/stalwart-mail/data
       - stalwart-etc:/opt/stalwart-mail/etc
     environment:
-      STALWART_HOSTNAME: ${STALWART_HOSTNAME:-mail.${BRAND_DOMAIN}}
+      STALWART_HOSTNAME: ${STALWART_HOSTNAME:-mail.your-project.vn}
     env_file:
       - ../../.env
     healthcheck:
@@ -184,29 +184,29 @@ services:
       timeout: 10s
       retries: 3
 
-  # ── ${BRAND_ORG_MENA} — SWIFT Messaging Gateway [otc.${BRAND_DOMAIN}] ────────────────────
+  # ── Your MENA Division Name — SWIFT Messaging Gateway [otc.your-project.vn] ────────────────────
   # Node.js Fastify proxy (Port 4004) bridging the monorepo to the SWIFT
   # Microgateway 2.0.17 JVM daemon (swift-mgw, Port 9003).
   swift-gateway:
     build:
       <<: *common-build
       dockerfile: deploy/docker/Dockerfile.swift-gateway
-    image: vnkr/swift-gateway:${TAG:-latest}
-    container_name: ${DOCKER_SERVICE_SWIFT}
+    image: your-registry/swift-gateway:${TAG:-latest}
+    container_name: your-swift-gateway
     ports:
       - "4004:4004"
     environment:
       NODE_ENV: production
       PORT: 4004
       SWIFT_LAU_KEY: ${SWIFT_LAU_KEY}
-      SWIFT_BIC_CODE: ${SWIFT_BIC_CODE:-${SWIFT_BIC_CODE}}
+      SWIFT_BIC_CODE: ${SWIFT_BIC_CODE:-YOURBICXXXX}
       # URL of the SWIFT Microgateway JVM daemon (same host network or sidecar)
       SWIFT_MGW_URL: ${SWIFT_MGW_URL:-http://swift-mgw-daemon:9003}
       SWIFT_MGW_APIKEY: ${SWIFT_MGW_APIKEY}
-      # Redis Event Bus — VNKR ↔ SWIFT bridge
-      REDIS_URL: redis://vnkr-redis:6379
+      # Redis Event Bus — YOUR_INFRA ↔ SWIFT bridge
+      REDIS_URL: redis://YOUR_INFRA-redis:6379
       # URL fiat-connector-api để forward credit notifications
-      FIAT_CONNECTOR_URL: http://${DOCKER_SERVICE_FIAT}:4001
+      FIAT_CONNECTOR_URL: http://your-fiat-connector-api:4001
     env_file:
       - ../../.env
     restart: unless-stopped
@@ -219,13 +219,13 @@ services:
       - otc-liquidity-engine
       - redis
 
-  # ── ${BRAND_ORG_MENA} — SWIFT Microgateway JVM Daemon [otc.${BRAND_DOMAIN}] ──────────────
+  # ── Your MENA Division Name — SWIFT Microgateway JVM Daemon [otc.your-project.vn] ──────────────
   # Spring Boot JAR (swift-mgw-2.0.17-1.jar) — requires JDK 11+, a valid
   # config-swift-mgw.enc and PKI keystore at runtime.
   # Mount the extracted vendor directory as a volume.
   swift-mgw-daemon:
     image: eclipse-temurin:17-jre-alpine
-    container_name: vnkr-swift-mgw-daemon
+    container_name: YOUR_INFRA-swift-mgw-daemon
     working_dir: /opt/swift-mgw
     volumes:
       - ../../services/swift-gateway/vendor/swift-mgw-2.0.17-1:/opt/swift-mgw:ro
@@ -260,33 +260,33 @@ services:
       retries: 5
       start_period: 60s
 
-  # ── ${BRAND_ORG_MENA} — SWIFT Chain Bridge Relayer [otc.${BRAND_DOMAIN}] ────────────────
+  # ── Your MENA Division Name — SWIFT Chain Bridge Relayer [otc.your-project.vn] ────────────────
   # Bi-Directional Oracle Relayer (Port 4005):
-  #   INBOUND:  swift-gateway webhook → settleInboundSwift() → Mint AXVN
+  #   INBOUND:  swift-gateway webhook → settleInboundSwift() → Mint YOUR_TOKEN
   #   OUTBOUND: SwiftOutboundRequested EVM event → swift-gateway /send-mt103
   swift-chain-bridge:
     build:
       <<: *common-build
       dockerfile: deploy/docker/Dockerfile.swift-chain-bridge
-    image: vnkr/swift-chain-bridge:${TAG:-latest}
-    container_name: vnkr-swift-chain-bridge
+    image: your-registry/swift-chain-bridge:${TAG:-latest}
+    container_name: YOUR_INFRA-swift-chain-bridge
     ports:
       - "4005:4005"
     environment:
       NODE_ENV: production
       PORT: 4005
-      # VNKR App-Chain EVM RPC (Hyperledger Besu)
-      VNKR_EVM_RPC: ${VNKR_EVM_RPC:-http://besu-node:8545}
-      # VNKRSwiftBridge.sol contract address on App-Chain
+      # YOUR_INFRA App-Chain EVM RPC (Hyperledger Besu)
+      YOUR_INFRA_EVM_RPC: ${YOUR_INFRA_EVM_RPC:-http://besu-node:8545}
+      # BrandSwiftBridge.sol contract address on App-Chain
       BRIDGE_CONTRACT_ADDRESS: ${BRIDGE_CONTRACT_ADDRESS}
       # Relayer wallet private key (phải có role oracleRelayer trong contract)
       RELAYER_PRIVATE_KEY: ${RELAYER_PRIVATE_KEY}
       # swift-gateway URL (nội bộ Docker network)
-      SWIFT_GATEWAY_URL: http://${DOCKER_SERVICE_SWIFT}:4004
+      SWIFT_GATEWAY_URL: http://your-swift-gateway:4004
       SWIFT_API_KEY: ${SWIFT_API_KEY}
-      SWIFT_BIC_CODE: ${SWIFT_BIC_CODE:-${SWIFT_BIC_CODE}XXX}
+      SWIFT_BIC_CODE: ${SWIFT_BIC_CODE:-YOURBICXXXXXXX}
       # Webhook secret cho xác thực nội bộ giữa swift-gateway và bridge
-      VNKR_INTERNAL_WEBHOOK_SECRET: ${VNKR_INTERNAL_WEBHOOK_SECRET}
+      YOUR_INFRA_INTERNAL_WEBHOOK_SECRET: ${YOUR_INFRA_INTERNAL_WEBHOOK_SECRET}
     env_file:
       - ../../.env
     restart: unless-stopped
@@ -299,13 +299,13 @@ services:
       - swift-gateway
       - redis
 
-  # ── VNKR R&D — Dune Alert Bots (Telegram / Discord) ───────────────────────
+  # ── YOUR_INFRA R&D — Dune Alert Bots (Telegram / Discord) ───────────────────────
   dune-alert-bots:
     build:
       <<: *common-build
       dockerfile: deploy/docker/Dockerfile.dune-alert-bots
-    image: vnkr/dune-alert-bots:${TAG:-latest}
-    container_name: vnkr-dune-alert-bots
+    image: your-registry/dune-alert-bots:${TAG:-latest}
+    container_name: YOUR_INFRA-dune-alert-bots
     environment:
       NODE_ENV: production
       DUNE_API_KEY: ${DUNE_API_KEY}
@@ -327,4 +327,4 @@ volumes:
 
 networks:
   default:
-    name: vnkr-network
+    name: YOUR_INFRA-network

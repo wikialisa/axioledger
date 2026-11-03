@@ -136,7 +136,7 @@ const start = async () => {
     await app.listen({ port: PORT, host: "0.0.0.0" });
     console.log(`
 ╔═══════════════════════════════════════════════════════╗
-║   VNKR Mock SWIFT MGW Daemon running on port ${PORT}    ║
+║   YOUR_TOKEN Mock SWIFT MGW Daemon running on port ${PORT}    ║
 ║   Replaces: swift-mgw-daemon (swift-mgw-2.0.17-1.jar) ║
 ║   Mode: SANDBOX_MOCK  — DEV/STAGING ONLY              ║
 ╚═══════════════════════════════════════════════════════╝`);

@@ -1,7 +1,7 @@
 /**
  * ui — Logo System
- * VNKR Organisation — Brand Identity
- * Wordmark "VNKR" + Wi-Fi signal mark (top-right of R)
+ * YOUR_TOKEN Organisation — Brand Identity
+ * Wordmark "YOUR_TOKEN" + Wi-Fi signal mark (top-right of R)
  *
  * Variants:
  *   dark  — black on white (default)
@@ -16,7 +16,7 @@ import React from "react";
 import type { CSSProperties } from "react";
 
 export type LogoVariant = "dark" | "light" | "green" | "pink";
-export type LogoSize    = "xs" | "sm" | "md" | "lg" | "xl";
+export type LogoSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 const SIZE_MAP: Record<LogoSize, number> = {
   xs: 60,
@@ -27,39 +27,39 @@ const SIZE_MAP: Record<LogoSize, number> = {
 };
 
 const VARIANT_MAP: Record<LogoVariant, { fg: string; bg: string }> = {
-  dark:  { fg: "#000000", bg: "transparent" },
+  dark: { fg: "#000000", bg: "transparent" },
   light: { fg: "#FFFFFF", bg: "transparent" },
-  green: { fg: "#000000", bg: "#BEFF6C"     },
-  pink:  { fg: "#000000", bg: "#FD9FDD"     },
+  green: { fg: "#000000", bg: "#BEFF6C" },
+  pink: { fg: "#000000", bg: "#FD9FDD" },
 };
 
 export interface LogoProps {
   variant?: LogoVariant;
-  size?:    LogoSize | number;
+  size?: LogoSize | number;
   /** Show background badge (rounded rect) */
-  badge?:   boolean;
-  style?:   CSSProperties;
+  badge?: boolean;
+  style?: CSSProperties;
   className?: string;
   /** aria-label override */
-  title?:   string;
+  title?: string;
 }
 
-export function VnkrLogo({
-  variant   = "dark",
-  size      = "md",
-  badge     = false,
+export function AXVNLogo({
+  variant = "dark",
+  size = "md",
+  badge = false,
   style,
   className,
-  title     = "VNKR",
+  title = "YOUR_TOKEN",
 }: LogoProps) {
-  const w     = typeof size === "number" ? size : SIZE_MAP[size];
-  const c     = VARIANT_MAP[variant];
-  const h     = Math.round(w * 0.32); // aspect ratio ≈ 3.1 : 1
-  const pad   = badge ? Math.round(w * 0.12) : 0;
+  const w = typeof size === "number" ? size : SIZE_MAP[size];
+  const c = VARIANT_MAP[variant];
+  const h = Math.round(w * 0.32); // aspect ratio ≈ 3.1 : 1
+  const pad = badge ? Math.round(w * 0.12) : 0;
   const totalW = w + pad * 2;
   const totalH = h + pad * 2;
-  const r     = badge ? Math.round(totalH * 0.25) : 0;
-  const fg    = c.fg;
+  const r = badge ? Math.round(totalH * 0.25) : 0;
+  const fg = c.fg;
 
   return (
     <svg
@@ -84,7 +84,7 @@ export function VnkrLogo({
         />
       )}
 
-      {/* ── VNKR wordmark ── */}
+      {/* ── YOUR_TOKEN wordmark ── */}
       <text
         x={pad}
         y={pad + h * 0.82}
@@ -94,7 +94,7 @@ export function VnkrLogo({
         fill={fg}
         letterSpacing="-0.01em"
       >
-        VNKR
+        YOUR_TOKEN
       </text>
 
       {/* ── Wi-Fi signal mark (3 arcs, top-right of R) ── */}

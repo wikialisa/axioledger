@@ -23,7 +23,7 @@ complianceRouter.post("/nq05/report", requireCompliance, async (req, res) => {
     period: `${body.startDate} — ${body.endDate}`,
     totalTransactions: 0, // placeholder until DB query
     totalVolume: "0",
-    fileUrl: `https://reports.${BRAND_DOMAIN}/nq05/${reportId}.${body.format.toLowerCase()}`,
+    fileUrl: `https://reports.your-project.vn/nq05/${reportId}.${body.format.toLowerCase()}`,
     generatedAt: new Date().toISOString(),
   }, "Báo cáo NQ-05 đã được tạo");
 });

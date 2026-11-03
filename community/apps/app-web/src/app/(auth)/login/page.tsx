@@ -10,12 +10,12 @@ import { Button, Input, Text, ArrowLeft, Lock, Eye, EyeOff, ShieldCheck } from "
 export default function LoginPage() {
   const router = useRouter();
   const [identifier, setIdentifier] = useState("");
-  const [password,   setPassword]   = useState("");
-  const [showPw,     setShowPw]     = useState(false);
-  const [totpStep,   setTotpStep]   = useState(false);
-  const [totpCode,   setTotpCode]   = useState("");
-  const [error,      setError]      = useState("");
-  const [loading,    setLoading]    = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
+  const [totpStep, setTotpStep] = useState(false);
+  const [totpCode, setTotpCode] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const canSubmit = identifier.trim().length >= 6 && password.length >= 6;
 
@@ -25,9 +25,9 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await fetch("/api/v1/auth/login", {
-        method:  "POST",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ identifier: identifier.trim(), password, totpCode: totpStep ? totpCode : undefined }),
+        body: JSON.stringify({ identifier: identifier.trim(), password, totpCode: totpStep ? totpCode : undefined }),
       });
       const data = await res.json();
       if (!data.success) {
@@ -38,7 +38,7 @@ export default function LoginPage() {
       }
       // Store tokens
       if (typeof window !== "undefined") {
-        localStorage.setItem("access_token",  data.data.accessToken);
+        localStorage.setItem("access_token", data.data.accessToken);
         localStorage.setItem("refresh_token", data.data.refreshToken);
       }
       router.push("/home");
@@ -71,13 +71,13 @@ export default function LoginPage() {
             {totpStep ? "Xác thực 2FA" : "Đăng nhập"}
           </h1>
           <p style={{ margin: "8px 0 0", fontSize: "0.9375rem", color: "#8F9BB3" }}>
-            {totpStep ? "Nhập mã 6 chữ số từ Google Authenticator" : "Chào mừng trở lại VNKR"}
+            {totpStep ? "Nhập mã 6 chữ số từ Google Authenticator" : "Chào mừng trở lại YOUR_TOKEN"}
           </p>
         </div>
 
         {!totpStep ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <Input label="Số điện thoại / Email" placeholder="0901 234 567 hoặc email@${BRAND_DOMAIN}" type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} fullWidth />
+            <Input label="Số điện thoại / Email" placeholder="0901 234 567 hoặc email@your-project.vn" type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} fullWidth />
             <div style={{ position: "relative" }}>
               <Input
                 label="Mật khẩu"

@@ -78,7 +78,7 @@ pnpm --filter sandbox-dashboard dev   # http://localhost:3007
 
 ### 🏛️ Chính phủ & Tổ chức công
 - **KYC Portal** tích hợp eKYC/eCitizen: `apps/kyc-portal/`
-- **Block Explorer** & Proof of Reserve công khai: `apps/explorer-AXVNscan/`
+- **Block Explorer** & Proof of Reserve công khai: `apps/explorer-YOUR_INFRAscan/`
 - **Quản trị DAO on-chain**: `apps/dao-portal/` + `programs/treasury-rbs/`
 - **SWIFT institutional banking**: `packages/swift-adapter/` + `services/swift-gateway/`
 - **On-premise deployment**: `deploy/docker/` hoặc `deploy/kubernetes/`

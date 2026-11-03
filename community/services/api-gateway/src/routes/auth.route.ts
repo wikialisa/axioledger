@@ -30,7 +30,7 @@ authRouter.post("/register", async (req, res) => {
   // TODO: persist user to DB, check uniqueness
   const passwordHash = await bcrypt.hash(body.password, 12);
   const userId = uuidv4();
-  const accessToken  = signAccessToken({ sub: userId, role: "user" });
+  const accessToken = signAccessToken({ sub: userId, role: "user" });
   const refreshToken = signRefreshToken({ sub: userId, role: "user" });
   await auditLog({ userId, action: "REGISTER", resource: "users", ...buildAuditContext(req), timestamp: new Date().toISOString() });
   created(res, { userId, accessToken, refreshToken, expiresIn: 900 }, "Đăng ký thành công");
@@ -45,7 +45,7 @@ authRouter.post("/login", async (req, res) => {
   }
   // TODO: fetch user from DB, validate password hash, check 2FA
   const userId = "demo-user-id"; // placeholder
-  const accessToken  = signAccessToken({ sub: userId, role: "user" });
+  const accessToken = signAccessToken({ sub: userId, role: "user" });
   const refreshToken = signRefreshToken({ sub: userId, role: "user" });
   await auditLog({ userId, action: "LOGIN", resource: "auth", ...buildAuditContext(req), timestamp: new Date().toISOString() });
   ok(res, { userId, accessToken, refreshToken, expiresIn: 900 }, "Đăng nhập thành công");
@@ -92,7 +92,7 @@ authRouter.post("/reset-password", async (req, res) => {
 
 // ─── POST /api/v1/auth/2fa/setup ─────────────────────────────────────────────
 authRouter.post("/2fa/setup", authenticate, async (req, res) => {
-  const secret = speakeasy.generateSecret({ name: `VNKR:${req.user!.sub}`, length: 20 });
+  const secret = speakeasy.generateSecret({ name: `YOUR_TOKEN:${req.user!.sub}`, length: 20 });
   const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url ?? "");
   // TODO: persist secret (encrypted) to user record temporarily until enabled
   ok(res, {

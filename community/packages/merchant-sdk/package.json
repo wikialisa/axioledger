@@ -1,7 +1,7 @@
 {
   "name": "merchant-sdk",
   "version": "1.0.1",
-  "description": "JS/TS SDK for merchant partners integrating VNKR payment gateway (dev-api.${BRAND_DOMAIN})",
+  "description": "JS/TS SDK for merchant partners integrating YOUR_TOKEN payment gateway (dev-api.your-project.vn)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -42,6 +42,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/YOUR_TOKENvietnam/YOUR_TOKEN-packages.git"
   }
 }

@@ -10,10 +10,10 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["ui-kit"],
   webpack(config) {
-    // alias "@vnkr/ui-kit" → "ui-kit" (legacy import path used in pages)
+    // alias "@YOUR_NPM_SCOPE_UPPER/ui-kit" → "ui-kit" (legacy import path used in pages)
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@vnkr/ui-kit": path.resolve(__dirname, "../../packages/ui-kit/src/index.ts"),
+      "@YOUR_NPM_SCOPE_UPPER/ui-kit": path.resolve(__dirname, "../../packages/ui-kit/src/index.ts"),
     };
     return config;
   },

@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── TRSRY.v2.sol — Kho bạc Quốc gia V2 ─────────────────────────────────────
-// Lưu giữ tài sản dự trữ: Vàng, VNĐ, FX và Crypto (10.000.000.000.000 VNKR).
-// Mọi token VNKR đúc ra đều phải có tài sản bảo chứng tương đương (≥ 1 VND / 1 token).
+// Lưu giữ tài sản dự trữ: Vàng, VNĐ, FX và Crypto (10.000.000.000.000 YOUR_TOKEN).
+// Mọi token YOUR_TOKEN đúc ra đều phải có tài sản bảo chứng tương đương (≥ 1 VND / 1 token).
 // Khóa thanh khoản không cho rút tài sản bảo chứng bất hợp pháp.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -34,13 +34,13 @@ contract TRSRYv2 is Module, ITRSRY {
     /// @notice Số lượng bị khóa (không thể rút) cho mỗi token
     mapping(address => uint256) public lockedBalances;
 
-    /// @notice Địa chỉ VNKR token (để tính Floor Price)
-    address public vnkrToken;
+    /// @notice Địa chỉ YOUR_TOKEN token (để tính Floor Price)
+    address public YOUR_TOKENToken;
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
-    constructor(Kernel kernel_, address vnkrToken_) Module(kernel_) {
-        vnkrToken = vnkrToken_;
+    constructor(Kernel kernel_, address YOUR_TOKENToken_) Module(kernel_) {
+        YOUR_TOKENToken = YOUR_TOKENToken_;
     }
 
     // ─── Module interface ─────────────────────────────────────────────────
@@ -112,9 +112,9 @@ contract TRSRYv2 is Module, ITRSRY {
         }
     }
 
-    /// @notice Giá sàn nội tại: Tổng dự trữ VND / Tổng cung VNKR lưu hành
+    /// @notice Giá sàn nội tại: Tổng dự trữ VND / Tổng cung YOUR_TOKEN lưu hành
     function floorPriceVnd() external view override returns (uint256) {
-        uint256 supply = circulatingVnkr();
+        uint256 supply = circulatingAXVN();
         if (supply == 0) return 0;
         uint256 len = reserveTokens.length;
         uint256 total;
@@ -138,8 +138,8 @@ contract TRSRYv2 is Module, ITRSRY {
         return reserveAssets[token_].priceVnd;
     }
 
-    function circulatingVnkr() public view override returns (uint256) {
-        return IERC20(vnkrToken).totalSupply();
+    function circulatingAXVN() public view override returns (uint256) {
+        return IERC20(YOUR_TOKENToken).totalSupply();
     }
 
     function reserveTokensLength() external view returns (uint256) {

@@ -11,7 +11,7 @@ COPY packages/core-sdk ./packages/core-sdk
 COPY services/otc-liquidity-engine ./services/otc-liquidity-engine
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @vnkr/otc-liquidity-engine build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/otc-liquidity-engine build
 
 FROM node:20-alpine AS runner
 WORKDIR /app

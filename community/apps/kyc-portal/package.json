@@ -2,7 +2,7 @@
   "name": "kyc-portal",
   "version": "0.1.0",
   "private": true,
-  "description": "[kyc.${BRAND_DOMAIN}] eKYC Portal — VNeID Integration, ZKP Attestation, Identity Management",
+  "description": "[kyc.your-project.vn] eKYC Portal — VNeID Integration, ZKP Attestation, Identity Management",
   "scripts": {
     "dev": "next dev -p 3013",
     "build": "next build",

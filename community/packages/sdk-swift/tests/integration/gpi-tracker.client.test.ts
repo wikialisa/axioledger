@@ -12,7 +12,7 @@ const MOCK_GPI_STATUS: GpiPaymentStatus = {
   status: 'ACSP',
   lastUpdateDt: '2024-07-01T12:00:00.000Z',
   agents: [
-    { bicfi: 'VNKRVNVX', trackerStatus: 'ACSP' },
+    { bicfi: 'AXVNVNVX', trackerStatus: 'ACSP' },
     { bicfi: 'CHASUS33', trackerStatus: 'ACSP' },
   ],
 };
@@ -51,7 +51,7 @@ describe('GpiTrackerClient (integration)', () => {
 
       expect(Array.isArray(result.agents)).toBe(true);
       expect(result.agents).toHaveLength(2);
-      expect(result.agents[0].bicfi).toBe('VNKRVNVX');
+      expect(result.agents[0].bicfi).toBe('AXVNVNVX');
       expect(result.agents[1].bicfi).toBe('CHASUS33');
     });
 
@@ -67,7 +67,7 @@ describe('GpiTrackerClient (integration)', () => {
           headers: expect.objectContaining({
             'X-SWIFT-Signature': expect.any(String),
             'X-SWIFT-Timestamp': expect.any(String),
-            'X-SWIFT-AppId': 'vnkrvietnam-swift-sdk',
+            'X-SWIFT-AppId': 'AXVNvietnam-swift-sdk',
           }),
         })
       );

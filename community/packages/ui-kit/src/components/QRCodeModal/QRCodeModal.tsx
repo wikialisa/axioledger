@@ -1,7 +1,7 @@
 /**
  * ui — QRCodeModal
  * QR code generator + scanner modal
- * Used by: app.${BRAND_DOMAIN} (receive payment, share wallet address, merchant checkout)
+ * Used by: app.your-project.vn (receive payment, share wallet address, merchant checkout)
  *
  * Tabs:
  *   show  — Display QR code for a value (address, URL, payment link)
@@ -24,26 +24,26 @@ import { Button } from "../Button/Button";
 export type QRModalTab = "show" | "scan";
 
 export interface QRCodeModalProps {
-  open:         boolean;
-  onClose:      () => void;
+  open: boolean;
+  onClose: () => void;
   /** Value to encode in QR */
-  value?:       string;
+  value?: string;
   /** Label shown under QR */
-  label?:       string;
+  label?: string;
   /** Subtitle (e.g. network name) */
-  subtitle?:    string;
+  subtitle?: string;
   /** Enable scan tab */
-  scannable?:   boolean;
+  scannable?: boolean;
   /** Called when QR scanned (scan tab) */
-  onScan?:      (result: string) => void;
+  onScan?: (result: string) => void;
   /** Default tab */
-  defaultTab?:  QRModalTab;
+  defaultTab?: QRModalTab;
   /** QR code size in px */
-  qrSize?:      number;
+  qrSize?: number;
   /** QR foreground color */
-  fgColor?:     string;
+  fgColor?: string;
   /** QR background color */
-  bgColor?:     string;
+  bgColor?: string;
 }
 
 // ─── Minimal QR matrix encoder ───────────────────────────────────────────────
@@ -86,10 +86,10 @@ function buildQRMatrix(text: string): boolean[][] {
         const c = row - d;
         if (r < 0 || c < 0 || c >= size) continue;
         if (matrix[r][c]) continue;
-        const byteIdx  = Math.floor(bitIdx / 8);
+        const byteIdx = Math.floor(bitIdx / 8);
         const bitInByte = 7 - (bitIdx % 8);
-        const byteVal  = bytes[byteIdx % bytes.length] ?? 0;
-        matrix[r][c]   = Boolean((byteVal >> bitInByte) & 1);
+        const byteVal = bytes[byteIdx % bytes.length] ?? 0;
+        matrix[r][c] = Boolean((byteVal >> bitInByte) & 1);
         bitIdx++;
       }
     }
@@ -102,17 +102,17 @@ function buildQRMatrix(text: string): boolean[][] {
 
 function QRCodeSVG({
   value,
-  size    = 200,
+  size = 200,
   fgColor = "#000000",
   bgColor = "#FFFFFF",
 }: {
-  value:    string;
-  size?:    number;
+  value: string;
+  size?: number;
   fgColor?: string;
   bgColor?: string;
 }) {
-  const matrix  = buildQRMatrix(value);
-  const cells   = matrix.length;
+  const matrix = buildQRMatrix(value);
+  const cells = matrix.length;
   const cellSize = size / cells;
 
   return (
@@ -161,23 +161,23 @@ function CopyButton({ value }: { value: string }) {
     <button
       onClick={handleCopy}
       style={{
-        display:        "flex",
-        alignItems:     "center",
-        gap:            6,
-        background:     copied ? "#ECFDF5" : "#F5F6FA",
-        border:         `1px solid ${copied ? "#00D68F" : "#E5E7EB"}`,
-        borderRadius:   8,
-        padding:        "8px 14px",
-        fontSize:       12,
-        fontWeight:     600,
-        fontFamily:     "'Work Sans', sans-serif",
-        color:          copied ? "#065F46" : "#4A5568",
-        cursor:         "pointer",
-        transition:     "background 0.15s, border-color 0.15s, color 0.15s",
-        whiteSpace:     "nowrap",
-        overflow:       "hidden",
-        textOverflow:   "ellipsis",
-        maxWidth:       260,
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        background: copied ? "#ECFDF5" : "#F5F6FA",
+        border: `1px solid ${copied ? "#00D68F" : "#E5E7EB"}`,
+        borderRadius: 8,
+        padding: "8px 14px",
+        fontSize: 12,
+        fontWeight: 600,
+        fontFamily: "'Work Sans', sans-serif",
+        color: copied ? "#065F46" : "#4A5568",
+        cursor: "pointer",
+        transition: "background 0.15s, border-color 0.15s, color 0.15s",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        maxWidth: 260,
       }}
     >
       {copied ? (
@@ -188,8 +188,8 @@ function CopyButton({ value }: { value: string }) {
       ) : (
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2"/>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
       )}
       {copied ? "Copied!" : value.length > 28 ? `${value.slice(0, 12)}…${value.slice(-8)}` : value}
@@ -227,19 +227,19 @@ function ScanTab({ onScan }: { onScan?: (result: string) => void }) {
   if (error) {
     return (
       <div style={{
-        display:        "flex",
-        flexDirection:  "column",
-        alignItems:     "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
-        height:         240,
-        gap:            12,
-        textAlign:      "center",
-        padding:        "0 20px",
+        height: 240,
+        gap: 12,
+        textAlign: "center",
+        padding: "0 20px",
       }}>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
           stroke="#A0AEC0" strokeWidth="1.5" strokeLinecap="round">
-          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-          <circle cx="12" cy="13" r="4"/>
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+          <circle cx="12" cy="13" r="4" />
         </svg>
         <p style={{ fontSize: 13, color: "#718096", fontFamily: "'Work Sans', sans-serif", margin: 0 }}>
           {error}
@@ -258,15 +258,15 @@ function ScanTab({ onScan }: { onScan?: (result: string) => void }) {
       />
       {/* Scan frame overlay */}
       <div style={{
-        position:       "absolute",
-        inset:          0,
-        display:        "flex",
-        alignItems:     "center",
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
         justifyContent: "center",
-        pointerEvents:  "none",
+        pointerEvents: "none",
       }}>
         <div style={{
-          width:  180, height: 180,
+          width: 180, height: 180,
           border: "2px solid rgba(255,255,255,0.8)",
           borderRadius: 12,
           boxShadow: "0 0 0 9999px rgba(0,0,0,0.45)",
@@ -294,20 +294,20 @@ function ScanTab({ onScan }: { onScan?: (result: string) => void }) {
               left: 0, right: 0,
               height: 2,
               background: "linear-gradient(to right, transparent, #BEFF6C, transparent)",
-              animation: "vnkr-scan-line 1.8s ease-in-out infinite",
+              animation: "YOUR_TOKEN-scan-line 1.8s ease-in-out infinite",
             }} />
           )}
         </div>
-        <style>{`@keyframes vnkr-scan-line {
+        <style>{`@keyframes YOUR_TOKEN-scan-line {
           0%   { top: 10px; }
           50%  { top: calc(100% - 12px); }
           100% { top: 10px; }
         }`}</style>
       </div>
       <p style={{
-        position:  "absolute", bottom: 12, left: 0, right: 0,
+        position: "absolute", bottom: 12, left: 0, right: 0,
         textAlign: "center", fontSize: 12, color: "rgba(255,255,255,0.8)",
-        fontFamily:"'Work Sans', sans-serif", margin: 0,
+        fontFamily: "'Work Sans', sans-serif", margin: 0,
       }}>
         Point camera at QR code
       </p>
@@ -320,30 +320,30 @@ function ScanTab({ onScan }: { onScan?: (result: string) => void }) {
 export function QRCodeModal({
   open,
   onClose,
-  value     = "",
+  value = "",
   label,
   subtitle,
   scannable = false,
   onScan,
   defaultTab = "show",
-  qrSize    = 200,
-  fgColor   = "#000000",
-  bgColor   = "#FFFFFF",
+  qrSize = 200,
+  fgColor = "#000000",
+  bgColor = "#FFFFFF",
 }: QRCodeModalProps) {
   const [tab, setTab] = useState<QRModalTab>(defaultTab);
 
   const TAB_STYLE = (active: boolean): CSSProperties => ({
-    flex:        1,
-    height:      36,
-    borderRadius:8,
-    border:      "none",
-    background:  active ? "#000" : "transparent",
-    color:       active ? "#fff" : "#718096",
-    fontSize:    13,
-    fontWeight:  active ? 600 : 400,
-    fontFamily:  "'Work Sans', sans-serif",
-    cursor:      "pointer",
-    transition:  "background 0.15s, color 0.15s",
+    flex: 1,
+    height: 36,
+    borderRadius: 8,
+    border: "none",
+    background: active ? "#000" : "transparent",
+    color: active ? "#fff" : "#718096",
+    fontSize: 13,
+    fontWeight: active ? 600 : 400,
+    fontFamily: "'Work Sans', sans-serif",
+    cursor: "pointer",
+    transition: "background 0.15s, color 0.15s",
   });
 
   return (
@@ -357,14 +357,14 @@ export function QRCodeModal({
         {/* Tab switcher */}
         {scannable && (
           <div style={{
-            display:     "flex",
-            background:  "#F5F6FA",
-            borderRadius:10,
-            padding:     3,
-            gap:         2,
+            display: "flex",
+            background: "#F5F6FA",
+            borderRadius: 10,
+            padding: 3,
+            gap: 2,
           }}>
-            <button style={TAB_STYLE(tab === "show")}   onClick={() => setTab("show")}>Show QR</button>
-            <button style={TAB_STYLE(tab === "scan")}   onClick={() => setTab("scan")}>Scan QR</button>
+            <button style={TAB_STYLE(tab === "show")} onClick={() => setTab("show")}>Show QR</button>
+            <button style={TAB_STYLE(tab === "scan")} onClick={() => setTab("scan")}>Scan QR</button>
           </div>
         )}
 
@@ -372,13 +372,13 @@ export function QRCodeModal({
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
             {/* QR code */}
             <div style={{
-              padding:      16,
-              background:   bgColor,
+              padding: 16,
+              background: bgColor,
               borderRadius: 16,
-              border:       "1px solid #F3F4F6",
-              boxShadow:    "0 2px 12px rgba(0,0,0,0.06)",
+              border: "1px solid #F3F4F6",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
             }}>
-              <QRCodeSVG value={value || "https://${BRAND_DOMAIN}"} size={qrSize} fgColor={fgColor} bgColor={bgColor} />
+              <QRCodeSVG value={value || "https://your-project.vn"} size={qrSize} fgColor={fgColor} bgColor={bgColor} />
             </div>
 
             {/* Label */}
@@ -407,14 +407,14 @@ export function QRCodeModal({
               iconLeft={
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                  <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                  <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                 </svg>
               }
               onClick={async () => {
                 if (navigator.share) {
-                  await navigator.share({ title: label ?? "VNKR", text: value });
+                  await navigator.share({ title: label ?? "YOUR_TOKEN", text: value });
                 }
               }}
             >

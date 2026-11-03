@@ -20,19 +20,19 @@ import type {
 
 describe("buildPacs008 / parsePacs008", () => {
   const payload: Pacs008Payload = {
-    msgId: "VNKR/20260819/PACS008/001",
+    msgId: "YOUR_TOKEN/20260819/PACS008/001",
     creDtTm: "2026-08-19T04:24:00Z",
     nbOfTxs: 1,
     sttlmMtd: "CLRG",
     instrId: "INSTR-001",
-    endToEndId: "E2E-VNKR-20260819",
+    endToEndId: "E2E-YOUR_TOKEN-20260819",
     txId: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
     intrBkSttlmAmt: 750_000.5,
     currency: "EUR",
     intrBkSttlmDt: "2026-08-19",
-    dbtrName: "VNKR TECH HOLDING JSC",
+    dbtrName: "Your Organisation Full Name JSC",
     dbtrAcctIBAN: "VN1234567890",
-    dbtrAgtBIC: "VNKRVNVNXXX",
+    dbtrAgtBIC: "AXVNVNVNXXX",
     cdtrAgtBIC: "DEUTDEFFXXX",
     cdtrName: "DEUTSCHE INDUSTRIAL GMBH",
     cdtrAcctIBAN: "DE89370400440532013000",
@@ -52,7 +52,7 @@ describe("buildPacs008 / parsePacs008", () => {
 
   it("contains correct MsgId", () => {
     const xml = buildPacs008(payload);
-    expect(xml).toContain("<MsgId>VNKR/20260819/PACS008/001</MsgId>");
+    expect(xml).toContain("<MsgId>YOUR_TOKEN/20260819/PACS008/001</MsgId>");
   });
 
   it("contains amount with 2 decimal places and currency", () => {
@@ -83,7 +83,7 @@ describe("buildPacs008 / parsePacs008", () => {
 
 describe("buildPacs009 / parsePacs009", () => {
   const payload: Pacs009Payload = {
-    msgId: "VNKR/20260819/PACS009/001",
+    msgId: "YOUR_TOKEN/20260819/PACS009/001",
     creDtTm: "2026-08-19T05:00:00Z",
     instrId: "COV-001",
     endToEndId: "E2E-COV-20260819",
@@ -91,9 +91,9 @@ describe("buildPacs009 / parsePacs009", () => {
     intrBkSttlmAmt: 500_000.0,
     currency: "USD",
     intrBkSttlmDt: "2026-08-19",
-    instgAgtBIC: "VNKRVNVNXXX",
+    instgAgtBIC: "AXVNVNVNXXX",
     instdAgtBIC: "CHASUS33XXX",
-    dbtrAgtBIC: "VNKRVNVNXXX",
+    dbtrAgtBIC: "AXVNVNVNXXX",
     cdtrAgtBIC: "CHASUS33XXX",
     cdtrName: "JP MORGAN CHASE BANK",
     cdtrAcctIBAN: "US12345678901234567890",
@@ -108,7 +108,7 @@ describe("buildPacs009 / parsePacs009", () => {
   });
 
   it("contains InstgAgt BIC", () => {
-    expect(buildPacs009(payload)).toContain("<BICFI>VNKRVNVNXXX</BICFI>");
+    expect(buildPacs009(payload)).toContain("<BICFI>AXVNVNVNXXX</BICFI>");
   });
 
   it("contains correct settlement amount", () => {
@@ -125,14 +125,14 @@ describe("buildPacs009 / parsePacs009", () => {
 
 describe("buildCamt053 / parseCamt053", () => {
   const payload: Camt053Payload = {
-    msgId: "VNKR/20260819/CAMT053/001",
+    msgId: "YOUR_TOKEN/20260819/CAMT053/001",
     creDtTm: "2026-08-19T08:00:00Z",
     stmtId: "STMT-2026-08-19-001",
     seqNb: 1,
     frDt: "2026-08-19",
     toDt: "2026-08-19",
     accountIBAN: "VN123456789012345",
-    servicerBIC: "VNKRVNVNXXX",
+    servicerBIC: "AXVNVNVNXXX",
     openingBalanceAmt: 1_000_000.0,
     openingBalanceCurrency: "USD",
     openingBalanceDC: "CRDT",
@@ -150,7 +150,7 @@ describe("buildCamt053 / parseCamt053", () => {
         bookingDate: "2026-08-19",
         valueDate: "2026-08-19",
         accountServicerRef: "ASR-001",
-        endToEndId: "E2E-VNKR-20260819",
+        endToEndId: "E2E-YOUR_TOKEN-20260819",
         bankTransactionCode: "ESCT",
         additionalEntryInfo: "Payment for IT services",
       },
@@ -194,12 +194,12 @@ describe("buildCamt053 / parseCamt053", () => {
 
 describe("buildPain001 / parsePain001", () => {
   const payload: Pain001Payload = {
-    msgId: "VNKR/20260819/PAIN001/001",
+    msgId: "YOUR_TOKEN/20260819/PAIN001/001",
     creDtTm: "2026-08-19T09:00:00Z",
-    initiatingPartyName: "VNKR TECH HOLDING JSC",
-    dbtrName: "VNKR OPERATING ACCOUNT",
+    initiatingPartyName: "Your Organisation Full Name JSC",
+    dbtrName: "YOUR_TOKEN OPERATING ACCOUNT",
     dbtrAcctIBAN: "VN123456789000000",
-    dbtrAgtBIC: "VNKRVNVNXXX",
+    dbtrAgtBIC: "AXVNVNVNXXX",
     transactions: [
       {
         endToEndId: "E2E-PAIN-001",

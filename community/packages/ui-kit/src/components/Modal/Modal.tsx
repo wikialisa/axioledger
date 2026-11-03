@@ -20,32 +20,32 @@ import type { CSSProperties, ReactNode, KeyboardEvent } from "react";
 export type ModalVariant = "sheet" | "center";
 
 export interface ModalProps {
-  open:         boolean;
-  onClose:      () => void;
-  variant?:     ModalVariant;
-  title?:       string;
+  open: boolean;
+  onClose: () => void;
+  variant?: ModalVariant;
+  title?: string;
   /** Subtitle or description */
-  subtitle?:    string;
-  children?:    ReactNode;
+  subtitle?: string;
+  children?: ReactNode;
   /** Footer action slot */
-  footer?:      ReactNode;
+  footer?: ReactNode;
   /** Whether clicking the backdrop closes the modal */
   closeOnBackdrop?: boolean;
   /** Max width for center variant */
-  maxWidth?:    number;
-  style?:       CSSProperties;
+  maxWidth?: number;
+  style?: CSSProperties;
 }
 
 export function Modal({
   open,
   onClose,
-  variant          = "sheet",
+  variant = "sheet",
   title,
   subtitle,
   children,
   footer,
-  closeOnBackdrop  = true,
-  maxWidth         = 480,
+  closeOnBackdrop = true,
+  maxWidth = 480,
   style,
 }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -78,41 +78,41 @@ export function Modal({
 
   // ── Backdrop ──────────────────────────────────────────────────────────────
   const backdropStyle: CSSProperties = {
-    position:   "fixed",
-    inset:      0,
+    position: "fixed",
+    inset: 0,
     background: "rgba(0,0,0,0.5)",
-    zIndex:     1000,
-    display:    "flex",
+    zIndex: 1000,
+    display: "flex",
     alignItems: variant === "center" ? "center" : "flex-end",
     justifyContent: "center",
     // Simple fade-in (no JS animation needed — just visible)
-    animation:  "vnkr-fade-in 0.18s ease",
+    animation: "YOUR_TOKEN-fade-in 0.18s ease",
   };
 
   // ── Dialog ────────────────────────────────────────────────────────────────
   const dialogStyle: CSSProperties = {
-    position:     "relative",
-    background:   "#FFFFFF",
-    width:        "100%",
-    maxWidth:     variant === "center" ? maxWidth : "100%",
-    maxHeight:    variant === "center" ? "90vh" : "85vh",
-    overflowY:    "auto",
-    outline:      "none",
+    position: "relative",
+    background: "#FFFFFF",
+    width: "100%",
+    maxWidth: variant === "center" ? maxWidth : "100%",
+    maxHeight: variant === "center" ? "90vh" : "85vh",
+    overflowY: "auto",
+    outline: "none",
     // Sheet: rounded top corners only
     borderRadius: variant === "center" ? 20 : "20px 20px 0 0",
-    padding:      "0 0 24px",
-    animation:    variant === "center"
-      ? "vnkr-scale-in 0.2s cubic-bezier(0.4,0,0.2,1)"
-      : "vnkr-slide-up 0.28s cubic-bezier(0.4,0,0.2,1)",
+    padding: "0 0 24px",
+    animation: variant === "center"
+      ? "YOUR_TOKEN-scale-in 0.2s cubic-bezier(0.4,0,0.2,1)"
+      : "YOUR_TOKEN-slide-up 0.28s cubic-bezier(0.4,0,0.2,1)",
     ...style,
   };
 
   return (
     <>
       <style>{`
-        @keyframes vnkr-fade-in   { from { opacity: 0 } to { opacity: 1 } }
-        @keyframes vnkr-slide-up  { from { transform: translateY(100%) } to { transform: translateY(0) } }
-        @keyframes vnkr-scale-in  { from { opacity: 0; transform: scale(0.95) } to { opacity: 1; transform: scale(1) } }
+        @keyframes YOUR_TOKEN-fade-in   { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes YOUR_TOKEN-slide-up  { from { transform: translateY(100%) } to { transform: translateY(0) } }
+        @keyframes YOUR_TOKEN-scale-in  { from { opacity: 0; transform: scale(0.95) } to { opacity: 1; transform: scale(1) } }
       `}</style>
 
       <div
@@ -125,22 +125,22 @@ export function Modal({
           style={dialogStyle}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={title ? "vnkr-modal-title" : undefined}
+          aria-labelledby={title ? "YOUR_TOKEN-modal-title" : undefined}
           tabIndex={-1}
           onClick={e => e.stopPropagation()}
         >
           {/* Drag handle (sheet only) */}
           {variant === "sheet" && (
             <div style={{
-              display:       "flex",
-              justifyContent:"center",
-              padding:       "12px 0 4px",
+              display: "flex",
+              justifyContent: "center",
+              padding: "12px 0 4px",
             }}>
               <div style={{
-                width:        40,
-                height:       4,
+                width: 40,
+                height: 4,
                 borderRadius: 99,
-                background:   "#E0E0E0",
+                background: "#E0E0E0",
               }} />
             </div>
           )}
@@ -148,28 +148,28 @@ export function Modal({
           {/* Header */}
           {(title || variant === "center") && (
             <div style={{
-              display:        "flex",
-              alignItems:     "center",
+              display: "flex",
+              alignItems: "center",
               justifyContent: "space-between",
-              padding:        "16px 24px 8px",
-              borderBottom:   (children || footer) ? "1px solid #F3F4F6" : "none",
+              padding: "16px 24px 8px",
+              borderBottom: (children || footer) ? "1px solid #F3F4F6" : "none",
             }}>
               <div>
                 {title && (
-                  <div id="vnkr-modal-title" style={{
-                    fontSize:  17,
-                    fontWeight:700,
-                    color:     "#1A1F36",
-                    fontFamily:"'Work Sans', sans-serif",
+                  <div id="YOUR_TOKEN-modal-title" style={{
+                    fontSize: 17,
+                    fontWeight: 700,
+                    color: "#1A1F36",
+                    fontFamily: "'Work Sans', sans-serif",
                   }}>
                     {title}
                   </div>
                 )}
                 {subtitle && (
                   <div style={{
-                    fontSize:  13,
-                    color:     "#8F9BB3",
-                    fontFamily:"'Work Sans', sans-serif",
+                    fontSize: 13,
+                    color: "#8F9BB3",
+                    fontFamily: "'Work Sans', sans-serif",
                     marginTop: 2,
                   }}>
                     {subtitle}
@@ -181,17 +181,17 @@ export function Modal({
                 onClick={onClose}
                 aria-label="Close"
                 style={{
-                  width:      32,
-                  height:     32,
-                  borderRadius:"50%",
+                  width: 32,
+                  height: 32,
+                  borderRadius: "50%",
                   background: "#F5F6FA",
-                  border:     "none",
-                  cursor:     "pointer",
-                  display:    "flex",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
                   alignItems: "center",
-                  justifyContent:"center",
+                  justifyContent: "center",
                   flexShrink: 0,
-                  color:      "#4A5568",
+                  color: "#4A5568",
                 }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -213,9 +213,9 @@ export function Modal({
           {/* Footer */}
           {footer && (
             <div style={{
-              padding:    "16px 24px 0",
-              borderTop:  "1px solid #F3F4F6",
-              marginTop:  16,
+              padding: "16px 24px 0",
+              borderTop: "1px solid #F3F4F6",
+              marginTop: 16,
             }}>
               {footer}
             </div>

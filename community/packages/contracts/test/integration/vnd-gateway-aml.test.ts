@@ -3,13 +3,13 @@ import { ethers } from "hardhat";
 
 // ─── vnd-gateway-aml.test.ts ──────────────────────────────────────────────────
 // Integration: VNDGateway eKYC flow + AML blacklist blocking.
-// Nạp VNĐ → nhận VNKR, rút VNKR → nhận VNĐ, chặn user bị blacklist.
+// Nạp VNĐ → nhận YOUR_TOKEN, rút YOUR_TOKEN → nhận VNĐ, chặn user bị blacklist.
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe("VNDGateway + COMPL AML — Integration", () => {
   let deployer: any, alice: any, blocked: any;
   let kernel: any, trsry: any, mintr: any, compl: any, gateway: any;
-  let vnkr: any, vndToken: any;
+  let YOUR_TOKEN: any, vndToken: any;
 
   const Actions = { InstallModule: 0, ActivatePolicy: 2 };
   const toVnd = (n: string) => ethers.parseUnits(n, 18);
@@ -17,10 +17,10 @@ describe("VNDGateway + COMPL AML — Integration", () => {
   before(async () => {
     [deployer, alice, blocked] = await ethers.getSigners();
 
-    vnkr = await (await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address)).waitForDeployment();
+    YOUR_TOKEN = await (await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
 
     // VND stablecoin mock
-    vndToken = await (await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address)).waitForDeployment();
+    vndToken = await (await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
     await vndToken.setMintAuthority(deployer.address);
     await vndToken.mint(alice.address, toVnd("10000000"));
 
@@ -29,15 +29,15 @@ describe("VNDGateway + COMPL AML — Integration", () => {
     )).waitForDeployment();
 
     trsry = await (await (await ethers.getContractFactory("TRSRYv2")).deploy(
-      kernel.target, vnkr.target
+      kernel.target, YOUR_TOKEN.target
     )).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, trsry.target);
 
     mintr = await (await (await ethers.getContractFactory("MINTRv1")).deploy(
-      kernel.target, vnkr.target, trsry.target
+      kernel.target, YOUR_TOKEN.target, trsry.target
     )).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, mintr.target);
-    await vnkr.setMintAuthority(mintr.target);
+    await YOUR_TOKEN.setMintAuthority(mintr.target);
 
     compl = await (await (await ethers.getContractFactory("COMPLv1")).deploy(kernel.target)).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, compl.target);

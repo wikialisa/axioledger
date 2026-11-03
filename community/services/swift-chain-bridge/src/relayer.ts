@@ -1,7 +1,7 @@
 import { OnChainListener, type OutboundEventData } from "./listeners/onchain.js";
 import { ChainExecutor } from "./executors/chain-executor.js";
 import { SwiftExecutor } from "./executors/swift-executor.js";
-import { VNKRBrokerFXOracle } from "./fx-oracle.js";
+import { AXVNBrokerFXOracle } from "./fx-oracle.js";
 import type { SwiftInboundCreditPayload } from "./listeners/swift-webhook.js";
 
 
@@ -14,10 +14,10 @@ import type { SwiftInboundCreditPayload } from "./listeners/swift-webhook.js";
  *    swift-gateway xác nhận điện MT103/pacs.008
  *    → POST /internal/swift/inbound-credit
  *    → handleSwiftInbound() → ChainExecutor.settleInbound()
- *    → VNKRSwiftBridge.settleInboundSwift() → Mint AXVN
+ *    → BrandSwiftBridge.settleInboundSwift() → Mint YOUR_TOKEN
  *
  *  OUTBOUND (On-Chain → Fiat SWIFT):
- *    User calls VNKRSwiftBridge.requestOutboundSwift() → burn AXVN
+ *    User calls BrandSwiftBridge.requestOutboundSwift() → burn YOUR_TOKEN
  *    → SwiftOutboundRequested event
  *    → OnChainListener.startListening()
  *    → handleChainOutbound() → SwiftExecutor.sendMT103()
@@ -27,22 +27,22 @@ import type { SwiftInboundCreditPayload } from "./listeners/swift-webhook.js";
  * Vendor reference: TODO/6-V2.md — Section 4 "Bi-Directional Relayer Engine"
  */
 export class SwiftChainBridgeRelayer {
-  private readonly onChain:   OnChainListener;
+  private readonly onChain: OnChainListener;
   private readonly chainExec: ChainExecutor;
   private readonly swiftExec: SwiftExecutor;
-  private readonly fxOracle:  VNKRBrokerFXOracle;
+  private readonly fxOracle: YOUR_TOKENBrokerFXOracle;
   private stopListening?: () => void;
 
   constructor(
     onChainListener?: OnChainListener,
-    chainExecutor?:   ChainExecutor,
-    swiftExecutor?:   SwiftExecutor,
-    fxOracle?:        VNKRBrokerFXOracle
+    chainExecutor?: ChainExecutor,
+    swiftExecutor?: SwiftExecutor,
+    fxOracle?: YOUR_TOKENBrokerFXOracle
   ) {
-    this.onChain   = onChainListener  ?? new OnChainListener();
-    this.chainExec = chainExecutor    ?? new ChainExecutor();
-    this.swiftExec = swiftExecutor    ?? new SwiftExecutor();
-    this.fxOracle  = fxOracle         ?? new VNKRBrokerFXOracle();
+    this.onChain = onChainListener ?? new OnChainListener();
+    this.chainExec = chainExecutor ?? new ChainExecutor();
+    this.swiftExec = swiftExecutor ?? new SwiftExecutor();
+    this.fxOracle = fxOracle ?? new YOUR_TOKENBrokerFXOracle();
   }
 
   // ─── INBOUND: SWIFT Fiat → Mint Token On-Chain ───────────────────────────
@@ -52,8 +52,8 @@ export class SwiftChainBridgeRelayer {
    *
    * Luồng V2 (FX Oracle):
    *   1. Lấy tỷ giá thực từ SBV / Vietcombank
-   *   2. Tính Gross VNKR, Gas Fee, Net VNKR (preview on-chain)
-   *   3. Gọi VNKRSwiftBridgeV2.settleInboundSwiftWithFX() → Mint VNKR (1 VNKR = 1 VND)
+   *   2. Tính Gross YOUR_TOKEN, Gas Fee, Net YOUR_TOKEN (preview on-chain)
+   *   3. Gọi BrandSwiftBridgeV2.settleInboundSwiftWithFX() → Mint YOUR_TOKEN (1 YOUR_TOKEN = 1 VND)
    */
   async handleSwiftInbound(
     payload: SwiftInboundCreditPayload,
@@ -79,7 +79,7 @@ export class SwiftChainBridgeRelayer {
       currency,
     });
     logger.info(
-      `[relayer] FX Breakdown  gross=${breakdown.grossVnkr.toLocaleString()} VNKR  fee=${breakdown.totalFeeVnkr.toLocaleString()} VNKR  net=${breakdown.netVnkr.toLocaleString()} VNKR`
+      `[relayer] FX Breakdown  gross=${breakdown.grossYOUR_TOKEN.toLocaleString()} YOUR_TOKEN  fee=${breakdown.totalFeeYOUR_TOKEN.toLocaleString()} YOUR_TOKEN  net=${breakdown.netYOUR_TOKEN.toLocaleString()} YOUR_TOKEN`
     );
 
     try {
@@ -90,11 +90,11 @@ export class SwiftChainBridgeRelayer {
         BigInt(Math.round(payload.amount)),        // originalAmount (full unit)
         BigInt(fxResult.rateToVnd),                 // fxRate integer
         payload.beneficiaryAddress,
-        0n                                          // 0 → dùng defaultBaseGasFeeVnkr từ contract
+        0n                                          // 0 → dùng defaultBaseGasFeeAXVN từ contract
       );
 
       logger.info(
-        `[relayer] ✅ INBOUND settled (V2/FX)  txHash=${result.txHash}  block=${result.blockNumber}  netVNKR=${breakdown.netVnkr.toLocaleString()}`
+        `[relayer] ✅ INBOUND settled (V2/FX)  txHash=${result.txHash}  block=${result.blockNumber}  netAXVN=${breakdown.netAXVN.toLocaleString()}`
       );
       return result;
     } catch (err) {
@@ -106,13 +106,13 @@ export class SwiftChainBridgeRelayer {
   // ─── OUTBOUND: On-Chain Event → SWIFT MT103 ─────────────────────────────
 
   /**
-   * Bắt đầu lắng nghe SwiftOutboundRequested events từ VNKRSwiftBridge.sol.
+   * Bắt đầu lắng nghe SwiftOutboundRequested events từ BrandSwiftBridge.sol.
    */
   startOutboundListener(
     logger: {
-      info:  (msg: string) => void;
+      info: (msg: string) => void;
       error: (msg: string, ...a: unknown[]) => void;
-      warn:  (msg: string) => void;
+      warn: (msg: string) => void;
     }
   ): void {
     this.stopListening = this.onChain.startListening(
@@ -146,19 +146,19 @@ export class SwiftChainBridgeRelayer {
     const amountUsd = Number(event.amount) / 1_000_000;
 
     // Tạo reference có ý nghĩa từ uetrHash
-    const reference = `VNKR-BRIDGE-${event.uetrHash.slice(2, 12).toUpperCase()}`;
+    const reference = `YOUR_TOKEN-BRIDGE-${event.uetrHash.slice(2, 12).toUpperCase()}`;
 
     let transmissionId: string | undefined;
     try {
       const swiftResult = await this.swiftExec.sendMT103({
-        uetr:               event.uetrHash,
-        receiverBic:        event.receiverBic,
+        uetr: event.uetrHash,
+        receiverBic: event.receiverBic,
         amountUsd,
-        currency:           "USD",
-        senderAddress:      event.sender,
-        beneficiaryName:    "INSTITUTIONAL RECEIVER",
+        currency: "USD",
+        senderAddress: event.sender,
+        beneficiaryName: "INSTITUTIONAL RECEIVER",
         beneficiaryAccount: "BANK-ACCT-OUT",
-        remittanceInfo:     `ON-CHAIN BRIDGE REDEMPTION  REF:${reference}`,
+        remittanceInfo: `ON-CHAIN BRIDGE REDEMPTION  REF:${reference}`,
       });
 
       transmissionId = swiftResult.transmissionId ?? swiftResult.messageId;

@@ -16,9 +16,9 @@ import {
 
 const QR_DYNAMIC_TTL = 60; // seconds
 
-type QRMode     = "scan" | "generate";
-type QRType     = "dynamic" | "static";
-type ScanResult = { type: "vietqr"|"crypto"|"unknown"; raw: string; parsed?: Record<string, string> };
+type QRMode = "scan" | "generate";
+type QRType = "dynamic" | "static";
+type ScanResult = { type: "vietqr" | "crypto" | "unknown"; raw: string; parsed?: Record<string, string> };
 
 const MOCK_SCANS: ScanResult[] = [
   {
@@ -38,19 +38,19 @@ function generateDynamicToken() {
 }
 
 export default function QRScanPage() {
-  const [mode,         setMode]         = useState<QRMode>("scan");
-  const [qrType,       setQrType]       = useState<QRType>("dynamic");
-  const [scanning,     setScanning]     = useState(true);
-  const [result,       setResult]       = useState<ScanResult | null>(null);
-  const [payModal,     setPayModal]     = useState(false);
-  const [scanCount,    setScanCount]    = useState(0);
-  const [frame,        setFrame]        = useState(0);
+  const [mode, setMode] = useState<QRMode>("scan");
+  const [qrType, setQrType] = useState<QRType>("dynamic");
+  const [scanning, setScanning] = useState(true);
+  const [result, setResult] = useState<ScanResult | null>(null);
+  const [payModal, setPayModal] = useState(false);
+  const [scanCount, setScanCount] = useState(0);
+  const [frame, setFrame] = useState(0);
 
   // Dynamic QR state
-  const [dynamicToken,   setDynamicToken]   = useState(generateDynamicToken());
-  const [qrCountdown,    setQrCountdown]    = useState(QR_DYNAMIC_TTL);
-  const [qrExpired,      setQrExpired]      = useState(false);
-  const [showQRModal,    setShowQRModal]    = useState(false);
+  const [dynamicToken, setDynamicToken] = useState(generateDynamicToken());
+  const [qrCountdown, setQrCountdown] = useState(QR_DYNAMIC_TTL);
+  const [qrExpired, setQrExpired] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const qrTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Scan line animation
@@ -69,7 +69,7 @@ export default function QRScanPage() {
       setScanning(false);
     }, 3000);
     return () => clearTimeout(t);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scanning, scanCount]);
 
   // Dynamic QR countdown
@@ -107,12 +107,12 @@ export default function QRScanPage() {
 
   // QR value: dynamic includes token + timestamp for uniqueness
   const qrValue = qrType === "dynamic"
-    ? `vnkr:pay?to=0x1234&token=${dynamicToken}`
-    : "vnkr:pay?to=0x1234&type=static";
+    ? `YOUR_TOKEN:pay?to=0x1234&token=${dynamicToken}`
+    : "YOUR_TOKEN:pay?to=0x1234&type=static";
 
   const [copied, setCopied] = useState(false);
   const copyAddress = async () => {
-    await navigator.clipboard.writeText(qrValue).catch(() => {});
+    await navigator.clipboard.writeText(qrValue).catch(() => { });
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -134,8 +134,8 @@ export default function QRScanPage() {
       <div style={{ padding: "4px 20px 12px" }}>
         <div style={{ display: "flex", background: "#F5F6FA", borderRadius: 12, padding: 3 }}>
           {([
-            { id: "scan",     label: "Quét QR" },
-            { id: "generate", label: "Tạo QR"  },
+            { id: "scan", label: "Quét QR" },
+            { id: "generate", label: "Tạo QR" },
           ] as const).map(t => (
             <button
               key={t.id}
@@ -159,9 +159,9 @@ export default function QRScanPage() {
           <div style={{ padding: "0 20px 16px" }}>
             <div style={{ position: "relative", background: "#0a0a0a", borderRadius: 20, overflow: "hidden", height: 300, display: "flex", alignItems: "center", justifyContent: "center" }}>
               {[
-                { top: 16,    left: 16,  borderTop: "3px solid #BEFF6C",    borderLeft: "3px solid #BEFF6C" },
-                { top: 16,    right: 16, borderTop: "3px solid #BEFF6C",    borderRight: "3px solid #BEFF6C" },
-                { bottom: 16, left: 16,  borderBottom: "3px solid #BEFF6C", borderLeft: "3px solid #BEFF6C" },
+                { top: 16, left: 16, borderTop: "3px solid #BEFF6C", borderLeft: "3px solid #BEFF6C" },
+                { top: 16, right: 16, borderTop: "3px solid #BEFF6C", borderRight: "3px solid #BEFF6C" },
+                { bottom: 16, left: 16, borderBottom: "3px solid #BEFF6C", borderLeft: "3px solid #BEFF6C" },
                 { bottom: 16, right: 16, borderBottom: "3px solid #BEFF6C", borderRight: "3px solid #BEFF6C" },
               ].map((s, i) => (
                 <div key={i} style={{ position: "absolute", width: 28, height: 28, borderRadius: 3, ...s }} />
@@ -223,7 +223,7 @@ export default function QRScanPage() {
           <div style={{ display: "flex", gap: 8 }}>
             {([
               { id: "dynamic", label: "QR Động (60s)" },
-              { id: "static",  label: "QR Tĩnh" },
+              { id: "static", label: "QR Tĩnh" },
             ] as const).map(t => (
               <button
                 key={t.id}
@@ -328,7 +328,7 @@ export default function QRScanPage() {
         open={showQRModal}
         onClose={() => setShowQRModal(false)}
         value={qrValue}
-        label="Địa chỉ nhận tiền VNKR"
+        label="Địa chỉ nhận tiền YOUR_TOKEN"
         subtitle={qrType === "dynamic" ? `Hết hạn sau ${qrCountdown}s` : "QR Tĩnh — Không hết hạn"}
       />
     </div>

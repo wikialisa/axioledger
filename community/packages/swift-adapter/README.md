@@ -1,12 +1,12 @@
 # swift-adapter
 
-SWIFT SDK wrapper for VNKR Institutional Banking — MT103/MT202/MT940 message builder, ISO 20022 (pacs.008 · pacs.009 · camt.053) parser, LAU signing, RMA registry, and Redis Event Bus client.
+SWIFT SDK wrapper for YOUR_TOKEN Institutional Banking — MT103/MT202/MT940 message builder, ISO 20022 (pacs.008 · pacs.009 · camt.053) parser, LAU signing, RMA registry, and Redis Event Bus client.
 
 ---
 
 ## Overview
 
-This package decouples the official SWIFT vendor SDKs from the VNKR monorepo application layer and exposes a clean TypeScript API for all SWIFT messaging operations.
+This package decouples the official SWIFT vendor SDKs from the YOUR_TOKEN monorepo application layer and exposes a clean TypeScript API for all SWIFT messaging operations.
 
 | Layer | What it wraps |
 |---|---|
@@ -15,7 +15,7 @@ This package decouples the official SWIFT vendor SDKs from the VNKR monorepo app
 | `src/security/` | LAU v2 HMAC-SHA256 signer, RMA authorisation registry |
 | `src/core/java-bridge.ts` | Node.js wrapper over `file-encryptor-decryptor-*.jar` via `child_process` |
 | `src/config/config-encryptor.ts` | AJV validator + JAR-backed config encryptor |
-| `src/client.ts` | Redis Streams event bus producer/consumer (`VNKRSwiftClient`) |
+| `src/client.ts` | Redis Streams event bus producer/consumer (`AXVNSwiftClient`) |
 
 ---
 
@@ -63,13 +63,13 @@ bash packages/swift-adapter/scripts/install-vendor.sh
 import { buildMT103 } from "swift-adapter";
 
 const message = buildMT103({
-  senderBIC: "${SWIFT_BIC_CODE}XXX",
+  senderBIC: "YOURBICXXXXXXX",
   receiverBIC: "BNPAFRPPXXX",
-  reference: "VNKR20260819001",
+  reference: "AXVN20260819001",
   amount: 1_500_000,
   currency: "USD",
   orderingAccount: "1029384756",
-  orderingName: "VNKR TECH HOLDING JSC",
+  orderingName: "Your Organisation Full Name JSC",
   beneficiaryAccount: "9876543210",
   beneficiaryName: "GLOBAL TECH SUPPLIER INC",
   chargesCode: "SHA",
@@ -83,15 +83,15 @@ const message = buildMT103({
 import { buildPacs008, parsePacs008 } from "swift-adapter";
 
 const xml = buildPacs008({
-  msgId: "VNKR/20260819/PACS008/001",
+  msgId: "YOUR_TOKEN/20260819/PACS008/001",
   instrId: "INSTR-001",
-  endToEndId: "E2E-VNKR-20260819",
+  endToEndId: "E2E-YOUR_TOKEN-20260819",
   txId: "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
   intrBkSttlmAmt: 750_000.5,
   currency: "EUR",
-  dbtrName: "VNKR TECH HOLDING JSC",
+  dbtrName: "Your Organisation Full Name JSC",
   dbtrAcctIBAN: "VN1234567890",
-  dbtrAgtBIC: "${SWIFT_BIC_CODE}XXX",
+  dbtrAgtBIC: "YOURBICXXXXXXX",
   cdtrAgtBIC: "DEUTDEFFXXX",
   cdtrName: "DEUTSCHE INDUSTRIAL GMBH",
   cdtrAcctIBAN: "DE89370400440532013000",
@@ -108,23 +108,23 @@ const { signature, timestamp } = signer.sign(message);
 const isValid = signer.verify(message, timestamp, signature);
 ```
 
-### Redis Event Bus (VNKRSwiftClient)
+### Redis Event Bus (AXVNSwiftClient)
 
 ```typescript
-import { VNKRSwiftClient } from "swift-adapter";
+import { AXVNSwiftClient } from "swift-adapter";
 import Redis from "ioredis";
 
 const redis = new Redis({ host: "localhost", port: 6379 });
-const client = new VNKRSwiftClient(redis);
+const client = new AXVNSwiftClient(redis);
 
 const { streamId } = await client.requestMT103({
-  senderBIC: "${SWIFT_BIC_CODE}XXX",
+  senderBIC: "YOURBICXXXXXXX",
   receiverBIC: "BNPAFRPPXXX",
-  reference: "VNKR20260819001",
+  reference: "AXVN20260819001",
   amount: 1_500_000,
   currency: "USD",
   orderingAccount: "1029384756",
-  orderingName: "VNKR TECH HOLDING JSC",
+  orderingName: "Your Organisation Full Name JSC",
   beneficiaryAccount: "9876543210",
   beneficiaryName: "GLOBAL TECH SUPPLIER INC",
 });
@@ -175,7 +175,7 @@ vendor/
 A `Dockerfile` is provided that bundles Node.js 20 + OpenJDK 17 JRE:
 
 ```bash
-docker build -f packages/swift-adapter/Dockerfile -t vnkr/swift-adapter .
+docker build -f packages/swift-adapter/Dockerfile -t YOUR_TOKEN/swift-adapter .
 ```
 
 ---
@@ -203,4 +203,4 @@ docker build -f packages/swift-adapter/Dockerfile -t vnkr/swift-adapter .
 
 ## License
 
-Internal — ${BRAND_ORG_FULL} JSC. SWIFT vendor bundles are subject to the [SWIFT API Connectivity Option License](vendor/swift-sdk-2.17.10-6/Swift-API-Connectivity-Option-License.html).
+Internal — Your Organisation Full Name JSC. SWIFT vendor bundles are subject to the [SWIFT API Connectivity Option License](vendor/swift-sdk-2.17.10-6/Swift-API-Connectivity-Option-License.html).

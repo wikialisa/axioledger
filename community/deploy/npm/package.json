@@ -2,24 +2,24 @@
   "name": "deploy-npm",
   "version": "1.0.0",
   "private": true,
-  "description": "NPM publish tooling for VNKR shared packages (packages/*)",
+  "description": "NPM publish tooling for YOUR_INFRA shared packages (packages/*)",
   "scripts": {
-    "publish:all":        "node scripts/publish-all.mjs",
-    "publish:dry":        "node scripts/publish-all.mjs --dry-run",
-    "version:patch":      "node scripts/bump-version.mjs patch",
-    "version:minor":      "node scripts/bump-version.mjs minor",
-    "version:major":      "node scripts/bump-version.mjs major",
-    "registry:check":     "node scripts/registry-check.mjs",
-    "provenance:verify":  "node scripts/provenance-verify.mjs"
+    "publish:all": "node scripts/publish-all.mjs",
+    "publish:dry": "node scripts/publish-all.mjs --dry-run",
+    "version:patch": "node scripts/bump-version.mjs patch",
+    "version:minor": "node scripts/bump-version.mjs minor",
+    "version:major": "node scripts/bump-version.mjs major",
+    "registry:check": "node scripts/registry-check.mjs",
+    "provenance:verify": "node scripts/provenance-verify.mjs"
   },
   "dependencies": {
-    "semver":  "^7.6.3",
-    "chalk":   "^5.3.0",
-    "execa":   "^9.3.0",
-    "globby":  "^14.0.1"
+    "semver": "^7.6.3",
+    "chalk": "^5.3.0",
+    "execa": "^9.3.0",
+    "globby": "^14.0.1"
   },
   "devDependencies": {
-    "@types/node":  "^22.0.0",
+    "@types/node": "^22.0.0",
     "@types/semver": "^7.5.8"
   },
   "engines": {

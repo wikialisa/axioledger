@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── range-stability.policy.sol — RangeBoundStability (RBS Engine) ───────────
-// Tự động can thiệp giá (Cushion & Wall) mua/bán VNKR để ổn định thị trường.
+// Tự động can thiệp giá (Cushion & Wall) mua/bán YOUR_TOKEN để ổn định thị trường.
 // Duy trì dải giá: [wallLow, cushionLow] … [cushionHigh, wallHigh].
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -35,8 +35,8 @@ contract RangeBoundStability is Policy {
     /// @notice Reserve token used for cushion interventions (e.g. DAI)
     address public reserveToken;
 
-    /// @notice VNKR token
-    address public vnkrToken;
+    /// @notice YOUR_TOKEN token
+    address public YOUR_TOKENToken;
 
     /// @notice Max reserve spend per cushion cycle (18 dec)
     uint256 public cushionBudget;
@@ -48,17 +48,17 @@ contract RangeBoundStability is Policy {
     // ─── Events ───────────────────────────────────────────────────────────
 
     event WallPricesUpdated(uint256 wallLow, uint256 cushionLow, uint256 cushionHigh, uint256 wallHigh);
-    event CushionBuyTriggered(uint256 price, uint256 reserveSpent, uint256 vnkrReceived);
-    event CushionSellTriggered(uint256 price, uint256 vnkrSpent, uint256 reserveReceived);
+    event CushionBuyTriggered(uint256 price, uint256 reserveSpent, uint256 AXVNReceived);
+    event CushionSellTriggered(uint256 price, uint256 AXVNSpent, uint256 reserveReceived);
     event WallBuyTriggered(uint256 price, uint256 reserveSpent);
-    event WallSellTriggered(uint256 price, uint256 vnkrBurned);
+    event WallSellTriggered(uint256 price, uint256 AXVNBurned);
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
     constructor(
         Kernel kernel_,
         address reserveToken_,
-        address vnkrToken_,
+        address YOUR_TOKENToken_,
         uint256 wallLow_,
         uint256 cushionLow_,
         uint256 cushionHigh_,
@@ -66,7 +66,7 @@ contract RangeBoundStability is Policy {
         uint256 cushionBudget_
     ) Policy(kernel_) {
         reserveToken  = reserveToken_;
-        vnkrToken     = vnkrToken_;
+        YOUR_TOKENToken     = YOUR_TOKENToken_;
         wallLow       = wallLow_;
         cushionLow    = cushionLow_;
         cushionHigh   = cushionHigh_;
@@ -96,13 +96,13 @@ contract RangeBoundStability is Policy {
     {
         reqs    = new Permissions[](3);
         reqs[0] = Permissions({ keycode: "TREAS", funcSelector: TREASv1.withdraw.selector });
-        reqs[1] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintVnkr.selector });
-        reqs[2] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.burnVnkr.selector });
+        reqs[1] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintAXVN.selector });
+        reqs[2] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.burnAXVN.selector });
     }
 
     // ─── RBS interventions ────────────────────────────────────────────────
 
-    /// @notice Called when oracle detects price in cushion low range — buy VNKR with reserves
+    /// @notice Called when oracle detects price in cushion low range — buy YOUR_TOKEN with reserves
     function cushionBuy(uint256 currentPrice_, uint256 reserveAmount_) external {
         _checkCooldown();
         if (currentPrice_ <= wallLow || currentPrice_ >= cushionLow)
@@ -110,30 +110,30 @@ contract RangeBoundStability is Policy {
         if (reserveAmount_ == 0) revert RBS_ZeroAmount();
         require(reserveAmount_ <= cushionBudget, "RBS: budget exceeded");
 
-        // Withdraw reserve from treasury and conceptually buy VNKR on-market
+        // Withdraw reserve from treasury and conceptually buy YOUR_TOKEN on-market
         TREAS.withdraw(reserveToken, address(this), reserveAmount_);
-        // For on-chain accounting, mint equivalent VNKR to treasury
-        uint256 vnkrAmount = (reserveAmount_ * 1e18) / currentPrice_;
-        MINTR.mintVnkr(address(TREAS), vnkrAmount);
+        // For on-chain accounting, mint equivalent YOUR_TOKEN to treasury
+        uint256 AXVNAmount = (reserveAmount_ * 1e18) / currentPrice_;
+        MINTR.mintAXVN(address(TREAS), AXVNAmount);
 
         lastIntervention = block.timestamp;
-        emit CushionBuyTriggered(currentPrice_, reserveAmount_, vnkrAmount);
+        emit CushionBuyTriggered(currentPrice_, reserveAmount_, AXVNAmount);
     }
 
-    /// @notice Called when oracle detects price in cushion high range — sell VNKR for reserves
-    function cushionSell(uint256 currentPrice_, uint256 vnkrAmount_) external {
+    /// @notice Called when oracle detects price in cushion high range — sell YOUR_TOKEN for reserves
+    function cushionSell(uint256 currentPrice_, uint256 AXVNAmount_) external {
         _checkCooldown();
         if (currentPrice_ <= cushionHigh || currentPrice_ >= wallHigh)
             revert RBS_MarketStable(currentPrice_);
-        if (vnkrAmount_ == 0) revert RBS_ZeroAmount();
+        if (AXVNAmount_ == 0) revert RBS_ZeroAmount();
 
-        // Burn VNKR from treasury (reduce supply), receive reserve equivalent
-        MINTR.burnVnkr(address(TREAS), vnkrAmount_);
-        uint256 reserveOut = (vnkrAmount_ * currentPrice_) / 1e18;
+        // Burn YOUR_TOKEN from treasury (reduce supply), receive reserve equivalent
+        MINTR.burnAXVN(address(TREAS), AXVNAmount_);
+        uint256 reserveOut = (AXVNAmount_ * currentPrice_) / 1e18;
         TREAS.withdraw(reserveToken, address(TREAS), reserveOut);
 
         lastIntervention = block.timestamp;
-        emit CushionSellTriggered(currentPrice_, vnkrAmount_, reserveOut);
+        emit CushionSellTriggered(currentPrice_, AXVNAmount_, reserveOut);
     }
 
     // ─── Parameter management ─────────────────────────────────────────────

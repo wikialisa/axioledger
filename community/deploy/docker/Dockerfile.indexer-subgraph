@@ -10,7 +10,7 @@ COPY packages/config   ./packages/config
 COPY services/indexer-subgraph ./services/indexer-subgraph
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @vnkr/indexer-subgraph build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/indexer-subgraph build
 
 FROM node:20-alpine AS runner
 WORKDIR /app

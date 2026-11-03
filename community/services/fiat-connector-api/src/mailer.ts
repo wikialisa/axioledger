@@ -2,8 +2,8 @@ import nodemailer from "nodemailer";
 import { MAIL_CONFIG } from "config";
 
 export const mailer = nodemailer.createTransport({
-  host:   MAIL_CONFIG.SMTP_HOST,
-  port:   MAIL_CONFIG.SMTP_PORT,
+  host: MAIL_CONFIG.SMTP_HOST,
+  port: MAIL_CONFIG.SMTP_PORT,
   secure: MAIL_CONFIG.SMTP_SECURE,
   auth: {
     user: MAIL_CONFIG.SMTP_USER,
@@ -18,9 +18,9 @@ export const mailer = nodemailer.createTransport({
  */
 export async function sendOTPEmail(to: string, code: string): Promise<void> {
   await mailer.sendMail({
-    from:    MAIL_CONFIG.EMAIL_FROM,
+    from: MAIL_CONFIG.EMAIL_FROM,
     to,
-    subject: "[VNKR ID] Mã xác thực OTP của bạn",
+    subject: "[YOUR_TOKEN ID] Mã xác thực OTP của bạn",
     html: `<h3>Mã OTP của bạn là: <b>${code}</b></h3>
 <p>Mã có hiệu lực trong 5 phút.</p>
 <p style="color:#888;font-size:12px;">Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này.</p>`,

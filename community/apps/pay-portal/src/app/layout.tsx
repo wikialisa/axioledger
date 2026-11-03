@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VNKR Pay",
-  description: "Payment Gateway & Merchant Dashboard — VNKR FinTech Services JSC",
+  title: "YOUR_TOKEN Pay",
+  description: "Payment Gateway & Merchant Dashboard — YOUR_TOKEN FinTech Services JSC",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

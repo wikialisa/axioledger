@@ -15,20 +15,20 @@ export default function SetPinPage() {
   function handleComplete(value: string) {
     if (value.length === PIN_LENGTH) {
       // Save temporarily in sessionStorage for confirm step
-      sessionStorage.setItem("vnkr_pin_temp", value);
+      sessionStorage.setItem("AXVN_pin_temp", value);
       router.push("/confirm-pin");
     }
   }
 
   return (
     <div style={{
-      minHeight:     "100vh",
-      background:    "#FFFFFF",
-      display:       "flex",
+      minHeight: "100vh",
+      background: "#FFFFFF",
+      display: "flex",
       flexDirection: "column",
-      alignItems:    "center",
-      fontFamily:    "'Work Sans', sans-serif",
-      padding:       "64px 24px 48px",
+      alignItems: "center",
+      fontFamily: "'Work Sans', sans-serif",
+      padding: "64px 24px 48px",
     }}>
       {/* Title */}
       <div style={{ width: "100%", maxWidth: 360, textAlign: "center", marginBottom: 40 }}>
@@ -62,12 +62,12 @@ function PinDots({ filled, total }: { filled: number; total: number }) {
         <div
           key={i}
           style={{
-            width:        16,
-            height:       16,
+            width: 16,
+            height: 16,
             borderRadius: "50%",
-            background:   i < filled ? "#000000" : "#E5E7EB",
-            transition:   "background 0.15s",
-            border:       `2px solid ${i < filled ? "#000000" : "#CBD5E0"}`,
+            background: i < filled ? "#000000" : "#E5E7EB",
+            transition: "background 0.15s",
+            border: `2px solid ${i < filled ? "#000000" : "#CBD5E0"}`,
           }}
         />
       ))}

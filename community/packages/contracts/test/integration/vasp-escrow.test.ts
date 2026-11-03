@@ -10,15 +10,15 @@ describe("VaspEscrowPolicy — Integration", () => {
   let deployer: any, seller: any, buyer: any, operator: any;
   let kernel: any, escrow: any, dai: any;
 
-  const Actions   = { ActivatePolicy: 2 };
-  const ORDER_ID  = ethers.keccak256(ethers.toUtf8Bytes("order-001"));
-  const AMOUNT    = ethers.parseUnits("500", 18);
+  const Actions = { ActivatePolicy: 2 };
+  const ORDER_ID = ethers.keccak256(ethers.toUtf8Bytes("order-001"));
+  const AMOUNT = ethers.parseUnits("500", 18);
 
   before(async () => {
     [deployer, seller, buyer, operator] = await ethers.getSigners();
 
-    // Deploy simple DAI mock (reuse VNKRToken as ERC-20)
-    dai = await (await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address)).waitForDeployment();
+    // Deploy simple DAI mock (reuse YOUR_TOKENToken as ERC-20)
+    dai = await (await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
     await dai.setMintAuthority(deployer.address);
     await dai.mint(seller.address, ethers.parseUnits("10000", 18));
 

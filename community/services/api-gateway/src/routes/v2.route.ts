@@ -17,7 +17,7 @@ export const v2Router = Router();
 // ─── GET /api/v2/meta — V2 capability discovery ───────────────────────────────
 v2Router.get("/meta", (_req, res) => {
   ok(res, {
-    version:  "2",
+    version: "2",
     released: "2025-01-01",
     features: [
       "cursor_pagination",
@@ -28,11 +28,11 @@ v2Router.get("/meta", (_req, res) => {
     ],
     deprecates: {
       v1: {
-        sunset:  "2026-12-31",
-        docsUrl: "https://docs.${BRAND_DOMAIN}/api/migration/v1-to-v2",
+        sunset: "2026-12-31",
+        docsUrl: "https://docs.your-project.vn/api/migration/v1-to-v2",
       },
     },
-  }, "VNKR API v2");
+  }, "YOUR_TOKEN API v2");
 });
 
 // ─── TODO: v2 route modules will be added here ────────────────────────────────

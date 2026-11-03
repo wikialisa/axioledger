@@ -11,7 +11,7 @@ import {
   type MGWTransmissionResult,
 } from "swift-adapter";
 import { MGWClient } from "./mgw-client.js";
-import { VNKRSwiftBridge, initInboundListener } from "./bridge.js";
+import { BrandSwiftBridge, initInboundListener } from "./bridge.js";
 
 // ─── Bootstrap ───────────────────────────────────────────────────────────────
 
@@ -40,7 +40,7 @@ const redis = new Redis(redisUrl, {
 redis.on("error", (err) => app.log.warn({ err }, "[redis] Connection error"));
 redis.on("connect", () => app.log.info("[redis] Connected to Redis Event Bus"));
 
-const bridge = new VNKRSwiftBridge(redis, lauKey, mgw);
+const bridge = new BrandSwiftBridge(redis, lauKey, mgw);
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
 
@@ -64,7 +64,7 @@ app.post<{ Body: SWIFTMT103Payload }>(
     let mgwResult: Awaited<ReturnType<MGWClient["forwardMessage"]>> | null = null;
     try {
       mgwResult = await mgw.forwardMessage({
-        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "VNKRVNVN",
+        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "AXVNVNVN",
         rawMessage: rawMT103,
         lauSignature: signature,
         lauTimestamp: timestamp,
@@ -104,7 +104,7 @@ app.post<{ Body: SWIFTMT202Payload }>(
     let mgwResult: Awaited<ReturnType<MGWClient["forwardMessage"]>> | null = null;
     try {
       mgwResult = await mgw.forwardMessage({
-        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "VNKRVNVN",
+        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "AXVNVNVN",
         rawMessage: rawMT202,
         lauSignature: signature,
         lauTimestamp: timestamp,
@@ -142,7 +142,7 @@ app.post<{ Body: Pacs008Payload }>(
     let mgwResult: Awaited<ReturnType<MGWClient["forwardMessage"]>> | null = null;
     try {
       mgwResult = await mgw.forwardMessage({
-        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "VNKRVNVN",
+        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "AXVNVNVN",
         rawMessage: rawXML,
         lauSignature: signature,
         lauTimestamp: timestamp,
@@ -210,11 +210,11 @@ const start = async () => {
     // 2. Kết nối Redis (lazyConnect=true → không block startup)
     await redis.connect();
 
-    // 3. Khởi động VNKR SWIFT Bridge (vòng lặp Redis Stream consumer)
+    // 3. Khởi động YOUR_TOKEN SWIFT Bridge (vòng lặp Redis Stream consumer)
     //    Chạy trong background — lỗi không làm crash HTTP server
     bridge.start({
-      info:  (msg, ...a) => app.log.info({ extra: a }, msg),
-      warn:  (msg, ...a) => app.log.warn({ extra: a }, msg),
+      info: (msg, ...a) => app.log.info({ extra: a }, msg),
+      warn: (msg, ...a) => app.log.warn({ extra: a }, msg),
       error: (msg, ...a) => app.log.error({ extra: a }, msg),
     }).catch((err) => app.log.error({ err }, "[bridge] Unexpected error"));
 
@@ -222,7 +222,7 @@ const start = async () => {
     const fiatConnectorUrl = process.env["FIAT_CONNECTOR_URL"];
     if (fiatConnectorUrl) {
       initInboundListener(redis, fiatConnectorUrl, {
-        info:  (msg, ...a) => app.log.info({ extra: a }, msg),
+        info: (msg, ...a) => app.log.info({ extra: a }, msg),
         error: (msg, ...a) => app.log.error({ extra: a }, msg),
       }).catch((err) => app.log.error({ err }, "[bridge:inbound] Unexpected error"));
     }
@@ -236,7 +236,7 @@ const start = async () => {
       process.exit(0);
     };
     process.on("SIGTERM", shutdown);
-    process.on("SIGINT",  shutdown);
+    process.on("SIGINT", shutdown);
 
   } catch (err) {
     app.log.error(err);

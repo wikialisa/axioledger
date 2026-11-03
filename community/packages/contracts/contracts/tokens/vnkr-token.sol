@@ -4,15 +4,15 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// ─── vnkr-token.sol — VNKR ───────────────────────────────────────────────────
-// VNKR Reserve Currency (ERC-20).
+// ─── YOUR_TOKEN-token.sol — YOUR_TOKEN ───────────────────────────────────────────────────
+// YOUR_TOKEN Reserve Currency (ERC-20).
 // Bảo chứng tài sản — cung tối đa điều tiết bởi MINTRv1 và Bể dự trữ Kho bạc.
 // Chỉ địa chỉ được giao quyền mintAuthority (MINTRv1) mới được mint/burn.
 // ─────────────────────────────────────────────────────────────────────────────
 
-error VNKR_NotAuthorized(address caller);
+error AXVN_NotAuthorized(address caller);
 
-contract VNKRToken is ERC20, Ownable {
+contract YOUR_TOKENToken is ERC20, Ownable {
     // ─── State ────────────────────────────────────────────────────────────
 
     address public mintAuthority;
@@ -24,7 +24,7 @@ contract VNKRToken is ERC20, Ownable {
     // ─── Constructor ──────────────────────────────────────────────────────
 
     constructor(address admin_)
-        ERC20("VNKR Reserve Token", "VNKR")
+        ERC20("YOUR_TOKEN Reserve Token", "YOUR_TOKEN")
         Ownable(admin_)
     {}
 
@@ -39,16 +39,16 @@ contract VNKRToken is ERC20, Ownable {
     // ─── Mint / Burn ──────────────────────────────────────────────────────
 
     modifier onlyMintAuthority() {
-        if (msg.sender != mintAuthority) revert VNKR_NotAuthorized(msg.sender);
+        if (msg.sender != mintAuthority) revert AXVN_NotAuthorized(msg.sender);
         _;
     }
 
-    /// @notice Mint VNKR — callable only by MINTRv1
+    /// @notice Mint YOUR_TOKEN — callable only by MINTRv1
     function mint(address to_, uint256 amount_) external onlyMintAuthority {
         _mint(to_, amount_);
     }
 
-    /// @notice Burn VNKR — callable only by MINTRv1 (deflationary burn)
+    /// @notice Burn YOUR_TOKEN — callable only by MINTRv1 (deflationary burn)
     function burn(address from_, uint256 amount_) external onlyMintAuthority {
         _burn(from_, amount_);
     }

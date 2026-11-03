@@ -12,27 +12,27 @@ interface BlogRow { slug: string; title: string; category: string; published: bo
 interface CourseRow { courseId: string; title: string; level: string; lessonCount: number; published: boolean; }
 
 const MOCK_BLOGS: BlogRow[] = [
-  { slug: "bitcoin-halving-2024",   title: "Bitcoin Halving 2024 — Phân tích tác động", category: "Market",  published: true,  createdAt: "19/04/2024" },
-  { slug: "vnkr-stablecoin-guide",  title: "Hướng dẫn sử dụng VNKR Stablecoin",        category: "Tutorial",published: true,  createdAt: "15/03/2024" },
-  { slug: "defi-yield-farming-101", title: "DeFi Yield Farming cho người mới",           category: "DeFi",    published: false, createdAt: "01/06/2024" },
+  { slug: "bitcoin-halving-2024", title: "Bitcoin Halving 2024 — Phân tích tác động", category: "Market", published: true, createdAt: "19/04/2024" },
+  { slug: "YOUR_TOKEN-stablecoin-guide", title: "Hướng dẫn sử dụng YOUR_TOKEN Stablecoin", category: "Tutorial", published: true, createdAt: "15/03/2024" },
+  { slug: "defi-yield-farming-101", title: "DeFi Yield Farming cho người mới", category: "DeFi", published: false, createdAt: "01/06/2024" },
 ];
 
 const MOCK_COURSES: CourseRow[] = [
-  { courseId: "C001", title: "Bitcoin & Blockchain Cơ Bản",   level: "BEGINNER",     lessonCount: 8,  published: true  },
-  { courseId: "C002", title: "DeFi Nâng Cao — Yield Farming", level: "INTERMEDIATE", lessonCount: 12, published: true  },
-  { courseId: "C003", title: "Trading Kỹ Thuật Chuyên Sâu",   level: "PRO",          lessonCount: 20, published: false },
+  { courseId: "C001", title: "Bitcoin & Blockchain Cơ Bản", level: "BEGINNER", lessonCount: 8, published: true },
+  { courseId: "C002", title: "DeFi Nâng Cao — Yield Farming", level: "INTERMEDIATE", lessonCount: 12, published: true },
+  { courseId: "C003", title: "Trading Kỹ Thuật Chuyên Sâu", level: "PRO", lessonCount: 20, published: false },
 ];
 
 export default function AdminCMSPage() {
-  const [tab,          setTab]          = useState<"blogs" | "courses">("blogs");
-  const [search,       setSearch]       = useState("");
-  const [blogs,        setBlogs]        = useState<BlogRow[]>(MOCK_BLOGS);
-  const [courses,      setCourses]      = useState<CourseRow[]>(MOCK_COURSES);
-  const [deleteModal,  setDeleteModal]  = useState<string | null>(null);
+  const [tab, setTab] = useState<"blogs" | "courses">("blogs");
+  const [search, setSearch] = useState("");
+  const [blogs, setBlogs] = useState<BlogRow[]>(MOCK_BLOGS);
+  const [courses, setCourses] = useState<CourseRow[]>(MOCK_COURSES);
+  const [deleteModal, setDeleteModal] = useState<string | null>(null);
   const [newBlogModal, setNewBlogModal] = useState(false);
-  const [newTitle,     setNewTitle]     = useState("");
-  const [newCat,       setNewCat]       = useState("");
-  const [loading,      setLoading]      = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [newCat, setNewCat] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleCreateBlog = async () => {
     if (!newTitle.trim()) return;
@@ -51,10 +51,10 @@ export default function AdminCMSPage() {
   };
 
   const blogColumns: DataTableColumn[] = [
-    { key: "title",     label: "Tiêu đề",    render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as BlogRow).title}</Text> },
-    { key: "category",  label: "Danh mục",   render: v => <Badge variant="label" color="info" label={(v as BlogRow).category} /> },
+    { key: "title", label: "Tiêu đề", render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as BlogRow).title}</Text> },
+    { key: "category", label: "Danh mục", render: v => <Badge variant="label" color="info" label={(v as BlogRow).category} /> },
     { key: "published", label: "Trạng thái", render: v => <Badge variant="label" color={(v as BlogRow).published ? "success" : "warning"} label={(v as BlogRow).published ? "Đã đăng" : "Bản nháp"} /> },
-    { key: "createdAt", label: "Ngày tạo",   render: v => <Text variant="caption" color="#A0AEC0">{(v as BlogRow).createdAt}</Text> },
+    { key: "createdAt", label: "Ngày tạo", render: v => <Text variant="caption" color="#A0AEC0">{(v as BlogRow).createdAt}</Text> },
     {
       key: "actions", label: "Thao tác",
       render: v => (
@@ -69,13 +69,13 @@ export default function AdminCMSPage() {
   ];
 
   const courseColumns: DataTableColumn[] = [
-    { key: "title",       label: "Tên khóa học", render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as CourseRow).title}</Text> },
-    { key: "level",       label: "Cấp độ",       render: v => <Badge variant="label" color={(v as CourseRow).level === "BEGINNER" ? "info" : (v as CourseRow).level === "INTERMEDIATE" ? "warning" : "error"} label={(v as CourseRow).level} /> },
-    { key: "lessonCount", label: "Số bài",        render: v => <Text variant="caption" color="#4A5568">{(v as CourseRow).lessonCount} bài học</Text> },
-    { key: "published",   label: "Trạng thái",    render: v => <Badge variant="label" color={(v as CourseRow).published ? "success" : "warning"} label={(v as CourseRow).published ? "Công khai" : "Ẩn"} /> },
+    { key: "title", label: "Tên khóa học", render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as CourseRow).title}</Text> },
+    { key: "level", label: "Cấp độ", render: v => <Badge variant="label" color={(v as CourseRow).level === "BEGINNER" ? "info" : (v as CourseRow).level === "INTERMEDIATE" ? "warning" : "error"} label={(v as CourseRow).level} /> },
+    { key: "lessonCount", label: "Số bài", render: v => <Text variant="caption" color="#4A5568">{(v as CourseRow).lessonCount} bài học</Text> },
+    { key: "published", label: "Trạng thái", render: v => <Badge variant="label" color={(v as CourseRow).published ? "success" : "warning"} label={(v as CourseRow).published ? "Công khai" : "Ẩn"} /> },
   ];
 
-  const filteredBlogs   = blogs.filter(b => b.title.toLowerCase().includes(search.toLowerCase()));
+  const filteredBlogs = blogs.filter(b => b.title.toLowerCase().includes(search.toLowerCase()));
   const filteredCourses = courses.filter(c => c.title.toLowerCase().includes(search.toLowerCase()));
 
   return (
@@ -104,7 +104,7 @@ export default function AdminCMSPage() {
       </div>
 
       <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-        {tab === "blogs"   && <DataTable columns={blogColumns}   data={filteredBlogs   as unknown as Record<string, unknown>[]} />}
+        {tab === "blogs" && <DataTable columns={blogColumns} data={filteredBlogs as unknown as Record<string, unknown>[]} />}
         {tab === "courses" && <DataTable columns={courseColumns} data={filteredCourses as unknown as Record<string, unknown>[]} />}
       </div>
 

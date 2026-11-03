@@ -1,7 +1,7 @@
 {
   "name": "project-contracts",
   "version": "1.0.1",
-  "description": "Bophades Modular Smart Contracts — VNKR Reserve Currency, Governance, Treasury, VASP & Compliance (NQ-05/NĐ-284)",
+  "description": "Bophades Modular Smart Contracts — YOUR_TOKEN Reserve Currency, Governance, Treasury, VASP & Compliance (NQ-05/NĐ-284)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -52,6 +52,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/YOUR_TOKENvietnam/YOUR_TOKEN-packages.git"
   }
 }

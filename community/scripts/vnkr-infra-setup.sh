@@ -1,35 +1,35 @@
 #!/usr/bin/env bash
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║         VNKR TECH HOLDING JSC — Global Enterprise Infrastructure Setup      ║
-# ║         Chuẩn Hóa Hạ Tầng Mã Nguồn & Quản Lý Gói npm (@${BRAND_NPM_SCOPE})        ║
+# ║         Your Organisation Full Name JSC — Global Enterprise Infrastructure Setup      ║
+# ║         Chuẩn Hóa Hạ Tầng Mã Nguồn & Quản Lý Gói npm (@your-npm-org)        ║
 # ╠══════════════════════════════════════════════════════════════════════════════╣
 # ║  Tài liệu:   Global Enterprise Standards — Monorepo + npm Supply-Chain      ║
 # ║  Scope:      pnpm workspace · Turborepo · Changesets · GitHub Packages      ║
-# ║  Registry:   https://npm.pkg.github.com  (scope: @${BRAND_NPM_SCOPE})             ║
+# ║  Registry:   https://npm.pkg.github.com  (scope: @your-npm-org)             ║
 # ║  Node req:   >= 22.0.0   │   pnpm req: >= 9.0.0                            ║
-# ║  Tác giả:    VNKR Platform Engineering                                       ║
+# ║  Tác giả:    YOUR_INFRA Platform Engineering                                       ║
 # ║  Phiên bản:  1.0.0                                                           ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 #
 # ┌─────────────────────────────────────────────────────────────────────────────┐
-# │  SƠ ĐỒ KIẾN TRÚC HẠ TẦNG Git & npm (@${BRAND_NPM_SCOPE})                         │
+# │  SƠ ĐỒ KIẾN TRÚC HẠ TẦNG Git & npm (@your-npm-org)                         │
 # ├─────────────────────────────────────────────────────────────────────────────┤
 # │                                                                             │
-# │  vnkr-tech-holding-monorepo (GitHub)                                       │
+# │  YOUR_INFRA-tech-holding-monorepo (GitHub)                                       │
 # │  └── branch: main                                                          │
 # │       │                                                                    │
 # │       ├── apps/*          (Next.js / React / Vite frontends)               │
-# │       │   ├── id-fiat-gateway     (id.${BRAND_DOMAIN})     :3001                   │
-# │       │   ├── pay-portal          (pay.${BRAND_DOMAIN})     :3002                   │
-# │       │   ├── explorer-vnkrscan   (scan.${BRAND_DOMAIN})    :3003                   │
-# │       │   ├── swap-dex            (swap.${BRAND_DOMAIN})    :3004                   │
-# │       │   ├── dao-portal          (dao.${BRAND_DOMAIN})     :3005                   │
-# │       │   ├── holding-admin-portal(holding.${BRAND_DOMAIN}) :3006                   │
-# │       │   ├── app-web             (app.${BRAND_DOMAIN})     :3010                   │
-# │       │   ├── merchant-portal     (merchant.${BRAND_DOMAIN}):3011                   │
-# │       │   ├── sandbox-dashboard   (sandbox.${BRAND_DOMAIN}) :3012                   │
-# │       │   ├── kyc-portal          (kyc.${BRAND_DOMAIN})     :3013                   │
-# │       │   └── digital-twin-engine (lab.${BRAND_DOMAIN})                             │
+# │       │   ├── id-fiat-gateway     (id.your-project.vn)     :3001                   │
+# │       │   ├── pay-portal          (pay.your-project.vn)     :3002                   │
+# │       │   ├── explorer-YOUR_INFRAscan   (scan.your-project.vn)    :3003                   │
+# │       │   ├── swap-dex            (swap.your-project.vn)    :3004                   │
+# │       │   ├── dao-portal          (dao.your-project.vn)     :3005                   │
+# │       │   ├── holding-admin-portal(holding.your-project.vn) :3006                   │
+# │       │   ├── app-web             (app.your-project.vn)     :3010                   │
+# │       │   ├── merchant-portal     (merchant.your-project.vn):3011                   │
+# │       │   ├── sandbox-dashboard   (sandbox.your-project.vn) :3012                   │
+# │       │   ├── kyc-portal          (kyc.your-project.vn)     :3013                   │
+# │       │   └── digital-twin-engine (lab.your-project.vn)                             │
 # │       │                                                                    │
 # │       ├── packages/*      (npm publishable — GitHub Packages registry)     │
 # │       │   ├── project-types          (shared TS types)                │
@@ -41,13 +41,13 @@
 # │       │   ├── sdk-swift      (SWIFT Alliance Gateway SDK)     │
 # │       │   ├── swift-adapter  (MT103/MT202/ISO20022/LAU)       │
 # │       │   ├── sdk-internal   (SWIFT vendor SDK mirror)        │
-# │       │   └── ui-kit         (VNKR design system)             │
+# │       │   └── ui-kit         (YOUR_INFRA design system)             │
 # │       │                                                                    │
 # │       └── services/*      (microservices — Docker / Kubernetes)            │
 # │           ├── api-gateway          :4000  (REST 17 domains)                │
-# │           ├── fiat-connector-api   :4001  (dev-api.${BRAND_DOMAIN})               │
-# │           ├── otc-liquidity-engine :4002  (otc.${BRAND_DOMAIN} — VARA)            │
-# │           ├── indexer-subgraph     :4003  (treasury-subgraph-api.${BRAND_DOMAIN}) │
+# │           ├── fiat-connector-api   :4001  (dev-api.your-project.vn)               │
+# │           ├── otc-liquidity-engine :4002  (otc.your-project.vn — VARA)            │
+# │           ├── indexer-subgraph     :4003  (treasury-subgraph-api.your-project.vn) │
 # │           ├── swift-gateway        :4004  (SWIFT Microgateway 2.0.17)     │
 # │           ├── swift-chain-bridge   :4005  (SWIFT ↔ EVM/Solana oracle)     │
 # │           ├── mock-mgw-daemon      :9003  (dev/staging mock)              │
@@ -102,7 +102,7 @@ RESET=$'\e[0m'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MONOREPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-NPM_SCOPE="@${BRAND_NPM_SCOPE}"
+NPM_SCOPE="@your-npm-org"
 NPM_REGISTRY="https://npm.pkg.github.com"
 REQUIRED_NODE_MAJOR=22
 REQUIRED_PNPM_MAJOR=9
@@ -257,15 +257,15 @@ setup_npmrc() {
 
   # Kiểm tra scope mapping
   log_section "Kiểm Tra Scope Registry Mapping"
-  if grep -q "@${BRAND_NPM_SCOPE}:registry=https://npm.pkg.github.com" "$npmrc_path" 2>/dev/null; then
+  if grep -q "@your-npm-org:registry=https://npm.pkg.github.com" "$npmrc_path" 2>/dev/null; then
     log_ok "Scope ${NPM_SCOPE} → ${NPM_REGISTRY} ✓"
   else
     log_warn "Scope mapping cho ${NPM_SCOPE} chưa được cấu hình trong .npmrc"
     if confirm "Thêm scope mapping?"; then
       cat >> "$npmrc_path" <<EOF
 
-# VNKR scope → GitHub Packages (added by vnkr-infra-setup.sh)
-@${BRAND_NPM_SCOPE}:registry=https://npm.pkg.github.com
+# YOUR_INFRA scope → GitHub Packages (added by YOUR_INFRA-infra-setup.sh)
+@your-npm-org:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=\${NPM_TOKEN}
 EOF
       log_ok "Đã thêm scope mapping vào .npmrc"
@@ -293,10 +293,10 @@ EOF
 # MODULE 3: CHUẨN HÓA ĐỊNH DANH GÓI THƯ VIỆN
 # ──────────────────────────────────────────────────────────────────────────────
 validate_package_naming() {
-  log_header "MODULE 3 — Quy Ước Định Danh Gói @${BRAND_NPM_SCOPE}/*"
+  log_header "MODULE 3 — Quy Ước Định Danh Gói @your-npm-org/*"
 
   log_section "Quy Chuẩn Định Danh Toàn Cục"
-  printf '%b\n' "  ${DIM}Scope    :  @${BRAND_NPM_SCOPE}/<tên-gói>${RESET}"
+  printf '%b\n' "  ${DIM}Scope    :  @your-npm-org/<tên-gói>${RESET}"
   printf '%b\n' "  ${DIM}Registry :  https://npm.pkg.github.com${RESET}"
   printf '%b\n' "  ${DIM}Access   :  restricted (GitHub Packages)${RESET}"
   printf '%b\n' "  ${DIM}Định dạng tên: chữ thường, dấu gạch ngang, không ký tự đặc biệt${RESET}"
@@ -322,15 +322,15 @@ validate_package_naming() {
     printf '%b\n' "  ${BOLD}${pkg_name}${RESET} @ ${CYAN}${pkg_version}${RESET}"
 
     # Kiểm tra scope
-    if [[ "$pkg_name" == @${BRAND_NPM_SCOPE}/* ]]; then
-      log_ok "Scope @${BRAND_NPM_SCOPE} ✓"
+    if [[ "$pkg_name" == @your-npm-org/* ]]; then
+      log_ok "Scope @your-npm-org ✓"
     else
-      log_err "Tên '${pkg_name}' phải có scope @${BRAND_NPM_SCOPE}!"
+      log_err "Tên '${pkg_name}' phải có scope @your-npm-org!"
       ((errors++))
     fi
 
     # Kiểm tra định dạng tên (chỉ chữ thường + dấu gạch ngang)
-    local bare_name="${pkg_name#@${BRAND_NPM_SCOPE}/}"
+    local bare_name="${pkg_name#@your-npm-org/}"
     if [[ "$bare_name" =~ ^[a-z][a-z0-9-]*$ ]]; then
       log_ok "Định dạng tên hợp lệ '${bare_name}' ✓"
     else
@@ -609,14 +609,14 @@ setup_local_dev() {
     printf '%b\n' "  ${DIM}   export NPM_TOKEN=<YOUR_PAT>${RESET}"
     printf '\n'
     printf '%b\n' "  ${DIM}4. Hoặc dùng npm login:${RESET}"
-    printf '%b\n' "  ${DIM}   npm login --scope=@${BRAND_NPM_SCOPE} --registry=https://npm.pkg.github.com${RESET}"
+    printf '%b\n' "  ${DIM}   npm login --scope=@your-npm-org --registry=https://npm.pkg.github.com${RESET}"
     printf '\n'
   else
     log_ok "NPM_TOKEN được export ✓"
     # Validate token với registry
     log_info "Kiểm tra kết nối tới registry..."
     if curl -sf -H "Authorization: Bearer ${NPM_TOKEN}" \
-      "https://npm.pkg.github.com/@${BRAND_NPM_SCOPE}%2ftypes" > /dev/null 2>&1; then
+      "https://npm.pkg.github.com/@your-npm-org%2ftypes" > /dev/null 2>&1; then
       log_ok "Kết nối tới GitHub Packages thành công ✓"
     else
       log_warn "Không thể xác thực với GitHub Packages — kiểm tra lại NPM_TOKEN"
@@ -640,7 +640,7 @@ setup_local_dev() {
 # MODULE 8: QUYTRÌNH PUBLISH (Hướng Dẫn)
 # ──────────────────────────────────────────────────────────────────────────────
 show_publish_guide() {
-  log_header "MODULE 8 — Quy Trình Publish Packages (@${BRAND_NPM_SCOPE}/*)"
+  log_header "MODULE 8 — Quy Trình Publish Packages (@your-npm-org/*)"
 
   printf '%b\n' "${BOLD}${MAGENTA}  Quy Trình Khuyến Nghị: Changesets (Tự Động via CI)${RESET}"
   printf '\n'
@@ -733,9 +733,9 @@ generate_report() {
 # ──────────────────────────────────────────────────────────────────────────────
 usage() {
   printf '\n'
-  printf '%b\n' "${BOLD}${CYAN}VNKR Infra Setup — Chuẩn Hóa Hạ Tầng @${BRAND_NPM_SCOPE}${RESET}"
+  printf '%b\n' "${BOLD}${CYAN}YOUR_INFRA Infra Setup — Chuẩn Hóa Hạ Tầng @your-npm-org${RESET}"
   printf '\n'
-  printf '%b\n' "  ${BOLD}Usage:${RESET} bash scripts/vnkr-infra-setup.sh [module]"
+  printf '%b\n' "  ${BOLD}Usage:${RESET} bash scripts/YOUR_INFRA-infra-setup.sh [module]"
   printf '\n'
   printf '%b\n' "  ${BOLD}Modules:${RESET}"
   printf '%b\n' "    ${CYAN}all${RESET}         Chạy toàn bộ pipeline kiểm tra và chuẩn hóa (mặc định)"
@@ -750,9 +750,9 @@ usage() {
   printf '%b\n' "    ${CYAN}report${RESET}      Module 9 — Báo cáo tổng kết"
   printf '\n'
   printf '%b\n' "  ${BOLD}Ví dụ:${RESET}"
-  printf '%b\n' "    bash scripts/vnkr-infra-setup.sh              # full pipeline"
-  printf '%b\n' "    bash scripts/vnkr-infra-setup.sh audit        # chỉ security audit"
-  printf '%b\n' "    bash scripts/vnkr-infra-setup.sh publish      # xem hướng dẫn publish"
+  printf '%b\n' "    bash scripts/YOUR_INFRA-infra-setup.sh              # full pipeline"
+  printf '%b\n' "    bash scripts/YOUR_INFRA-infra-setup.sh audit        # chỉ security audit"
+  printf '%b\n' "    bash scripts/YOUR_INFRA-infra-setup.sh publish      # xem hướng dẫn publish"
   printf '\n'
 }
 
@@ -764,8 +764,8 @@ main() {
 
   printf '\n'
   printf '%b\n' "${BOLD}${MAGENTA}╔══════════════════════════════════════════════════════════════════════════╗${RESET}"
-  printf '%b\n' "${BOLD}${MAGENTA}║     VNKR TECH HOLDING JSC — Global Enterprise Infrastructure Setup       ║${RESET}"
-  printf '%b\n' "${BOLD}${MAGENTA}║     Chuẩn Hóa Hạ Tầng Mã Nguồn & Quản Lý Gói npm (@${BRAND_NPM_SCOPE})        ║${RESET}"
+  printf '%b\n' "${BOLD}${MAGENTA}║     Your Organisation Full Name JSC — Global Enterprise Infrastructure Setup       ║${RESET}"
+  printf '%b\n' "${BOLD}${MAGENTA}║     Chuẩn Hóa Hạ Tầng Mã Nguồn & Quản Lý Gói npm (@your-npm-org)        ║${RESET}"
   printf '%b\n' "${BOLD}${MAGENTA}╚══════════════════════════════════════════════════════════════════════════╝${RESET}"
   printf '%b\n' "  ${DIM}Monorepo: ${MONOREPO_ROOT}${RESET}"
   printf '%b\n' "  ${DIM}Scope:    ${NPM_SCOPE} → ${NPM_REGISTRY}${RESET}"
@@ -782,7 +782,7 @@ main() {
       show_publish_guide
       generate_report
       printf '\n'
-      printf '%b\n' "${BOLD}${GREEN}  ✅  Pipeline hoàn tất — hạ tầng @${BRAND_NPM_SCOPE} đạt chuẩn Global Enterprise.${RESET}"
+      printf '%b\n' "${BOLD}${GREEN}  ✅  Pipeline hoàn tất — hạ tầng @your-npm-org đạt chuẩn Global Enterprise.${RESET}"
       printf '\n'
       ;;
     env)         check_environment ;;

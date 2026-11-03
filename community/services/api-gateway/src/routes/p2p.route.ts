@@ -14,9 +14,9 @@ p2pRouter.use(authenticate);
  * Query params: side (BUY|SELL), asset, minAmount, maxAmount, page, limit
  */
 p2pRouter.get("/offers", (req, res) => {
-  const page  = Number(req.query["page"])  || 1;
+  const page = Number(req.query["page"]) || 1;
   const limit = Number(req.query["limit"]) || 20;
-  const side  = req.query["side"] as string | undefined;
+  const side = req.query["side"] as string | undefined;
   const asset = req.query["asset"] as string | undefined;
   // TODO: query P2P orderbook from DB with filters
   paginated(res, [], 0, page, limit);
@@ -25,18 +25,18 @@ p2pRouter.get("/offers", (req, res) => {
 // ─── POST /api/v1/p2p/offers ─────────────────────────────────────────────────
 /**
  * Create a new P2P offer (makeOffer).
- * Locks AXVN/VNKR into the Solana escrow PDA via on-chain instruction.
+ * Locks YOUR_TOKEN/YOUR_TOKEN into the Solana escrow PDA via on-chain instruction.
  */
 p2pRouter.post("/offers", async (req, res) => {
   const { side, asset, amount, rate, minLimit, maxLimit, paymentMethod, pin } = req.body as {
-    side:          "BUY" | "SELL";
-    asset:         string;
-    amount:        number;
-    rate:          number;
-    minLimit:      number;
-    maxLimit:      number;
+    side: "BUY" | "SELL";
+    asset: string;
+    amount: number;
+    rate: number;
+    minLimit: number;
+    maxLimit: number;
     paymentMethod: string;
-    pin:           string;
+    pin: string;
   };
   if (!side || !asset || !amount || !rate || !minLimit || !maxLimit || !paymentMethod || !pin) {
     fail(res, "Thiếu thông tin tạo lệnh P2P", 400, "VALIDATION_ERROR");
@@ -98,7 +98,7 @@ p2pRouter.post("/offers/:id/take", async (req, res) => {
 /**
  * Cancel a P2P offer (cancelOffer).
  * Only the offer creator can cancel; offer must be in OPEN state.
- * Returns AXVN/VNKR from the escrow PDA back to the maker's wallet.
+ * Returns YOUR_TOKEN/YOUR_TOKEN from the escrow PDA back to the maker's wallet.
  */
 p2pRouter.delete("/offers/:id", async (req, res) => {
   const { id } = req.params;

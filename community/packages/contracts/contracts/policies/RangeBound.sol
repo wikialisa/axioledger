@@ -9,7 +9,7 @@ import "../modules/MINTR/MINTR.v1.sol";
 
 // ─── RangeBound.sol — Open Market Stability Operations ───────────────────────
 // Thực thi can thiệp thị trường theo dải giá từ RANGEv1.
-// Bảo vệ tỷ giá sàn nội tại VNKR/VND — mua vào khi giá xuống, bán ra khi giá lên.
+// Bảo vệ tỷ giá sàn nội tại YOUR_TOKEN/VND — mua vào khi giá xuống, bán ra khi giá lên.
 // ─────────────────────────────────────────────────────────────────────────────
 
 error RangeBound_Cooldown(uint256 nextAllowed);
@@ -33,10 +33,10 @@ contract RangeBound is Policy {
 
     // ─── Events ───────────────────────────────────────────────────────────
 
-    event CushionBuy(uint256 price, uint256 reserveSpent, uint256 vnkrMinted);
-    event CushionSell(uint256 price, uint256 vnkrBurned, uint256 reserveReceived);
+    event CushionBuy(uint256 price, uint256 reserveSpent, uint256 AXVNMinted);
+    event CushionSell(uint256 price, uint256 AXVNBurned, uint256 reserveReceived);
     event WallBuy(uint256 price, uint256 reserveSpent);
-    event WallSell(uint256 price, uint256 vnkrBurned);
+    event WallSell(uint256 price, uint256 AXVNBurned);
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
@@ -60,14 +60,14 @@ contract RangeBound is Policy {
     function requestPermissions() external view override returns (Permissions[] memory reqs) {
         reqs    = new Permissions[](4);
         reqs[0] = Permissions({ keycode: "TRSRY", funcSelector: TRSRYv2.withdraw.selector });
-        reqs[1] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintVnkr.selector });
-        reqs[2] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.burnVnkr.selector });
+        reqs[1] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintAXVN.selector });
+        reqs[2] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.burnAXVN.selector });
         reqs[3] = Permissions({ keycode: "RANGE", funcSelector: RANGEv1.recordIntervention.selector });
     }
 
     // ─── Interventions ────────────────────────────────────────────────────
 
-    /// @notice Mua VNKR bằng dự trữ khi giá trong Cushion Low
+    /// @notice Mua YOUR_TOKEN bằng dự trữ khi giá trong Cushion Low
     function cushionBuy(uint256 currentPriceVnd_, uint256 reserveAmount_) external {
         _requireCooldown();
         (bool inLow,) = RANGE.isInCushion(currentPriceVnd_);
@@ -76,24 +76,24 @@ contract RangeBound is Policy {
         if (reserveAmount_ > cushionBudget) revert RangeBound_BudgetExceeded(cushionBudget, reserveAmount_);
 
         TRSRY.withdraw(reserveToken, address(this), reserveAmount_);
-        uint256 vnkrAmount = (reserveAmount_ * 1e18) / currentPriceVnd_;
-        MINTR.mintVnkr(address(TRSRY), vnkrAmount);
+        uint256 AXVNAmount = (reserveAmount_ * 1e18) / currentPriceVnd_;
+        MINTR.mintAXVN(address(TRSRY), AXVNAmount);
         RANGE.recordIntervention(0, currentPriceVnd_, reserveAmount_);
         lastIntervention = block.timestamp;
-        emit CushionBuy(currentPriceVnd_, reserveAmount_, vnkrAmount);
+        emit CushionBuy(currentPriceVnd_, reserveAmount_, AXVNAmount);
     }
 
-    /// @notice Bán VNKR lấy dự trữ khi giá trong Cushion High
-    function cushionSell(uint256 currentPriceVnd_, uint256 vnkrAmount_) external {
+    /// @notice Bán YOUR_TOKEN lấy dự trữ khi giá trong Cushion High
+    function cushionSell(uint256 currentPriceVnd_, uint256 AXVNAmount_) external {
         _requireCooldown();
         (, bool inHigh) = RANGE.isInCushion(currentPriceVnd_);
         if (!inHigh) revert RangeBound_PriceInRange(currentPriceVnd_);
-        if (vnkrAmount_ == 0) revert RangeBound_ZeroAmount();
+        if (AXVNAmount_ == 0) revert RangeBound_ZeroAmount();
 
-        MINTR.burnVnkr(address(TRSRY), vnkrAmount_);
-        RANGE.recordIntervention(1, currentPriceVnd_, vnkrAmount_);
+        MINTR.burnAXVN(address(TRSRY), AXVNAmount_);
+        RANGE.recordIntervention(1, currentPriceVnd_, AXVNAmount_);
         lastIntervention = block.timestamp;
-        emit CushionSell(currentPriceVnd_, vnkrAmount_, (vnkrAmount_ * currentPriceVnd_) / 1e18);
+        emit CushionSell(currentPriceVnd_, AXVNAmount_, (AXVNAmount_ * currentPriceVnd_) / 1e18);
     }
 
     function updateCushionBudget(uint256 budget_) external {

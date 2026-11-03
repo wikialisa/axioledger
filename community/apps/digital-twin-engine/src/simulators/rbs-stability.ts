@@ -1,6 +1,6 @@
 export interface RBSParams {
   collateralRatio: number;       // e.g. 1.5 = 150%
-  pegDeviation: number;          // absolute VNKR/USD deviation
+  pegDeviation: number;          // absolute YOUR_TOKEN/USD deviation
   liquidityDepthUsd: number;
 }
 
@@ -11,7 +11,7 @@ export interface RBSResult {
 }
 
 /**
- * Rule-Based Stability simulator for the VNKR peg mechanism.
+ * Rule-Based Stability simulator for the YOUR_TOKEN peg mechanism.
  */
 export function simulateRBSStability(params: RBSParams): RBSResult {
   const { collateralRatio, pegDeviation, liquidityDepthUsd } = params;

@@ -9,12 +9,12 @@ export const SOLANA_RPC_MAINNET = process.env["SOLANA_RPC_MAINNET"] ?? "https://
 
 /** App-Chain Genesis (EVM) — set APPCHAIN_RPC in .env */
 export const APPCHAIN_RPC_LOCAL   = process.env["APPCHAIN_RPC"]     ?? "http://localhost:8545";
-export const APPCHAIN_RPC_MAINNET = process.env["APPCHAIN_RPC_MAINNET"] ?? "https://rpc.${BRAND_DOMAIN}";
+export const APPCHAIN_RPC_MAINNET = process.env["APPCHAIN_RPC_MAINNET"] ?? "https://rpc.your-project.vn";
 
 export const TRON_FULL_HOST  = process.env["TRON_FULL_HOST"]  ?? "https://api.trongrid.io";
 export const TRON_NILE_TESTNET = "https://nile.trongrid.io";
 
-export const DEFAULT_API_ENDPOINT = process.env["DEFAULT_API_ENDPOINT"] ?? "https://dev-api.${BRAND_DOMAIN}";
+export const DEFAULT_API_ENDPOINT = process.env["DEFAULT_API_ENDPOINT"] ?? "https://dev-api.your-project.vn";
 
 // ─── Solana Program IDs ───────────────────────────────────────────────────────
 // Set via env before `anchor build` (see scripts/set-program-ids.sh).
@@ -52,10 +52,10 @@ export const EVM_CONTRACTS = {
 // ─── Stalwart Mail Server ─────────────────────────────────────────────────────
 
 export const MAIL_CONFIG = {
-  SMTP_HOST:   process.env["SMTP_HOST"]  ?? "mail.${BRAND_DOMAIN}",
+  SMTP_HOST:   process.env["SMTP_HOST"]  ?? "mail.your-project.vn",
   SMTP_PORT:   Number(process.env["SMTP_PORT"] ?? 587),
   SMTP_SECURE: process.env["SMTP_SECURE"] === "true",
-  SMTP_USER:   process.env["SMTP_USER"]  ?? "no-reply@${BRAND_DOMAIN}",
+  SMTP_USER:   process.env["SMTP_USER"]  ?? "no-reply@your-project.vn",
   SMTP_PASS:   process.env["SMTP_PASS"]  ?? "",
-  EMAIL_FROM:  process.env["EMAIL_FROM"] ?? "${BRAND_ORG_FULL} <no-reply@${BRAND_DOMAIN}>",
+  EMAIL_FROM:  process.env["EMAIL_FROM"] ?? "Your Organisation Full Name <no-reply@your-project.vn>",
 } as const;

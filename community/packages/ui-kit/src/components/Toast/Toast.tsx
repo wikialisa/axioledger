@@ -36,28 +36,28 @@ import type { CSSProperties, ReactNode } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type ToastVariant  = "success" | "error" | "warning" | "info" | "dark";
+export type ToastVariant = "success" | "error" | "warning" | "info" | "dark";
 export type ToastPosition = "top-right" | "top-center" | "bottom-right" | "bottom-center";
 
 export interface ToastOptions {
   /** Duration in ms. 0 = persistent */
   duration?: number;
   /** Position override */
-  position?:  ToastPosition;
+  position?: ToastPosition;
   /** Icon override */
-  icon?:      ReactNode;
+  icon?: ReactNode;
   /** Show progress bar */
-  progress?:  boolean;
+  progress?: boolean;
 }
 
 export interface ToastItem {
-  id:        string;
-  variant:   ToastVariant;
-  message:   ReactNode;
-  duration:  number;
-  position:  ToastPosition;
-  icon?:     ReactNode;
-  progress:  boolean;
+  id: string;
+  variant: ToastVariant;
+  message: ReactNode;
+  duration: number;
+  position: ToastPosition;
+  icon?: ReactNode;
+  progress: boolean;
   createdAt: number;
 }
 
@@ -69,10 +69,10 @@ const MAX_TOASTS = 5;
 
 const VARIANT_MAP: Record<ToastVariant, { bg: string; fg: string; accent: string; icon: string }> = {
   success: { bg: "#ECFDF5", fg: "#065F46", accent: "#00D68F", icon: "✓" },
-  error:   { bg: "#FFF1F2", fg: "#9F1239", accent: "#FF3D71", icon: "✕" },
+  error: { bg: "#FFF1F2", fg: "#9F1239", accent: "#FF3D71", icon: "✕" },
   warning: { bg: "#FFFBEB", fg: "#92400E", accent: "#FFAA00", icon: "⚠" },
-  info:    { bg: "#EFF6FF", fg: "#1E40AF", accent: "#0095FF", icon: "ℹ" },
-  dark:    { bg: "#1A1F36", fg: "#FFFFFF", accent: "#BEFF6C", icon: "●" },
+  info: { bg: "#EFF6FF", fg: "#1E40AF", accent: "#0095FF", icon: "ℹ" },
+  dark: { bg: "#1A1F36", fg: "#FFFFFF", accent: "#BEFF6C", icon: "●" },
 };
 
 // ─── Internal event bus (no React dependency for toast() calls) ───────────────
@@ -80,7 +80,7 @@ const VARIANT_MAP: Record<ToastVariant, { bg: string; fg: string; accent: string
 type Listener = (item: ToastItem) => void;
 type RemoveListener = (id: string) => void;
 
-const listeners:       Listener[]       = [];
+const listeners: Listener[] = [];
 const removeListeners: RemoveListener[] = [];
 
 function emitAdd(item: ToastItem) {
@@ -104,10 +104,10 @@ function createToast(
     id,
     variant,
     message,
-    duration:  opts.duration ?? DEFAULT_DURATION,
-    position:  opts.position ?? DEFAULT_POSITION,
-    icon:      opts.icon,
-    progress:  opts.progress ?? true,
+    duration: opts.duration ?? DEFAULT_DURATION,
+    position: opts.position ?? DEFAULT_POSITION,
+    icon: opts.icon,
+    progress: opts.progress ?? true,
     createdAt: Date.now(),
   });
   return id;
@@ -117,12 +117,12 @@ function createToast(
 
 export const toast = {
   success: (msg: ReactNode, opts?: ToastOptions) => createToast("success", msg, opts),
-  error:   (msg: ReactNode, opts?: ToastOptions) => createToast("error",   msg, opts),
+  error: (msg: ReactNode, opts?: ToastOptions) => createToast("error", msg, opts),
   warning: (msg: ReactNode, opts?: ToastOptions) => createToast("warning", msg, opts),
-  info:    (msg: ReactNode, opts?: ToastOptions) => createToast("info",    msg, opts),
-  dark:    (msg: ReactNode, opts?: ToastOptions) => createToast("dark",    msg, opts),
+  info: (msg: ReactNode, opts?: ToastOptions) => createToast("info", msg, opts),
+  dark: (msg: ReactNode, opts?: ToastOptions) => createToast("dark", msg, opts),
   dismiss: (id: string) => emitRemove(id),
-  custom:  (node: ReactNode, opts?: ToastOptions) => createToast("dark",  node, opts),
+  custom: (node: ReactNode, opts?: ToastOptions) => createToast("dark", node, opts),
 };
 
 // ─── ToastProvider ────────────────────────────────────────────────────────────
@@ -135,8 +135,8 @@ export interface ToastProviderProps {
 }
 
 export function ToastProvider({
-  position:  defaultPos  = DEFAULT_POSITION,
-  maxToasts: max         = MAX_TOASTS,
+  position: defaultPos = DEFAULT_POSITION,
+  maxToasts: max = MAX_TOASTS,
 }: ToastProviderProps) {
   const [items, setItems] = useState<ToastItem[]>([]);
 
@@ -185,20 +185,20 @@ export function ToastProvider({
 
 function ToastContainer({ position, items, onDismiss }: {
   position: ToastPosition;
-  items:    ToastItem[];
+  items: ToastItem[];
   onDismiss: (id: string) => void;
 }) {
-  const isTop     = position.startsWith("top");
-  const isCenter  = position.endsWith("center");
+  const isTop = position.startsWith("top");
+  const isCenter = position.endsWith("center");
 
   const containerStyle: CSSProperties = {
-    position:       "fixed",
-    zIndex:         1000,
-    display:        "flex",
-    flexDirection:  isTop ? "column" : "column-reverse",
-    gap:            10,
-    padding:        16,
-    pointerEvents:  "none",
+    position: "fixed",
+    zIndex: 1000,
+    display: "flex",
+    flexDirection: isTop ? "column" : "column-reverse",
+    gap: 10,
+    padding: 16,
+    pointerEvents: "none",
     // Horizontal
     ...(isCenter
       ? { left: "50%", transform: "translateX(-50%)" }
@@ -206,8 +206,8 @@ function ToastContainer({ position, items, onDismiss }: {
     ),
     // Vertical
     ...(isTop ? { top: 0 } : { bottom: 0 }),
-    maxWidth:       400,
-    width:          "100%",
+    maxWidth: 400,
+    width: "100%",
   };
 
   return (
@@ -222,12 +222,12 @@ function ToastContainer({ position, items, onDismiss }: {
 // ─── Single toast card ────────────────────────────────────────────────────────
 
 function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: (id: string) => void }) {
-  const [paused,  setPaused]  = useState(false);
+  const [paused, setPaused] = useState(false);
   const [visible, setVisible] = useState(true);
   const [progress, setProgress] = useState(100);
-  const elapsed   = useRef(0);
-  const lastTick  = useRef(Date.now());
-  const rafId     = useRef<number>(0);
+  const elapsed = useRef(0);
+  const lastTick = useRef(Date.now());
+  const rafId = useRef<number>(0);
 
   const c = VARIANT_MAP[item.variant];
 
@@ -237,7 +237,7 @@ function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: (id: strin
 
     const tick = () => {
       if (!paused) {
-        const now  = Date.now();
+        const now = Date.now();
         elapsed.current += now - lastTick.current;
         lastTick.current = now;
         const pct = Math.max(0, 100 - (elapsed.current / item.duration) * 100);
@@ -258,32 +258,32 @@ function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: (id: strin
   }, [item.duration, item.id, onDismiss, paused]);
 
   const cardStyle: CSSProperties = {
-    display:        "flex",
-    alignItems:     "flex-start",
-    gap:            10,
-    background:     c.bg,
-    borderRadius:   12,
-    padding:        "12px 14px",
-    boxShadow:      "0 4px 20px rgba(0,0,0,0.12)",
-    pointerEvents:  "all",
-    position:       "relative",
-    overflow:       "hidden",
-    borderLeft:     `3px solid ${c.accent}`,
-    animation:      visible
-      ? "vnkr-toast-in 0.25s cubic-bezier(0.4,0,0.2,1)"
-      : "vnkr-toast-out 0.25s cubic-bezier(0.4,0,0.2,1) forwards",
-    fontFamily:     "'Work Sans', sans-serif",
-    minWidth:       280,
-    maxWidth:       360,
-    width:          "100%",
-    boxSizing:      "border-box",
+    display: "flex",
+    alignItems: "flex-start",
+    gap: 10,
+    background: c.bg,
+    borderRadius: 12,
+    padding: "12px 14px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+    pointerEvents: "all",
+    position: "relative",
+    overflow: "hidden",
+    borderLeft: `3px solid ${c.accent}`,
+    animation: visible
+      ? "YOUR_TOKEN-toast-in 0.25s cubic-bezier(0.4,0,0.2,1)"
+      : "YOUR_TOKEN-toast-out 0.25s cubic-bezier(0.4,0,0.2,1) forwards",
+    fontFamily: "'Work Sans', sans-serif",
+    minWidth: 280,
+    maxWidth: 360,
+    width: "100%",
+    boxSizing: "border-box",
   };
 
   return (
     <>
       <style>{`
-        @keyframes vnkr-toast-in  { from { opacity:0; transform: translateY(-8px) scale(0.95) } to { opacity:1; transform: translateY(0) scale(1) } }
-        @keyframes vnkr-toast-out { from { opacity:1; transform: scale(1) } to { opacity:0; transform: scale(0.95) } }
+        @keyframes YOUR_TOKEN-toast-in  { from { opacity:0; transform: translateY(-8px) scale(0.95) } to { opacity:1; transform: translateY(0) scale(1) } }
+        @keyframes YOUR_TOKEN-toast-out { from { opacity:1; transform: scale(1) } to { opacity:0; transform: scale(0.95) } }
       `}</style>
       <div
         style={cardStyle}
@@ -317,7 +317,7 @@ function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: (id: strin
           }}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
 
@@ -325,8 +325,8 @@ function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: (id: strin
         {item.progress && item.duration > 0 && (
           <div style={{
             position: "absolute", bottom: 0, left: 0,
-            height:   3,
-            width:    `${progress}%`,
+            height: 3,
+            width: `${progress}%`,
             background: c.accent,
             borderRadius: "0 99px 99px 0",
             transition: "width 0.1s linear",

@@ -2,7 +2,7 @@
   "name": "app-web",
   "version": "0.1.0",
   "private": true,
-  "description": "[app.${BRAND_DOMAIN}] Main Web App — Wallet, Crypto, Card, Cashback, P2P (${BRAND_ORG_FINTECH})",
+  "description": "[app.your-project.vn] Main Web App — Wallet, Crypto, Card, Cashback, P2P (Your FinTech Division Name)",
   "scripts": {
     "dev": "next dev -p 3010",
     "build": "next build",

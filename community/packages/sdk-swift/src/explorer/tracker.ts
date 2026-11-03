@@ -6,8 +6,8 @@ import type { BlockchainNetwork } from "../generators/iso20022-dto.js";
 export interface UETRMapping {
   /** SWIFT UETR (UUID v4) */
   uetr: string;
-  /** Internal VNKR transaction ID */
-  vnkrTxId: string;
+  /** Internal YOUR_TOKEN transaction ID */
+  AXVNTxId: string;
   /** Target blockchain network */
   network: BlockchainNetwork;
   /** On-chain transaction hash */
@@ -28,7 +28,7 @@ export interface UETRMapping {
  * Maintains a bi-directional index between:
  *  - SWIFT UETR (cross-border payment identifier)
  *  - On-Chain Transaction Hash (blockchain settlement leg)
- *  - VNKR Internal Transaction ID (internal orchestration ID)
+ *  - YOUR_TOKEN Internal Transaction ID (internal orchestration ID)
  *
  * In production, the backing store should be a persistent database
  * (e.g. PostgreSQL or Redis). This module provides an in-memory
@@ -39,7 +39,7 @@ export interface UETRMapping {
 export class TransactionTracker {
   private readonly byUETR: Map<string, UETRMapping> = new Map();
   private readonly byTxHash: Map<string, string> = new Map(); // txHash → uetr
-  private readonly byVNKRTxId: Map<string, string> = new Map(); // vnkrTxId → uetr
+  private readonly byAXVNTxId: Map<string, string> = new Map(); // AXVNTxId → uetr
 
   // ─── Registration ───────────────────────────────────────────────────────────
 
@@ -50,7 +50,7 @@ export class TransactionTracker {
    */
   register(
     uetr: string,
-    vnkrTxId: string,
+    AXVNTxId: string,
     network: BlockchainNetwork,
     onChainTxHash: string,
     escrowId?: string
@@ -62,7 +62,7 @@ export class TransactionTracker {
     const now = new Date().toISOString();
     const mapping: UETRMapping = {
       uetr,
-      vnkrTxId,
+      AXVNTxId,
       network,
       onChainTxHash,
       escrowId,
@@ -73,7 +73,7 @@ export class TransactionTracker {
 
     this.byUETR.set(uetr, mapping);
     this.byTxHash.set(onChainTxHash, uetr);
-    this.byVNKRTxId.set(vnkrTxId, uetr);
+    this.byAXVNTxId.set(AXVNTxId, uetr);
 
     return mapping;
   }
@@ -112,9 +112,9 @@ export class TransactionTracker {
     return uetr ? this.byUETR.get(uetr) : undefined;
   }
 
-  /** Look up a mapping by internal VNKR transaction ID */
-  getByVNKRTxId(vnkrTxId: string): UETRMapping | undefined {
-    const uetr = this.byVNKRTxId.get(vnkrTxId);
+  /** Look up a mapping by internal YOUR_TOKEN transaction ID */
+  getByAXVNTxId(AXVNTxId: string): UETRMapping | undefined {
+    const uetr = this.byAXVNTxId.get(AXVNTxId);
     return uetr ? this.byUETR.get(uetr) : undefined;
   }
 

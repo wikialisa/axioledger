@@ -28,7 +28,7 @@ const parser = new XMLParser({
  * Build a `pacs.008.001.08` FIToFI Customer Credit Transfer XML message.
  *
  * Used for ISO 20022 MX payment routing through SWIFT gpi / SWIFTNet,
- * SEPA INST, and the VNKR cross-border corridor.
+ * SEPA INST, and the YOUR_TOKEN cross-border corridor.
  *
  * Vendor reference: swift-messaging-sdk JAR — pacs.008.001.08
  */
@@ -259,7 +259,7 @@ export function parseCamt053(xml: string): Record<string, unknown> {
 /**
  * Build a `pain.001.001.09` Customer Credit Transfer Initiation XML.
  *
- * Used for bulk payment initiation from corporate ERP systems or VNKR
+ * Used for bulk payment initiation from corporate ERP systems or YOUR_TOKEN
  * institutional payment orchestration engine.
  *
  * Vendor reference: swift-messaging-sdk JAR — pain.001.001.09
@@ -289,11 +289,11 @@ export function buildPain001(payload: Pain001Payload): string {
     CdtrAcct: { Id: { IBAN: t.cdtrAcctIBAN } },
     ...(t.remittanceRef || t.remittanceInfo
       ? {
-          RmtInf: {
-            ...(t.remittanceRef ? { Strd: { CdtrRefInf: { Ref: t.remittanceRef } } } : {}),
-            ...(t.remittanceInfo ? { Ustrd: t.remittanceInfo } : {}),
-          },
-        }
+        RmtInf: {
+          ...(t.remittanceRef ? { Strd: { CdtrRefInf: { Ref: t.remittanceRef } } } : {}),
+          ...(t.remittanceInfo ? { Ustrd: t.remittanceInfo } : {}),
+        },
+      }
       : {}),
   }));
 

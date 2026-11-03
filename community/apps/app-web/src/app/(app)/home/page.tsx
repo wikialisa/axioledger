@@ -29,16 +29,16 @@ const BALANCE_VISIBLE_KEY = "home_balance_visible";
 const BALANCE_VND = 2_500_000;
 
 const CRYPTO_BADGES: CryptoBadgeData[] = [
-  { ticker: "BTC",  percent: "12.7%", trend: "up"      },
-  { ticker: "ETH",  percent: "5.2%",  trend: "up"      },
-  { ticker: "SOL",  percent: "−3.1%", trend: "down"    },
-  { ticker: "AXVN", percent: "8.4%",  trend: "up"      },
-  { ticker: "GLD",  percent: "0.3%",  trend: "neutral" },
+  { ticker: "BTC", percent: "12.7%", trend: "up" },
+  { ticker: "ETH", percent: "5.2%", trend: "up" },
+  { ticker: "SOL", percent: "−3.1%", trend: "down" },
+  { ticker: "YOUR_TOKEN", percent: "8.4%", trend: "up" },
+  { ticker: "GLD", percent: "0.3%", trend: "neutral" },
 ];
 
 // Chart data: last 7 days income vs expense
 const CHART_LABELS = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
-const CHART_INCOME  = [1200000, 0, 2500000, 500000, 0, 1800000, 300000];
+const CHART_INCOME = [1200000, 0, 2500000, 500000, 0, 1800000, 300000];
 const CHART_EXPENSE = [450000, 320000, 800000, 200000, 150000, 600000, 80000];
 
 function QuickAction({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick?: () => void }) {
@@ -56,12 +56,12 @@ function QuickAction({ icon, label, onClick }: { icon: React.ReactNode; label: s
 }
 
 export default function HomePage() {
-  const [activeBadge,    setActiveBadge]   = useState(0);
-  const [qrOpen,         setQrOpen]        = useState(false);
+  const [activeBadge, setActiveBadge] = useState(0);
+  const [qrOpen, setQrOpen] = useState(false);
   const [balanceVisible, setBalanceVisible] = useState(true);
-  const [chartError,     setChartError]    = useState(false);
-  const [chartLoading,   setChartLoading]  = useState(false);
-  const [notifCount,     setNotifCount]    = useState(3);
+  const [chartError, setChartError] = useState(false);
+  const [chartLoading, setChartLoading] = useState(false);
+  const [notifCount, setNotifCount] = useState(3);
 
   // Persist balance visibility in localStorage
   useEffect(() => {
@@ -156,10 +156,10 @@ export default function HomePage() {
 
       {/* ── Quick actions ────────────────────────────────────────────────── */}
       <div style={{ display: "flex", justifyContent: "space-around", padding: "0 20px 20px" }}>
-        <QuickAction icon={<ArrowUp size={22} />}   label="Gửi"   onClick={() => window.location.href = "/transfer"} />
-        <QuickAction icon={<ArrowDown size={22} />} label="Nhận"  onClick={() => setQrOpen(true)} />
-        <QuickAction icon={<ArrowSwap size={22} />} label="P2P"   onClick={() => window.location.href = "/p2p"} />
-        <QuickAction icon={<QrCode size={22} />}    label="QR"    onClick={() => setQrOpen(true)} />
+        <QuickAction icon={<ArrowUp size={22} />} label="Gửi" onClick={() => window.location.href = "/transfer"} />
+        <QuickAction icon={<ArrowDown size={22} />} label="Nhận" onClick={() => setQrOpen(true)} />
+        <QuickAction icon={<ArrowSwap size={22} />} label="P2P" onClick={() => window.location.href = "/p2p"} />
+        <QuickAction icon={<QrCode size={22} />} label="QR" onClick={() => setQrOpen(true)} />
       </div>
 
       {/* ── Crypto badges ───────────────────────────────────────────────── */}
@@ -194,7 +194,7 @@ export default function HomePage() {
           <LineChart
             labels={CHART_LABELS}
             series={[
-              { name: "Thu", data: CHART_INCOME,  color: "#00D68F", area: true },
+              { name: "Thu", data: CHART_INCOME, color: "#00D68F", area: true },
               { name: "Chi", data: CHART_EXPENSE, color: "#FF3D71", area: true },
             ]}
             height={140}
@@ -207,9 +207,9 @@ export default function HomePage() {
       <QRCodeModal
         open={qrOpen}
         onClose={() => setQrOpen(false)}
-        value="vnkr:0x1234567890abcdef1234567890abcdef12345678"
+        value="YOUR_TOKEN:0x1234567890abcdef1234567890abcdef12345678"
         label="Địa chỉ ví của bạn"
-        subtitle="VNKR App — Solana / EVM"
+        subtitle="YOUR_TOKEN App — Solana / EVM"
         scannable
       />
     </div>

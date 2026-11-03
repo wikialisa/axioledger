@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── chrg-module.v1.sol — CHRG ───────────────────────────────────────────────
 // Thu gom và phân phối phí giao dịch từ VASP, P2P, SWIFT Bridge và Commerce.
-// Phân chia: POL buy-back + Kho bạc cổ tức sVNKR/gVNKR.
+// Phân chia: POL buy-back + Kho bạc cổ tức sAXVN/gAXVN.
 // ─────────────────────────────────────────────────────────────────────────────
 
 using SafeERC20 for IERC20;
@@ -33,7 +33,7 @@ contract CHRGv1 is Module {
 
     /// @notice Distribution split: polBps + treasuryBps must equal 10_000
     uint16 public polBps      = 3_000;  // 30% → Protocol-Owned Liquidity buy-back
-    uint16 public treasuryBps = 7_000;  // 70% → Treasury yield for sVNKR/gVNKR holders
+    uint16 public treasuryBps = 7_000;  // 70% → Treasury yield for sAXVN/gAXVN holders
 
     address public polReceiver;
     address public treasuryReceiver;

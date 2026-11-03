@@ -1,4 +1,4 @@
-// PM2 Ecosystem — VNKR Tech Holding Monorepo
+// PM2 Ecosystem — Your Organisation Full Name Monorepo
 // Usage:
 //   pm2 start ecosystem.config.cjs               # start tất cả
 //   pm2 start ecosystem.config.cjs --only api-gateway
@@ -88,16 +88,16 @@ module.exports = {
     // ├──────────────────────────────────────────────────────────────────┤
     // │  FRONTEND APPS                                                   │
     // ├──────────────────────────────────────────────────────────────────┤
-    nextApp("app-web",        "app-web",               3010), // app.${BRAND_DOMAIN}
-    nextApp("pay-portal",     "pay-portal",            3002), // pay.${BRAND_DOMAIN}
-    nextApp("explorer",       "explorer-vnkrscan",     3003), // scan.${BRAND_DOMAIN}
-    nextApp("swap-dex",       "swap-dex",              3004), // swap.${BRAND_DOMAIN}
-    nextApp("dao-portal",     "dao-portal",            3005), // dao.${BRAND_DOMAIN}
-    nextApp("holding-admin",  "holding-admin-portal",  3006), // holding.${BRAND_DOMAIN}
-    nextApp("id-fiat",        "id-fiat-gateway",       3001), // id.${BRAND_DOMAIN}
-    nextApp("kyc-portal",     "kyc-portal",            3013), // kyc.${BRAND_DOMAIN}
-    nextApp("merchant",       "merchant-portal",       3011), // merchant.${BRAND_DOMAIN}
-    nextApp("sandbox",        "sandbox-dashboard",     3012), // sandbox.${BRAND_DOMAIN}
+    nextApp("app-web",        "app-web",               3010), // app.your-project.vn
+    nextApp("pay-portal",     "pay-portal",            3002), // pay.your-project.vn
+    nextApp("explorer",       "explorer-YOUR_INFRAscan",     3003), // scan.your-project.vn
+    nextApp("swap-dex",       "swap-dex",              3004), // swap.your-project.vn
+    nextApp("dao-portal",     "dao-portal",            3005), // dao.your-project.vn
+    nextApp("holding-admin",  "holding-admin-portal",  3006), // holding.your-project.vn
+    nextApp("id-fiat",        "id-fiat-gateway",       3001), // id.your-project.vn
+    nextApp("kyc-portal",     "kyc-portal",            3013), // kyc.your-project.vn
+    nextApp("merchant",       "merchant-portal",       3011), // merchant.your-project.vn
+    nextApp("sandbox",        "sandbox-dashboard",     3012), // sandbox.your-project.vn
     // └──────────────────────────────────────────────────────────────────┘
   ],
 };

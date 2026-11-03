@@ -1,7 +1,7 @@
-# @vnkr/ui
+# @YOUR_NPM_SCOPE_UPPER/ui
 
-> **VNKR Organisation — Exclusive Design System Library**
-> Thư viện component React/TypeScript độc quyền, trích xuất từ VNKR Design System.
+> **YOUR_TOKEN Organisation — Exclusive Design System Library**
+> Thư viện component React/TypeScript độc quyền, trích xuất từ YOUR_TOKEN Design System.
 
 ---
 
@@ -9,7 +9,7 @@
 
 ```bash
 # Trong monorepo axvietnam
-pnpm add @vnkr/ui
+pnpm add @YOUR_NPM_SCOPE_UPPER/ui
 ```
 
 ---
@@ -17,12 +17,12 @@ pnpm add @vnkr/ui
 ## Cấu trúc thư viện
 
 ```
-@vnkr/ui
+@YOUR_NPM_SCOPE_UPPER/ui
 ├── tokens/
 │   ├── colors.ts          ← Brand + Semantic + Shade scales
 │   ├── typography.ts      ← Work Sans — sizes, weights, line-heights
 │   ├── spacing.ts         ← 4px grid — spacing, radius, shadow, z-index
-│   └── cssVariables.ts    ← CSS Custom Properties (--vnkr-*)
+│   └── cssVariables.ts    ← CSS Custom Properties (--YOUR_TOKEN-*)
 └── components/
     ├── Typography/
     │   ├── Text.tsx           ← <Text variant="h1" weight="semibold">
@@ -42,7 +42,7 @@ pnpm add @vnkr/ui
 ### Colors
 
 ```tsx
-import { colorBrand, colorShades, colors } from "@vnkr/ui";
+import { colorBrand, colorShades, colors } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
 // Brand palette
 colorBrand.dark     // #000000
@@ -65,7 +65,7 @@ colorShades.greyscale[2]  // #2E3A59
 ### Typography
 
 ```tsx
-import { fontSize, fontWeight, fontFamily } from "@vnkr/ui";
+import { fontSize, fontWeight, fontFamily } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
 fontSize.h1        // "6rem"    (96px)
 fontSize.body2     // "0.875rem"(14px)
@@ -76,20 +76,20 @@ fontFamily.base    // "'Work Sans', ..."
 ### CSS Variables
 
 ```tsx
-import { injectVnkrTokens } from "@vnkr/ui";
+import { injectYOUR_TOKENTokens } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
-// Gọi một lần ở App root — inject tất cả --vnkr-* variables vào <head>
-injectVnkrTokens();
+// Gọi một lần ở App root — inject tất cả --YOUR_TOKEN-* variables vào <head>
+injectYOUR_TOKENTokens();
 ```
 
 ```css
 /* Sử dụng trong CSS */
 .my-element {
-  background: var(--vnkr-brand-violet);
-  font-size:  var(--vnkr-fs-h5);
-  color:      var(--vnkr-grey-700);
-  padding:    var(--vnkr-space-4);
-  border-radius: var(--vnkr-radius-lg);
+  background: var(--YOUR_TOKEN-brand-violet);
+  font-size:  var(--YOUR_TOKEN-fs-h5);
+  color:      var(--YOUR_TOKEN-grey-700);
+  padding:    var(--YOUR_TOKEN-space-4);
+  border-radius: var(--YOUR_TOKEN-radius-lg);
 }
 ```
 
@@ -98,10 +98,10 @@ injectVnkrTokens();
 ## 2 — Typography Component
 
 ```tsx
-import { Text } from "@vnkr/ui";
+import { Text } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
 // Headings
-<Text variant="h1">VNKR</Text>
+<Text variant="h1">YOUR_INFRA</Text>
 <Text variant="h3" weight="medium" color="#2E3A59">Dashboard</Text>
 
 // Body
@@ -133,7 +133,7 @@ import { Text } from "@vnkr/ui";
 ### TypographyScale — Reference
 
 ```tsx
-import { TypographyScale } from "@vnkr/ui";
+import { TypographyScale } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
 // Dùng trong Storybook hoặc docs page
 <TypographyScale />
@@ -144,9 +144,9 @@ import { TypographyScale } from "@vnkr/ui";
 ## 3 — Color Palette Component
 
 ```tsx
-import { ColorPalette } from "@vnkr/ui";
+import { ColorPalette } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
-// Reference component hiển thị toàn bộ bảng màu VNKR
+// Reference component hiển thị toàn bộ bảng màu YOUR_TOKEN
 <ColorPalette />
 ```
 
@@ -160,7 +160,7 @@ Tất cả icon là SVG inline, **zero external dependency**, linear stroke styl
 import {
   ArrowRight, Wallet, Shield, Bell, User,
   Search, Home, Settings2, CreditCard, Send,
-} from "@vnkr/ui";
+} from "@YOUR_NPM_SCOPE_UPPER/ui";
 
 // Basic usage
 <ArrowRight />
@@ -168,8 +168,8 @@ import {
 <Shield size={20} strokeWidth={2} />
 
 // Dynamic icon by name
-import { VnkrIcon } from "@vnkr/ui";
-<VnkrIcon name="Wallet" size={24} color="#00D68F" />
+import { YOUR_TOKENIcon } from "@YOUR_NPM_SCOPE_UPPER/ui";
+<YOUR_TOKENIcon name="Wallet" size={24} color="#00D68F" />
 ```
 
 ### Props
@@ -184,7 +184,7 @@ import { VnkrIcon } from "@vnkr/ui";
 ### IconGallery — Reference
 
 ```tsx
-import { IconGallery } from "@vnkr/ui";
+import { IconGallery } from "@YOUR_NPM_SCOPE_UPPER/ui";
 
 // Searchable gallery — dùng trong Storybook
 <IconGallery />
@@ -219,4 +219,4 @@ import { IconGallery } from "@vnkr/ui";
 
 ## License
 
-`UNLICENSED` — © VNKR Organisation. All rights reserved.
+`UNLICENSED` — © YOUR_TOKEN Organisation. All rights reserved.

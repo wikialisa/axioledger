@@ -3,7 +3,7 @@
  * /onramp — Fiat On-Ramp / Off-Ramp
  * Features:
  *  - 30-second FX rate lock countdown before confirming
- *  - VND ↔ VNKR (1:1 peg)
+ *  - VND ↔ YOUR_TOKEN (1:1 peg)
  */
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -12,35 +12,35 @@ import {
   Bank, ShieldCheck, AlertCircle, Clock,
 } from "ui-kit";
 
-type Tab      = "onramp" | "offramp";
+type Tab = "onramp" | "offramp";
 type RampStep = "form" | "confirm" | "done";
 
 const PAYMENT_METHODS = [
-  { id: "vcb", label: "Vietcombank",  sub: "1234 5678 90",   color: "#0072BC" },
-  { id: "mb",  label: "MB Bank",      sub: "9876 5432 10",   color: "#004B9B" },
-  { id: "tcb", label: "Techcombank",  sub: "1111 2222 3333", color: "#EE0033" },
+  { id: "vcb", label: "Vietcombank", sub: "1234 5678 90", color: "#0072BC" },
+  { id: "mb", label: "MB Bank", sub: "9876 5432 10", color: "#004B9B" },
+  { id: "tcb", label: "Techcombank", sub: "1111 2222 3333", color: "#EE0033" },
 ];
 
 const RATE_INFO = {
-  onramp:  { from: "VND",  to: "VNKR", rate: "1 VND = 1 VNKR",  fee: "0%", note: "Nạp tức thì, không mất phí" },
-  offramp: { from: "VNKR", to: "VND",  rate: "1 VNKR = 1 VND",   fee: "0%", note: "Rút về ngân hàng trong vài phút" },
+  onramp: { from: "VND", to: "YOUR_TOKEN", rate: "1 VND = 1 YOUR_TOKEN", fee: "0%", note: "Nạp tức thì, không mất phí" },
+  offramp: { from: "YOUR_TOKEN", to: "VND", rate: "1 YOUR_TOKEN = 1 VND", fee: "0%", note: "Rút về ngân hàng trong vài phút" },
 };
 
 const FX_LOCK_DURATION = 30; // seconds
 
 export default function OnRampPage() {
-  const [tab,       setTab]       = useState<Tab>("onramp");
-  const [step,      setStep]      = useState<RampStep>("form");
-  const [amount,    setAmount]    = useState("");
-  const [method,    setMethod]    = useState(PAYMENT_METHODS[0].id);
-  const [loading,   setLoading]   = useState(false);
+  const [tab, setTab] = useState<Tab>("onramp");
+  const [step, setStep] = useState<RampStep>("form");
+  const [amount, setAmount] = useState("");
+  const [method, setMethod] = useState(PAYMENT_METHODS[0].id);
+  const [loading, setLoading] = useState(false);
 
   // FX rate lock
   const [fxCountdown, setFxCountdown] = useState(0);
-  const [fxLocked,    setFxLocked]    = useState(false);
+  const [fxLocked, setFxLocked] = useState(false);
   const fxTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const info    = RATE_INFO[tab];
+  const info = RATE_INFO[tab];
   const receive = amount ? Number(amount).toLocaleString("vi-VN") : "—";
 
   // Start FX lock when entering confirm step
@@ -49,7 +49,7 @@ export default function OnRampPage() {
       startFxLock();
     }
     return () => { if (fxTimer.current) clearInterval(fxTimer.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
   const startFxLock = () => {
@@ -96,8 +96,8 @@ export default function OnRampPage() {
       <div style={{ padding: "16px 20px 8px", display: "flex", alignItems: "center", gap: 10 }}>
         <ArrowSwap size={22} color="#1A1F36" />
         <div>
-          <Text variant="h6" weight="semibold" color="#1A1F36">Nạp / Rút VNKR</Text>
-          <Text variant="caption" color="#A0AEC0">1 VNKR = 1 VND · Tokenized Fiat</Text>
+          <Text variant="h6" weight="semibold" color="#1A1F36">Nạp / Rút YOUR_TOKEN</Text>
+          <Text variant="caption" color="#A0AEC0">1 YOUR_TOKEN = 1 VND · Tokenized Fiat</Text>
         </div>
       </div>
 
@@ -105,8 +105,8 @@ export default function OnRampPage() {
       <div style={{ padding: "8px 20px 16px" }}>
         <div style={{ display: "flex", background: "#F5F6FA", borderRadius: 12, padding: 3 }}>
           {([
-            { id: "onramp",  label: "Nạp VND → VNKR", icon: <ArrowDown size={14} /> },
-            { id: "offramp", label: "Rút VNKR → VND",  icon: <ArrowUp size={14} />  },
+            { id: "onramp", label: "Nạp VND → YOUR_TOKEN", icon: <ArrowDown size={14} /> },
+            { id: "offramp", label: "Rút YOUR_TOKEN → VND", icon: <ArrowUp size={14} /> },
           ] as const).map(t => (
             <button
               key={t.id}
@@ -143,7 +143,7 @@ export default function OnRampPage() {
               type="number"
               value={amount}
               onChange={e => setAmount(e.target.value)}
-              caption={`Số dư: ${tab === "onramp" ? "5.000.000 VND" : "1.200.000 VNKR"}`}
+              caption={`Số dư: ${tab === "onramp" ? "5.000.000 VND" : "1.200.000 YOUR_TOKEN"}`}
             />
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
               {["100.000", "500.000", "1.000.000", "5.000.000"].map(v => (
@@ -229,12 +229,12 @@ export default function OnRampPage() {
           <Text variant="subtitle2" weight="semibold" color="#1A1F36">Xác nhận giao dịch</Text>
           <div style={{ background: "#fff", borderRadius: 16, padding: "4px 16px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
             {[
-              { label: "Loại",      value: tab === "onramp" ? "Nạp tiền (On-Ramp)" : "Rút tiền (Off-Ramp)" },
-              { label: "Số tiền",   value: `${Number(amount).toLocaleString("vi-VN")} ${info.from}` },
+              { label: "Loại", value: tab === "onramp" ? "Nạp tiền (On-Ramp)" : "Rút tiền (Off-Ramp)" },
+              { label: "Số tiền", value: `${Number(amount).toLocaleString("vi-VN")} ${info.from}` },
               { label: "Nhận được", value: `${receive} ${info.to}` },
               { label: "Ngân hàng", value: selectedMethod.label },
-              { label: "Phí",       value: "0đ" },
-              { label: "Tỷ lệ",     value: info.rate },
+              { label: "Phí", value: "0đ" },
+              { label: "Tỷ lệ", value: info.rate },
             ].map((r, i, arr) => (
               <div key={r.label} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: i < arr.length - 1 ? "1px solid #F3F4F6" : "none" }}>
                 <Text variant="body2" color="#718096">{r.label}</Text>

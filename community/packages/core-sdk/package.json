@@ -1,7 +1,7 @@
 {
   "name": "core-sdk",
   "version": "1.0.1",
-  "description": "Solana/EVM Web3 Wrapper & Anchor IDL Integrator — shared across all VNKR apps",
+  "description": "Solana/EVM Web3 Wrapper & Anchor IDL Integrator — shared across all YOUR_TOKEN apps",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -44,6 +44,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/YOUR_TOKENvietnam/YOUR_TOKEN-packages.git"
   }
 }

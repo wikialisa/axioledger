@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  VNKR TECH HOLDING — SWIFT Full Setup & Deploy Master Script
+#  Your Organisation Full Name — SWIFT Full Setup & Deploy Master Script
 #  /var/www/scripts/run-swift-setup.sh
 #
 #  Thực hiện đầy đủ 5 bước:
@@ -95,7 +95,7 @@ prompt_value() {
 echo ""
 echo -e "${BOLD}${CYAN}"
 echo "  ╔════════════════════════════════════════════════════════╗"
-echo "  ║   VNKR TECH HOLDING — SWIFT Full Setup & Deploy       ║"
+echo "  ║   Your Organisation Full Name — SWIFT Full Setup & Deploy       ║"
 echo "  ║   5-Step Master Script                                 ║"
 echo "  ╚════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
@@ -176,11 +176,11 @@ else
       log "Giữ nguyên keystore cũ."
     else
       rm -f "${KEYSTORE_FILE}" "${ENC_CONFIG}"
-      bash "${REPO_ROOT}/scripts/setup-mgw-keystore.sh" --env TEST --bic ${SWIFT_BIC_CODE}XXX
+      bash "${REPO_ROOT}/scripts/setup-mgw-keystore.sh" --env TEST --bic YOURBICXXXXXXX
     fi
   else
     log "Chạy setup-mgw-keystore.sh..."
-    bash "${REPO_ROOT}/scripts/setup-mgw-keystore.sh" --env TEST --bic ${SWIFT_BIC_CODE}XXX
+    bash "${REPO_ROOT}/scripts/setup-mgw-keystore.sh" --env TEST --bic YOURBICXXXXXXX
   fi
 
   # ── Xóa file config thô sau khi mã hóa ──────────────────────────────────────
@@ -217,7 +217,7 @@ else
 
   log "Kiểm tra SWIFT vars trong .env..."
   MISSING_VARS=()
-  for v in SWIFT_LAU_KEY SWIFT_MGW_APIKEY RELAYER_PRIVATE_KEY SWIFT_API_KEY VNKR_INTERNAL_WEBHOOK_SECRET; do
+  for v in SWIFT_LAU_KEY SWIFT_MGW_APIKEY RELAYER_PRIVATE_KEY SWIFT_API_KEY YOUR_INFRA_INTERNAL_WEBHOOK_SECRET; do
     val=$(current_val "$v")
     if [[ -z "$val" ]]; then
       MISSING_VARS+=("$v")
@@ -272,11 +272,11 @@ else
           set_env_var "SWIFT_API_KEY" "${SWIFT_API_VAL}"
           ok "  SWIFT_API_KEY đã lưu."
           ;;
-        VNKR_INTERNAL_WEBHOOK_SECRET)
-          echo "  VNKR_INTERNAL_WEBHOOK_SECRET — Shared secret giữa swift-gateway và bridge"
-          prompt_secret WEBHOOK_VAL "  VNKR_INTERNAL_WEBHOOK_SECRET"
-          set_env_var "VNKR_INTERNAL_WEBHOOK_SECRET" "${WEBHOOK_VAL}"
-          ok "  VNKR_INTERNAL_WEBHOOK_SECRET đã lưu."
+        YOUR_INFRA_INTERNAL_WEBHOOK_SECRET)
+          echo "  YOUR_INFRA_INTERNAL_WEBHOOK_SECRET — Shared secret giữa swift-gateway và bridge"
+          prompt_secret WEBHOOK_VAL "  YOUR_INFRA_INTERNAL_WEBHOOK_SECRET"
+          set_env_var "YOUR_INFRA_INTERNAL_WEBHOOK_SECRET" "${WEBHOOK_VAL}"
+          ok "  YOUR_INFRA_INTERNAL_WEBHOOK_SECRET đã lưu."
           ;;
       esac
       echo ""
@@ -378,7 +378,7 @@ fi
 echo ""
 echo -e "${BOLD}${GREEN}"
 echo "  ╔════════════════════════════════════════════════════════╗"
-echo "  ║   ✅  VNKR SWIFT Setup hoàn tất                       ║"
+echo "  ║   ✅  YOUR_INFRA SWIFT Setup hoàn tất                       ║"
 echo "  ╚════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 echo ""

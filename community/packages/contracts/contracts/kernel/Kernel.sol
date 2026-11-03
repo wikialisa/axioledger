@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 // ─── Kernel.sol ───────────────────────────────────────────────────────────────
-// VnkrvietnamDAO — Bophades Architecture
+// AXVNvietnamDAO — Bophades Architecture
 // Trung tâm điều phối quyền hạn giữa các Modules và Policies.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -58,7 +58,7 @@ interface IPolicy {
 //                              KERNEL
 // ─────────────────────────────────────────────────────────────────────────────
 
-/// @title  Kernel — VnkrvietnamDAO Bophades Core Coordinator
+/// @title  Kernel — AXVNvietnamDAO Bophades Core Coordinator
 /// @notice Manages installation/upgrade of Modules and activation/deactivation
 ///         of Policies, along with role-based permission grants.
 contract Kernel {

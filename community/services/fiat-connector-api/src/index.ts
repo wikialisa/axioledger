@@ -27,10 +27,10 @@ const REPLAY_WINDOW_MS = 30_000;
 
 /**
  * Regex to parse the Offer ID from the bank payment Memo/Description field.
- * Format mandated by P2P UI: "VNKR P2P OFFER <OFFER_ID>"
- * Example: "VNKR P2P OFFER ORD-20241201-A3F9"
+ * Format mandated by P2P UI: "YOUR_TOKEN P2P OFFER <OFFER_ID>"
+ * Example: "YOUR_TOKEN P2P OFFER ORD-20241201-A3F9"
  */
-const MEMO_REGEX = /VNKR P2P OFFER ([A-Z0-9-]+)/;
+const MEMO_REGEX = /YOUR_TOKEN P2P OFFER ([A-Z0-9-]+)/;
 
 // ─── DB readiness probe ────────────────────────────────────────────────────────
 async function dbReady(): Promise<boolean> {
@@ -79,7 +79,7 @@ function isTimestampFresh(timestampHeader: string | undefined): boolean {
  * Security:
  *   1. Verify `x-bank-signature` (HMAC-SHA256 of raw body).
  *   2. Replay-attack protection: `x-bank-timestamp` must be within 30 s.
- *   3. Parse Memo for offer ID via VNKR P2P OFFER regex.
+ *   3. Parse Memo for offer ID via YOUR_TOKEN P2P OFFER regex.
  *   4. Persist receipt + transition P2P order atomically.
  *   5. Trigger on-chain takeOffer via swift-adapter (TODO: wire once adapter is available in scope).
  */

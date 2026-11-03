@@ -20,13 +20,13 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545",
     },
     testnet: {
-      url: process.env["APPCHAIN_RPC_TESTNET"] ?? "https://rpc-testnet.${BRAND_DOMAIN}",
+      url: process.env["APPCHAIN_RPC_TESTNET"] ?? "https://rpc-testnet.your-project.vn",
       accounts: process.env["DEPLOYER_PRIVATE_KEY"]
         ? [process.env["DEPLOYER_PRIVATE_KEY"]]
         : [],
     },
     mainnet: {
-      url: process.env["APPCHAIN_RPC_MAINNET"] ?? "https://rpc.${BRAND_DOMAIN}",
+      url: process.env["APPCHAIN_RPC_MAINNET"] ?? "https://rpc.your-project.vn",
       accounts: process.env["DEPLOYER_PRIVATE_KEY"]
         ? [process.env["DEPLOYER_PRIVATE_KEY"]]
         : [],

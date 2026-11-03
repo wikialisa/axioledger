@@ -16,10 +16,10 @@ COPY packages/swift-adapter ./packages/swift-adapter
 COPY services/swift-chain-bridge ./services/swift-chain-bridge
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @vnkr/types          build
-RUN pnpm --filter @vnkr/config         build
-RUN pnpm --filter @vnkr/swift-adapter  build
-RUN pnpm --filter @vnkr/swift-chain-bridge build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/types          build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/config         build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/swift-adapter  build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/swift-chain-bridge build
 
 FROM node:20-alpine AS runner
 WORKDIR /app

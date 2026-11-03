@@ -2,23 +2,23 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title:       "VNKR Merchant — Payment Dashboard",
-  description: "Merchant Portal — Quản lý thanh toán, API Keys, đơn hàng — VNKR FinTech",
-  icons:       { icon: "/favicon.ico" },
+  title: "YOUR_TOKEN Merchant — Payment Dashboard",
+  description: "Merchant Portal — Quản lý thanh toán, API Keys, đơn hàng — YOUR_TOKEN FinTech",
+  icons: { icon: "/favicon.ico" },
   openGraph: {
-    title:       "VNKR Merchant Portal",
+    title: "YOUR_TOKEN Merchant Portal",
     description: "Merchant Dashboard — Quản lý thanh toán & API",
-    url:         "https://merchant.${BRAND_DOMAIN}",
-    siteName:    "VNKR Merchant",
-    locale:      "vi_VN",
-    type:        "website",
+    url: "https://merchant.your-project.vn",
+    siteName: "YOUR_TOKEN Merchant",
+    locale: "vi_VN",
+    type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  width:        "device-width",
+  width: "device-width",
   initialScale: 1,
-  themeColor:   "#000000",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

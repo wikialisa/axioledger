@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import "../kernel/Kernel.sol";
 
 // ─── IKernel.sol ─────────────────────────────────────────────────────────────
-// External-facing interface for the VnkrvietnamDAO Kernel.
+// External-facing interface for the AXVNvietnamDAO Kernel.
 // SDKs and off-chain indexers use this to query state without importing
 // the full Kernel implementation.
 // ─────────────────────────────────────────────────────────────────────────────

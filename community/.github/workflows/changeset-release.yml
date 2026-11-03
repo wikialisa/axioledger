@@ -36,7 +36,7 @@ jobs:
 
       # ── Build theo thứ tự dependency ────────────────────────────────────────
       - name: Build all packages
-        run: pnpm --filter "@${BRAND_NPM_SCOPE}/*" build
+        run: pnpm --filter "@your-npm-org/*" build
 
       # ── Changesets: tạo PR hoặc publish ────────────────────────────────────
       - name: Create Release PR or Publish

@@ -2,7 +2,7 @@
   "name": "dune-alert-bots",
   "version": "0.1.0",
   "private": true,
-  "description": "Telegram/Discord Alert Bots & Dune Analytics DApp data — VNKR Digital Twin & AI Labs",
+  "description": "Telegram/Discord Alert Bots & Dune Analytics DApp data — YOUR_TOKEN Digital Twin & AI Labs",
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "tsc",

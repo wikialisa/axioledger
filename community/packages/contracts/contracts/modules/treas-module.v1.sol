@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── treas-module.v1.sol — TREAS ─────────────────────────────────────────────
 // Lưu trữ tài sản dự trữ (VUSD, USDT, ETH, WBTC, RWA) và cấp phát vốn
-// cho các Allocators.  Mọi token VNKR đúc ra đều phải có tài sản bảo chứng
+// cho các Allocators.  Mọi token YOUR_TOKEN đúc ra đều phải có tài sản bảo chứng
 // tương đương (≥ 1 VND / 1 token) trong kho bạc này.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ contract TREASv1 is Module {
     address[] public reserveTokens;
 
     /// @notice VND value Oracle per token (simplified: set by Admin in tests; production uses Chainlink)
-    mapping(address => uint256) public tokenPriceVnd; // 1e18 = 1 VND (1 VNKR ≥ 1 VND bảo chứng tối thiểu)
+    mapping(address => uint256) public tokenPriceVnd; // 1e18 = 1 VND (1 YOUR_TOKEN ≥ 1 VND bảo chứng tối thiểu)
 
     // ─── Events ───────────────────────────────────────────────────────────
 

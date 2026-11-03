@@ -11,8 +11,8 @@
 gateway_url: "https://sandbox.swiftnet.sipn.swift.com/swift/api/v1"
 
 # Your institution's BIC code (8 or 11 alphanumeric characters).
-# Example: VNKRVNVX  or  VNKRVNVXXXX
-institution_bic: "VNKRVNVX"
+# Example: AXVNVNVX  or  AXVNVNVXXXX
+institution_bic: "AXVNVNVX"
 
 # BIC of the Service Bureau providing connectivity on your behalf (optional).
 # Leave empty if your institution connects directly to SWIFT.

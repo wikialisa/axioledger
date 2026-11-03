@@ -1,7 +1,7 @@
 /**
  * ui — Typography Tokens
  * Font: Work Sans — Semibold / Medium / Regular
- * Source: VNKR Design-system / Icon-set / Typography.png
+ * Source: YOUR_TOKEN Design-system / Icon-set / Typography.png
  */
 
 export const fontFamily = {
@@ -9,8 +9,8 @@ export const fontFamily = {
 } as const;
 
 export const fontWeight = {
-  regular:  400,
-  medium:   500,
+  regular: 400,
+  medium: 500,
   semibold: 600,
 } as const;
 
@@ -27,28 +27,28 @@ export const fontSize = {
   subtitle1: "1rem",     // 16px
   subtitle2: "0.875rem", // 14px
   // Body
-  body1:   "1rem",     // 16px
-  body2:   "0.875rem", // 14px
+  body1: "1rem",     // 16px
+  body2: "0.875rem", // 14px
   caption: "0.75rem",  // 12px
-  overline:"0.625rem", // 10px
+  overline: "0.625rem", // 10px
   // Button
-  btnGiant:  "1.25rem",  // 20px
-  btnLarge:  "1rem",     // 16px
+  btnGiant: "1.25rem",  // 20px
+  btnLarge: "1rem",     // 16px
   btnMedium: "0.875rem", // 14px
-  btnSmall:  "0.75rem",  // 12px
+  btnSmall: "0.75rem",  // 12px
 } as const;
 
 export const lineHeight = {
-  tight:   1.2,
-  normal:  1.5,
+  tight: 1.2,
+  normal: 1.5,
   relaxed: 1.75,
 } as const;
 
 export const letterSpacing = {
-  tight:  "-0.01em",
+  tight: "-0.01em",
   normal: "0em",
-  wide:   "0.05em",
-  wider:  "0.1em",
+  wide: "0.05em",
+  wider: "0.1em",
 } as const;
 
 export const typography = {
@@ -59,6 +59,6 @@ export const typography = {
   letterSpacing,
 } as const;
 
-export type FontSize    = keyof typeof fontSize;
-export type FontWeight  = keyof typeof fontWeight;
-export type LineHeight  = keyof typeof lineHeight;
+export type FontSize = keyof typeof fontSize;
+export type FontWeight = keyof typeof fontWeight;
+export type LineHeight = keyof typeof lineHeight;

@@ -3,7 +3,7 @@
 // `sdk-swift` blockchain bridge module.
 
 /**
- * ABI fragment for the VNKR CrossBorderEscrow contract (EVM / Solidity).
+ * ABI fragment for the YOUR_TOKEN CrossBorderEscrow contract (EVM / Solidity).
  *
  * Deployed on Ethereum and BNB Chain for fiat ↔ crypto settlement.
  *
@@ -25,11 +25,11 @@ export const CROSS_BORDER_ESCROW_ABI = [
     type: "function",
     stateMutability: "nonpayable",
     inputs: [
-      { name: "uetr",        type: "bytes32" },
+      { name: "uetr", type: "bytes32" },
       { name: "beneficiary", type: "address" },
-      { name: "token",       type: "address" },
-      { name: "amount",      type: "uint256" },
-      { name: "expiry",      type: "uint256" },
+      { name: "token", type: "address" },
+      { name: "amount", type: "uint256" },
+      { name: "expiry", type: "uint256" },
     ],
     outputs: [{ name: "escrowId", type: "bytes32" }],
   },
@@ -38,8 +38,8 @@ export const CROSS_BORDER_ESCROW_ABI = [
     type: "function",
     stateMutability: "nonpayable",
     inputs: [
-      { name: "escrowId",           type: "bytes32" },
-      { name: "swiftConfirmation",  type: "bytes"   },
+      { name: "escrowId", type: "bytes32" },
+      { name: "swiftConfirmation", type: "bytes" },
     ],
     outputs: [],
   },
@@ -57,13 +57,13 @@ export const CROSS_BORDER_ESCROW_ABI = [
     stateMutability: "view",
     inputs: [{ name: "escrowId", type: "bytes32" }],
     outputs: [
-      { name: "uetr",        type: "bytes32" },
-      { name: "depositor",   type: "address" },
+      { name: "uetr", type: "bytes32" },
+      { name: "depositor", type: "address" },
       { name: "beneficiary", type: "address" },
-      { name: "token",       type: "address" },
-      { name: "amount",      type: "uint256" },
-      { name: "expiry",      type: "uint256" },
-      { name: "status",      type: "uint8"   },
+      { name: "token", type: "address" },
+      { name: "amount", type: "uint256" },
+      { name: "expiry", type: "uint256" },
+      { name: "status", type: "uint8" },
     ],
   },
   // ─── Events ──────────────────────────────────────────────────────────────
@@ -72,11 +72,11 @@ export const CROSS_BORDER_ESCROW_ABI = [
     type: "event",
     anonymous: false,
     inputs: [
-      { name: "escrowId",    indexed: true,  type: "bytes32" },
-      { name: "uetr",        indexed: true,  type: "bytes32" },
+      { name: "escrowId", indexed: true, type: "bytes32" },
+      { name: "uetr", indexed: true, type: "bytes32" },
       { name: "beneficiary", indexed: false, type: "address" },
-      { name: "amount",      indexed: false, type: "uint256" },
-      { name: "expiry",      indexed: false, type: "uint256" },
+      { name: "amount", indexed: false, type: "uint256" },
+      { name: "expiry", indexed: false, type: "uint256" },
     ],
   },
   {
@@ -84,9 +84,9 @@ export const CROSS_BORDER_ESCROW_ABI = [
     type: "event",
     anonymous: false,
     inputs: [
-      { name: "escrowId", indexed: true,  type: "bytes32" },
-      { name: "uetr",     indexed: true,  type: "bytes32" },
-      { name: "txHash",   indexed: false, type: "bytes32" },
+      { name: "escrowId", indexed: true, type: "bytes32" },
+      { name: "uetr", indexed: true, type: "bytes32" },
+      { name: "txHash", indexed: false, type: "bytes32" },
     ],
   },
   {
@@ -95,7 +95,7 @@ export const CROSS_BORDER_ESCROW_ABI = [
     anonymous: false,
     inputs: [
       { name: "escrowId", indexed: true, type: "bytes32" },
-      { name: "uetr",     indexed: true, type: "bytes32" },
+      { name: "uetr", indexed: true, type: "bytes32" },
     ],
   },
 ] as const;
@@ -109,7 +109,7 @@ export const TRC20_USDT_ABI = [
     name: "transfer",
     type: "Function",
     inputs: [
-      { name: "_to",    type: "address" },
+      { name: "_to", type: "address" },
       { name: "_value", type: "uint256" },
     ],
     outputs: [{ name: "success", type: "bool" }],
@@ -124,7 +124,7 @@ export const TRC20_USDT_ABI = [
     name: "allowance",
     type: "Function",
     inputs: [
-      { name: "owner",   type: "address" },
+      { name: "owner", type: "address" },
       { name: "spender", type: "address" },
     ],
     outputs: [{ name: "remaining", type: "uint256" }],
@@ -134,7 +134,7 @@ export const TRC20_USDT_ABI = [
     type: "Function",
     inputs: [
       { name: "_spender", type: "address" },
-      { name: "_value",   type: "uint256" },
+      { name: "_value", type: "uint256" },
     ],
     outputs: [{ name: "success", type: "bool" }],
   },

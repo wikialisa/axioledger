@@ -1,4 +1,4 @@
-# NPM Registry — VNKR Package Publish Guide
+# NPM Registry — YOUR_INFRA Package Publish Guide
 
 ## Packages published to GitHub Packages (`npm.pkg.github.com`)
 
@@ -104,7 +104,7 @@ pnpm version:major
 ### `.npmrc` (root — already configured)
 
 ```ini
-@${BRAND_NPM_SCOPE}:registry=https://npm.pkg.github.com
+@your-npm-org:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
@@ -112,7 +112,7 @@ pnpm version:major
 
 ```bash
 # Authenticate once with a GitHub PAT (scope: read:packages, write:packages)
-npm login --scope=@${BRAND_NPM_SCOPE} --registry=https://npm.pkg.github.com
+npm login --scope=@your-npm-org --registry=https://npm.pkg.github.com
 ```
 
 ### Required GitHub secrets

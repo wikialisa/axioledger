@@ -38,10 +38,10 @@ interface TokenRate {
 }
 
 const BASE_RATES: Record<string, TokenRate> = {
-  AXVN: { bid: 1,       ask: 1,       change: 0,    unit: "1 AXVN = 1 VND (Pegged)" },
-  VNKR: { bid: 1,       ask: 1,       change: 0,    unit: "1 VNKR = 1 VND (Stablecoin)" },
-  USDT: { bid: 26149,   ask: 26164,   change: 0.06, unit: "1 USDT = 26.149–26.164 VND" },
-  SOL:  { bid: 3580000, ask: 3612000, change: 2.14, unit: "1 SOL ≈ 3.580.000–3.612.000 VND" },
+  YOUR_TOKEN: { bid: 1, ask: 1, change: 0, unit: "1 YOUR_TOKEN = 1 VND (Pegged)" },
+  YOUR_TOKEN: { bid: 1, ask: 1, change: 0, unit: "1 YOUR_TOKEN = 1 VND (Stablecoin)" },
+  USDT: { bid: 26149, ask: 26164, change: 0.06, unit: "1 USDT = 26.149–26.164 VND" },
+  SOL: { bid: 3580000, ask: 3612000, change: 2.14, unit: "1 SOL ≈ 3.580.000–3.612.000 VND" },
 };
 
 function useLiveRates() {
@@ -51,7 +51,7 @@ function useLiveRates() {
       setRates(prev => ({
         ...prev,
         USDT: { ...prev.USDT, bid: Math.round(26149 + (Math.random() - 0.5) * 30), ask: Math.round(26164 + (Math.random() - 0.5) * 30) },
-        SOL:  { ...prev.SOL,  bid: Math.round(3580000 + (Math.random() - 0.5) * 20000), ask: Math.round(3612000 + (Math.random() - 0.5) * 20000) },
+        SOL: { ...prev.SOL, bid: Math.round(3580000 + (Math.random() - 0.5) * 20000), ask: Math.round(3612000 + (Math.random() - 0.5) * 20000) },
       }));
     }, 8000);
     return () => clearInterval(id);
@@ -62,38 +62,42 @@ function useLiveRates() {
 type OrderStatus = "OPEN" | "MATCHED" | "COMPLETED" | "CANCELLED" | "DISPUTED";
 
 interface P2PRow {
-  id: string; side: "MUA"|"BÁN"; token: string; amount: string; price: string;
+  id: string; side: "MUA" | "BÁN"; token: string; amount: string; price: string;
   total: string; payment: string; status: OrderStatus; trader: string; time: string;
 }
 
 const ORDERS: P2PRow[] = [
-  { id:"ORD001", side:"MUA",  token:"AXVN", amount:"500",  price:"16.800đ",  total:"8.400.000đ",  payment:"Vietcombank", status:"OPEN",      trader:"ThuanNV", time:"14:30" },
-  { id:"ORD002", side:"BÁN",  token:"AXVN", amount:"200",  price:"17.200đ",  total:"3.440.000đ",  payment:"MB Bank",     status:"MATCHED",   trader:"MinhTT",  time:"13:45" },
-  { id:"ORD003", side:"MUA",  token:"USDT", amount:"100",  price:"25.400đ",  total:"2.540.000đ",  payment:"Techcombank", status:"COMPLETED", trader:"LanHT",   time:"12:00" },
-  { id:"ORD004", side:"BÁN",  token:"USDT", amount:"500",  price:"25.350đ",  total:"12.675.000đ", payment:"ACB",         status:"OPEN",      trader:"QuangPM", time:"11:20" },
-  { id:"ORD005", side:"MUA",  token:"AXVN", amount:"1000", price:"16.750đ",  total:"16.750.000đ", payment:"Vietinbank",  status:"CANCELLED", trader:"AnhDN",   time:"10:05" },
+  { id: "ORD001", side: "MUA", token: "YOUR_TOKEN", amount: "500", price: "16.800đ", total: "8.400.000đ", payment: "Vietcombank", status: "OPEN", trader: "ThuanNV", time: "14:30" },
+  { id: "ORD002", side: "BÁN", token: "YOUR_TOKEN", amount: "200", price: "17.200đ", total: "3.440.000đ", payment: "MB Bank", status: "MATCHED", trader: "MinhTT", time: "13:45" },
+  { id: "ORD003", side: "MUA", token: "USDT", amount: "100", price: "25.400đ", total: "2.540.000đ", payment: "Techcombank", status: "COMPLETED", trader: "LanHT", time: "12:00" },
+  { id: "ORD004", side: "BÁN", token: "USDT", amount: "500", price: "25.350đ", total: "12.675.000đ", payment: "ACB", status: "OPEN", trader: "QuangPM", time: "11:20" },
+  { id: "ORD005", side: "MUA", token: "YOUR_TOKEN", amount: "1000", price: "16.750đ", total: "16.750.000đ", payment: "Vietinbank", status: "CANCELLED", trader: "AnhDN", time: "10:05" },
 ];
 
-const STATUS_MAP: Record<OrderStatus, { color: "info"|"warning"|"success"|"dark"|"error"; label: string }> = {
-  OPEN:      { color: "info",    label: "Mở"        },
-  MATCHED:   { color: "warning", label: "Khớp lệnh" },
-  COMPLETED: { color: "success", label: "Hoàn thành"},
-  CANCELLED: { color: "dark",    label: "Huỷ"       },
-  DISPUTED:  { color: "error",   label: "Khiếu nại" },
+const STATUS_MAP: Record<OrderStatus, { color: "info" | "warning" | "success" | "dark" | "error"; label: string }> = {
+  OPEN: { color: "info", label: "Mở" },
+  MATCHED: { color: "warning", label: "Khớp lệnh" },
+  COMPLETED: { color: "success", label: "Hoàn thành" },
+  CANCELLED: { color: "dark", label: "Huỷ" },
+  DISPUTED: { color: "error", label: "Khiếu nại" },
 };
 
 const COLUMNS: AnyCol = [
-  { key: "side", label: "Loại", width: 60, sortable: true,
-    render: (v) => <span style={{ fontWeight: 700, fontSize: 12, color: v === "MUA" ? "#00D68F" : "#FF3D71" }}>{String(v)}</span> },
-  { key: "token",   label: "Token",    sortable: true },
-  { key: "amount",  label: "Số lượng", sortable: true },
-  { key: "price",   label: "Giá (VND)",sortable: true },
-  { key: "total",   label: "Tổng",     sortable: true, hideOnMobile: true },
-  { key: "payment", label: "TT",       hideOnMobile: true },
-  { key: "status",  label: "Trạng thái",
-    render: (v) => { const s = STATUS_MAP[v as OrderStatus]; return <Badge variant="label" color={s.color} label={s.label} />; } },
-  { key: "trader",  label: "Trader",   hideOnMobile: true },
-  { key: "time",    label: "Giờ" },
+  {
+    key: "side", label: "Loại", width: 60, sortable: true,
+    render: (v) => <span style={{ fontWeight: 700, fontSize: 12, color: v === "MUA" ? "#00D68F" : "#FF3D71" }}>{String(v)}</span>
+  },
+  { key: "token", label: "Token", sortable: true },
+  { key: "amount", label: "Số lượng", sortable: true },
+  { key: "price", label: "Giá (VND)", sortable: true },
+  { key: "total", label: "Tổng", sortable: true, hideOnMobile: true },
+  { key: "payment", label: "TT", hideOnMobile: true },
+  {
+    key: "status", label: "Trạng thái",
+    render: (v) => { const s = STATUS_MAP[v as OrderStatus]; return <Badge variant="label" color={s.color} label={s.label} />; }
+  },
+  { key: "trader", label: "Trader", hideOnMobile: true },
+  { key: "time", label: "Giờ" },
 ];
 
 /** Format seconds as MM:SS */
@@ -106,15 +110,15 @@ function fmtCountdown(s: number) {
 export default function P2PPage() {
   const router = useRouter();
   const rates = useLiveRates();
-  const [orders,        setOrders]       = useState<P2PRow[]>(ORDERS);
-  const [createModal,   setCreateModal]  = useState(false);
-  const [escrowModal,   setEscrowModal]  = useState<P2PRow | null>(null);
-  const [disputeModal,  setDisputeModal] = useState<P2PRow | null>(null);
+  const [orders, setOrders] = useState<P2PRow[]>(ORDERS);
+  const [createModal, setCreateModal] = useState(false);
+  const [escrowModal, setEscrowModal] = useState<P2PRow | null>(null);
+  const [disputeModal, setDisputeModal] = useState<P2PRow | null>(null);
   const [escrowCountdown, setEscrowCountdown] = useState(ESCROW_DURATION_S);
-  const [side,          setSide]         = useState<"MUA"|"BÁN">("MUA");
-  const [token,         setToken]        = useState("AXVN");
-  const [amount,        setAmount]       = useState("");
-  const [price,         setPrice]        = useState("");
+  const [side, setSide] = useState<"MUA" | "BÁN">("MUA");
+  const [token, setToken] = useState("YOUR_TOKEN");
+  const [amount, setAmount] = useState("");
+  const [price, setPrice] = useState("");
   const escrowTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Start escrow countdown when escrow modal is open
@@ -134,7 +138,7 @@ export default function P2PPage() {
       });
     }, 1000);
     return () => { if (escrowTimerRef.current) clearInterval(escrowTimerRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [escrowModal?.id]);
 
   const handleTokenChange = useCallback((t: string) => {
@@ -143,7 +147,7 @@ export default function P2PPage() {
     if (r) setPrice(String(Math.round((r.bid + r.ask) / 2)));
   }, [rates]);
 
-  const handleSideChange = useCallback((s: "MUA"|"BÁN") => {
+  const handleSideChange = useCallback((s: "MUA" | "BÁN") => {
     setSide(s);
     const r = rates[token];
     if (r) setPrice(String(s === "MUA" ? r.ask : r.bid));
@@ -177,10 +181,10 @@ export default function P2PPage() {
       {/* ── Stats row ────────────────────────────────────────────────────── */}
       <div style={{ display: "flex", gap: 10, padding: "0 20px 16px" }}>
         {[
-          { label: "Lệnh mở",    value: String(orders.filter(o => o.status === "OPEN").length),    color: "#0095FF" },
-          { label: "Khớp lệnh",  value: String(orders.filter(o => o.status === "MATCHED").length), color: "#FFAA00" },
-          { label: "Hoàn thành", value: String(orders.filter(o => o.status === "COMPLETED").length),color: "#00D68F" },
-          { label: "Vol hôm nay",value: "28.6M đ",  color: "#AF96FB" },
+          { label: "Lệnh mở", value: String(orders.filter(o => o.status === "OPEN").length), color: "#0095FF" },
+          { label: "Khớp lệnh", value: String(orders.filter(o => o.status === "MATCHED").length), color: "#FFAA00" },
+          { label: "Hoàn thành", value: String(orders.filter(o => o.status === "COMPLETED").length), color: "#00D68F" },
+          { label: "Vol hôm nay", value: "28.6M đ", color: "#AF96FB" },
         ].map(s => (
           <div key={s.label} style={{ flex: 1, background: "#fff", borderRadius: 12, padding: "10px 12px", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: s.color, fontFamily: "'Work Sans', sans-serif" }}>{s.value}</div>
@@ -245,7 +249,7 @@ export default function P2PPage() {
           <div>
             <Text variant="caption" weight="semibold" color="#57606a" style={{ marginBottom: 8, display: "block" }}>Token</Text>
             <div style={{ display: "flex", gap: 8 }}>
-              {["AXVN", "VNKR", "USDT", "SOL"].map(t => (
+              {["YOUR_TOKEN", "YOUR_TOKEN", "USDT", "SOL"].map(t => (
                 <Button key={t} variant={token === t ? "filled" : "outlined"} color="dark" size="sm" onClick={() => handleTokenChange(t)}>
                   {t}
                 </Button>
@@ -311,13 +315,13 @@ export default function P2PPage() {
             </div>
 
             {[
-              { label: "Loại",        value: escrowModal.side },
-              { label: "Token",       value: escrowModal.token },
-              { label: "Số lượng",    value: escrowModal.amount },
-              { label: "Giá",         value: escrowModal.price },
-              { label: "Tổng",        value: escrowModal.total },
-              { label: "Thanh toán",  value: escrowModal.payment },
-              { label: "Trader",      value: escrowModal.trader },
+              { label: "Loại", value: escrowModal.side },
+              { label: "Token", value: escrowModal.token },
+              { label: "Số lượng", value: escrowModal.amount },
+              { label: "Giá", value: escrowModal.price },
+              { label: "Tổng", value: escrowModal.total },
+              { label: "Thanh toán", value: escrowModal.payment },
+              { label: "Trader", value: escrowModal.trader },
             ].map((r, i, arr) => (
               <div key={r.label} style={{ display: "flex", justifyContent: "space-between", borderBottom: i < arr.length - 1 ? "1px solid #F3F4F6" : "none", paddingBottom: 8 }}>
                 <Text variant="body2" color="#718096">{r.label}</Text>
@@ -352,7 +356,7 @@ export default function P2PPage() {
         }
       >
         <Text variant="body2" color="#718096" style={{ padding: "8px 0" }}>
-          Khiếu nại sẽ được gửi đến đội hỗ trợ VNKR. Tiền sẽ tiếp tục được giữ trong Escrow cho đến khi vụ việc được giải quyết.
+          Khiếu nại sẽ được gửi đến đội hỗ trợ YOUR_TOKEN. Tiền sẽ tiếp tục được giữ trong Escrow cho đến khi vụ việc được giải quyết.
         </Text>
       </Modal>
     </div>

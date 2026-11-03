@@ -21,16 +21,16 @@ const DAILY_VOLUME = [2100000, 3400000, 1800000, 4200000, 3800000, 5100000, 4600
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function PaymentsPage() {
-  const [amount,      setAmount]      = useState("");
+  const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [qrOpen,      setQrOpen]      = useState(false);
-  const [qrValue,     setQrValue]     = useState("");
+  const [qrOpen, setQrOpen] = useState(false);
+  const [qrValue, setQrValue] = useState("");
 
   const handleCreateQR = () => {
-    const amt    = parseFloat(amount.replace(/[^0-9.]/g, ""));
-    const desc   = description.trim() || "VNKR Payment";
+    const amt = parseFloat(amount.replace(/[^0-9.]/g, ""));
+    const desc = description.trim() || "YOUR_TOKEN Payment";
     const orderId = `ORD-${Date.now().toString(36).toUpperCase()}`;
-    const value  = `https://pay.${BRAND_DOMAIN}/${orderId}?amount=${isNaN(amt) ? 0 : amt}&desc=${encodeURIComponent(desc)}`;
+    const value = `https://pay.your-project.vn/${orderId}?amount=${isNaN(amt) ? 0 : amt}&desc=${encodeURIComponent(desc)}`;
     setQrValue(value);
     setQrOpen(true);
   };
@@ -51,11 +51,11 @@ export default function PaymentsPage() {
 
           {/* Wallet card */}
           <div style={{
-            background:   "#fff",
+            background: "#fff",
             borderRadius: 14,
-            border:       "1px solid #F3F4F6",
-            padding:      "20px",
-            display:      "flex",
+            border: "1px solid #F3F4F6",
+            padding: "20px",
+            display: "flex",
             justifyContent: "center",
           }}>
             <WalletCard
@@ -70,10 +70,10 @@ export default function PaymentsPage() {
 
           {/* QR form */}
           <div style={{
-            background:   "#fff",
+            background: "#fff",
             borderRadius: 14,
-            border:       "1px solid #F3F4F6",
-            padding:      "20px 22px",
+            border: "1px solid #F3F4F6",
+            padding: "20px 22px",
           }}>
             <Text variant="subtitle2" weight="semibold" color="#1A1F36" style={{ marginBottom: 16 }}>Tạo QR Thanh toán</Text>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -105,19 +105,19 @@ export default function PaymentsPage() {
 
         {/* ── Right: daily volume chart ──────────────────────────────────── */}
         <div style={{
-          background:   "#fff",
+          background: "#fff",
           borderRadius: 14,
-          border:       "1px solid #F3F4F6",
-          padding:      "20px 24px",
+          border: "1px solid #F3F4F6",
+          padding: "20px 24px",
         }}>
           <Text variant="subtitle1" weight="semibold" color="#1A1F36">Lưu lượng thanh toán theo ngày</Text>
           <Text variant="caption" color="#718096" style={{ display: "block", marginBottom: 16 }}>8 ngày gần nhất (VND)</Text>
           <LineChart
             series={[{
-              name:  "Payment Volume",
-              data:  DAILY_VOLUME,
+              name: "Payment Volume",
+              data: DAILY_VOLUME,
               color: "#AF96FB",
-              area:  true,
+              area: true,
             }]}
             labels={DAILY_LABELS}
             height={280}
@@ -128,18 +128,18 @@ export default function PaymentsPage() {
 
           {/* Summary row */}
           <div style={{
-            display:             "grid",
+            display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap:                 1,
-            marginTop:           20,
-            background:          "#F3F4F6",
-            borderRadius:        10,
-            overflow:            "hidden",
+            gap: 1,
+            marginTop: 20,
+            background: "#F3F4F6",
+            borderRadius: 10,
+            overflow: "hidden",
           }}>
             {[
-              { label: "Tổng 8 ngày",    value: `₫${(DAILY_VOLUME.reduce((a, b) => a + b, 0) / 1_000_000).toFixed(1)}M` },
+              { label: "Tổng 8 ngày", value: `₫${(DAILY_VOLUME.reduce((a, b) => a + b, 0) / 1_000_000).toFixed(1)}M` },
               { label: "Trung bình/ngày", value: `₫${(DAILY_VOLUME.reduce((a, b) => a + b, 0) / DAILY_VOLUME.length / 1_000_000).toFixed(1)}M` },
-              { label: "Cao nhất",        value: `₫${(Math.max(...DAILY_VOLUME) / 1_000_000).toFixed(1)}M` },
+              { label: "Cao nhất", value: `₫${(Math.max(...DAILY_VOLUME) / 1_000_000).toFixed(1)}M` },
             ].map(({ label, value }) => (
               <div key={label} style={{ background: "#fff", padding: "14px 16px", textAlign: "center" }}>
                 <Text variant="caption" color="#A0AEC0">{label}</Text>
@@ -158,7 +158,7 @@ export default function PaymentsPage() {
         onClose={() => setQrOpen(false)}
         value={qrValue}
         label="Quét để thanh toán"
-        subtitle={`${parseFloat(amount || "0").toLocaleString("vi-VN")} VND — ${description || "VNKR Payment"}`}
+        subtitle={`${parseFloat(amount || "0").toLocaleString("vi-VN")} VND — ${description || "YOUR_TOKEN Payment"}`}
         scannable
       />
 

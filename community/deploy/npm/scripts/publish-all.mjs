@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * publish-all.mjs — Publish all @vnkr/* public packages to npmjs.com
+ * publish-all.mjs — Publish all @YOUR_NPM_SCOPE_UPPER/* public packages to npmjs.com
  *
  * Usage:
  *   node scripts/publish-all.mjs           # real publish
@@ -15,7 +15,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT      = resolve(__dirname, "../../..");
+const ROOT = resolve(__dirname, "../../..");
 
 const DRY_RUN = process.argv.includes("--dry-run");
 
@@ -30,12 +30,12 @@ const PUBLISHABLE = [
 ];
 
 async function main() {
-  console.log(chalk.bold.cyan("\n📦  VNKR NPM Publisher"));
+  console.log(chalk.bold.cyan("\n📦  YOUR_INFRA NPM Publisher"));
   console.log(DRY_RUN ? chalk.yellow("⚠  DRY-RUN mode — no packages will be uploaded\n") : chalk.green("🚀  LIVE publish mode\n"));
 
   let published = 0;
-  let skipped   = 0;
-  let failed    = 0;
+  let skipped = 0;
+  let failed = 0;
 
   for (const pkgDir of PUBLISHABLE) {
     const pkgJsonPath = resolve(ROOT, pkgDir, "package.json");

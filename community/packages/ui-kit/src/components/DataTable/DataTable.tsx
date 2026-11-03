@@ -24,47 +24,47 @@ export type SortDirection = "asc" | "desc" | "none";
 
 export interface DataTableColumn<T = Record<string, unknown>> {
   /** Unique column key */
-  key:           string;
+  key: string;
   /** Header label */
-  label:         string;
+  label: string;
   /** Width (px or %) */
-  width?:        string | number;
+  width?: string | number;
   /** Text alignment */
-  align?:        "left" | "center" | "right";
+  align?: "left" | "center" | "right";
   /** Enable sort on this column */
-  sortable?:     boolean;
+  sortable?: boolean;
   /** Custom cell renderer */
-  render?:       (value: unknown, row: T, rowIndex: number) => ReactNode;
+  render?: (value: unknown, row: T, rowIndex: number) => ReactNode;
   /** Hide on mobile */
   hideOnMobile?: boolean;
 }
 
 export interface DataTableProps<T = Record<string, unknown>> {
-  columns:          DataTableColumn<T>[];
-  data:             T[];
+  columns: DataTableColumn<T>[];
+  data: T[];
   /** Row unique key field */
-  rowKey?:          string;
+  rowKey?: string;
   /** Show global search input */
-  searchable?:      boolean;
+  searchable?: boolean;
   searchPlaceholder?: string;
   /** Enable row selection */
-  selectable?:      boolean;
-  selectedKeys?:    string[];
+  selectable?: boolean;
+  selectedKeys?: string[];
   onSelectionChange?: (keys: string[]) => void;
   /** Row click */
-  onRowClick?:      (row: T, index: number) => void;
+  onRowClick?: (row: T, index: number) => void;
   /** Pagination */
-  pageSize?:        number;
+  pageSize?: number;
   pageSizeOptions?: number[];
   /** Loading state — shows skeleton rows */
-  loading?:         boolean;
+  loading?: boolean;
   /** Slot shown when data is empty */
-  emptySlot?:       ReactNode;
+  emptySlot?: ReactNode;
   /** Table caption / title */
-  caption?:         string;
+  caption?: string;
   /** Right-side toolbar slot */
-  toolbarSlot?:     ReactNode;
-  style?:           CSSProperties;
+  toolbarSlot?: ReactNode;
+  style?: CSSProperties;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -72,27 +72,27 @@ export interface DataTableProps<T = Record<string, unknown>> {
 export function DataTable<T extends Record<string, unknown>>({
   columns,
   data,
-  rowKey          = "id",
-  searchable      = true,
+  rowKey = "id",
+  searchable = true,
   searchPlaceholder = "Search…",
-  selectable      = false,
-  selectedKeys    = [],
+  selectable = false,
+  selectedKeys = [],
   onSelectionChange,
   onRowClick,
   pageSize: defaultPageSize = 10,
   pageSizeOptions = [10, 25, 50],
-  loading         = false,
+  loading = false,
   emptySlot,
   caption,
   toolbarSlot,
   style,
 }: DataTableProps<T>) {
 
-  const [query,     setQuery]     = useState("");
-  const [sortKey,   setSortKey]   = useState<string | null>(null);
-  const [sortDir,   setSortDir]   = useState<SortDirection>("none");
-  const [page,      setPage]      = useState(1);
-  const [pageSize,  setPageSize]  = useState(defaultPageSize);
+  const [query, setQuery] = useState("");
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortDir, setSortDir] = useState<SortDirection>("none");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(defaultPageSize);
 
   // ── Filter ────────────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
@@ -121,7 +121,7 @@ export function DataTable<T extends Record<string, unknown>>({
 
   // ── Pagination ────────────────────────────────────────────────────────────
   const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
-  const paginated  = sorted.slice((page - 1) * pageSize, page * pageSize);
+  const paginated = sorted.slice((page - 1) * pageSize, page * pageSize);
 
   const handleSort = (key: string) => {
     if (sortKey !== key) { setSortKey(key); setSortDir("asc"); setPage(1); }
@@ -158,9 +158,9 @@ export function DataTable<T extends Record<string, unknown>>({
     fontFamily: "'Work Sans', sans-serif",
     background: "#FFFFFF",
     borderRadius: 12,
-    border:     "1px solid #E5E7EB",
-    boxShadow:  shadows.sm,
-    overflow:   "hidden",
+    border: "1px solid #E5E7EB",
+    boxShadow: shadows.sm,
+    overflow: "hidden",
     ...style,
   };
 
@@ -169,13 +169,13 @@ export function DataTable<T extends Record<string, unknown>>({
       {/* Toolbar */}
       {(caption || searchable || toolbarSlot) && (
         <div style={{
-          display:        "flex",
-          alignItems:     "center",
+          display: "flex",
+          alignItems: "center",
           justifyContent: "space-between",
-          padding:        "12px 16px",
-          borderBottom:   "1px solid #F3F4F6",
-          gap:            12,
-          flexWrap:       "wrap",
+          padding: "12px 16px",
+          borderBottom: "1px solid #F3F4F6",
+          gap: 12,
+          flexWrap: "wrap",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1 }}>
             {caption && (
@@ -193,17 +193,17 @@ export function DataTable<T extends Record<string, unknown>>({
                   onChange={handleSearch}
                   placeholder={searchPlaceholder}
                   style={{
-                    width:        "100%",
-                    height:       36,
-                    padding:      "0 12px 0 34px",
-                    fontSize:     13,
-                    fontFamily:   "'Work Sans', sans-serif",
-                    background:   "#F5F6FA",
-                    border:       "1.5px solid transparent",
+                    width: "100%",
+                    height: 36,
+                    padding: "0 12px 0 34px",
+                    fontSize: 13,
+                    fontFamily: "'Work Sans', sans-serif",
+                    background: "#F5F6FA",
+                    border: "1.5px solid transparent",
                     borderRadius: 8,
-                    outline:      "none",
-                    color:        "#1A1F36",
-                    boxSizing:    "border-box",
+                    outline: "none",
+                    color: "#1A1F36",
+                    boxSizing: "border-box",
                   }}
                   aria-label="Search table"
                 />
@@ -221,10 +221,10 @@ export function DataTable<T extends Record<string, unknown>>({
       {/* Table scroll wrapper */}
       <div style={{ overflowX: "auto" }}>
         <table style={{
-          width:          "100%",
+          width: "100%",
           borderCollapse: "collapse",
-          fontSize:        13,
-          minWidth:        400,
+          fontSize: 13,
+          minWidth: 400,
         }}>
           {/* Head */}
           <thead>
@@ -242,16 +242,16 @@ export function DataTable<T extends Record<string, unknown>>({
                 <th
                   key={col.key}
                   style={{
-                    padding:    "10px 16px",
-                    textAlign:  col.align ?? "left",
+                    padding: "10px 16px",
+                    textAlign: col.align ?? "left",
                     fontWeight: 700,
-                    color:      "#57606A",
-                    fontSize:   11,
+                    color: "#57606A",
+                    fontSize: 11,
                     letterSpacing: "0.05em",
                     textTransform: "uppercase",
                     whiteSpace: "nowrap",
-                    width:      col.width,
-                    cursor:     col.sortable ? "pointer" : "default",
+                    width: col.width,
+                    cursor: col.sortable ? "pointer" : "default",
                     userSelect: "none",
                   }}
                   onClick={() => col.sortable && handleSort(col.key)}
@@ -284,11 +284,11 @@ export function DataTable<T extends Record<string, unknown>>({
               <tr>
                 <td colSpan={columns.length + (selectable ? 1 : 0)}>
                   <div style={{
-                    padding:        "40px 0",
-                    textAlign:      "center",
-                    color:          "#A0AEC0",
-                    fontSize:       14,
-                    fontFamily:     "'Work Sans', sans-serif",
+                    padding: "40px 0",
+                    textAlign: "center",
+                    color: "#A0AEC0",
+                    fontSize: 14,
+                    fontFamily: "'Work Sans', sans-serif",
                   }}>
                     {emptySlot ?? "No data found"}
                   </div>
@@ -304,9 +304,9 @@ export function DataTable<T extends Record<string, unknown>>({
                     onClick={() => onRowClick?.(row, ri)}
                     style={{
                       borderBottom: "1px solid #F3F4F6",
-                      background:   isSelected ? "#F0F4FF" : "transparent",
-                      cursor:       onRowClick ? "pointer" : "default",
-                      transition:   "background 0.1s",
+                      background: isSelected ? "#F0F4FF" : "transparent",
+                      cursor: onRowClick ? "pointer" : "default",
+                      transition: "background 0.1s",
                     }}
                     onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLElement).style.background = "#FAFAFA"; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = isSelected ? "#F0F4FF" : "transparent"; }}
@@ -319,12 +319,12 @@ export function DataTable<T extends Record<string, unknown>>({
                     )}
                     {columns.map(col => (
                       <td key={col.key} style={{
-                        padding:   "12px 16px",
+                        padding: "12px 16px",
                         textAlign: col.align ?? "left",
-                        color:     "#1A1F36",
+                        color: "#1A1F36",
                         fontWeight: 400,
-                        maxWidth:  200,
-                        overflow:  "hidden",
+                        maxWidth: 200,
+                        overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
                       }}>
@@ -344,13 +344,13 @@ export function DataTable<T extends Record<string, unknown>>({
 
       {/* Pagination footer */}
       <div style={{
-        display:        "flex",
-        alignItems:     "center",
+        display: "flex",
+        alignItems: "center",
         justifyContent: "space-between",
-        padding:        "10px 16px",
-        borderTop:      "1px solid #F3F4F6",
-        flexWrap:       "wrap",
-        gap:            8,
+        padding: "10px 16px",
+        borderTop: "1px solid #F3F4F6",
+        flexWrap: "wrap",
+        gap: 8,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#718096" }}>
           <span>Rows per page:</span>
@@ -358,15 +358,15 @@ export function DataTable<T extends Record<string, unknown>>({
             value={pageSize}
             onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }}
             style={{
-              height:       28,
-              fontSize:     12,
-              fontFamily:   "'Work Sans', sans-serif",
-              border:       "1px solid #E5E7EB",
+              height: 28,
+              fontSize: 12,
+              fontFamily: "'Work Sans', sans-serif",
+              border: "1px solid #E5E7EB",
               borderRadius: 6,
-              padding:      "0 6px",
-              background:   "#F7F8FA",
-              cursor:       "pointer",
-              outline:      "none",
+              padding: "0 6px",
+              background: "#F7F8FA",
+              cursor: "pointer",
+              outline: "none",
             }}
           >
             {pageSizeOptions.map(n => <option key={n} value={n}>{n}</option>)}
@@ -446,17 +446,17 @@ function PaginationButton({ onClick, disabled, active, children, "aria-label": l
       disabled={disabled}
       aria-label={label}
       style={{
-        minWidth:     28,
-        height:       28,
+        minWidth: 28,
+        height: 28,
         borderRadius: 6,
-        border:       active ? "none" : "1px solid #E5E7EB",
-        background:   active ? "#000000" : "transparent",
-        color:        active ? "#FFFFFF" : (disabled ? "#CBD5E0" : "#4A5568"),
-        fontSize:     12,
-        fontFamily:   "'Work Sans', sans-serif",
-        fontWeight:   active ? 700 : 400,
-        cursor:       disabled ? "not-allowed" : "pointer",
-        padding:      "0 6px",
+        border: active ? "none" : "1px solid #E5E7EB",
+        background: active ? "#000000" : "transparent",
+        color: active ? "#FFFFFF" : (disabled ? "#CBD5E0" : "#4A5568"),
+        fontSize: 12,
+        fontFamily: "'Work Sans', sans-serif",
+        fontWeight: active ? 700 : 400,
+        cursor: disabled ? "not-allowed" : "pointer",
+        padding: "0 6px",
       }}
     >
       {children}
@@ -467,8 +467,8 @@ function PaginationButton({ onClick, disabled, active, children, "aria-label": l
 function SortIcon({ dir }: { dir: SortDirection }) {
   return (
     <svg width="10" height="12" viewBox="0 0 10 14" fill="none">
-      <path d="M5 1v12M2 4l3-3 3 3" stroke={dir === "asc" ? "#000" : "#CBD5E0"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 10l3 3 3-3" stroke={dir === "desc" ? "#000" : "#CBD5E0"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M5 1v12M2 4l3-3 3 3" stroke={dir === "asc" ? "#000" : "#CBD5E0"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 10l3 3 3-3" stroke={dir === "desc" ? "#000" : "#CBD5E0"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -477,7 +477,7 @@ function SearchIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
     </svg>
   );
 }
@@ -503,12 +503,12 @@ function CheckboxInput({
 function SkeletonCell({ width = 100 }: { width?: number }) {
   return (
     <div style={{
-      height:       14,
+      height: 14,
       width,
       borderRadius: 4,
-      background:   "linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%)",
+      background: "linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%)",
       backgroundSize: "200% 100%",
-      animation:    "vnkr-skeleton 1.4s ease infinite",
+      animation: "YOUR_TOKEN-skeleton 1.4s ease infinite",
     }} />
   );
 }

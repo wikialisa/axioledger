@@ -7,13 +7,13 @@ import { buildMT940 } from "../src/mt/mt940.js";
 
 describe("buildMT103", () => {
   const basePayload = {
-    senderBIC: "VNKRVNVNXXX",
+    senderBIC: "AXVNVNVNXXX",
     receiverBIC: "BNPAFRPPXXX",
-    reference: "VNKR20260819001",
+    reference: "AXVN20260819001",
     amount: 1_500_000.0,
     currency: "USD",
     orderingAccount: "1029384756",
-    orderingName: "VNKR TECH HOLDING JSC",
+    orderingName: "Your Organisation Full Name JSC",
     beneficiaryAccount: "9876543210",
     beneficiaryName: "GLOBAL TECH SUPPLIER INC",
     chargesCode: "OUR" as const,
@@ -22,7 +22,7 @@ describe("buildMT103", () => {
 
   it("bắt đầu với block {1:F01...}", () => {
     const msg = buildMT103(basePayload);
-    expect(msg).toMatch(/^\{1:F01VNKRVNVNXXX/);
+    expect(msg).toMatch(/^\{1:F01AXVNVNVNXXX/);
   });
 
   it("chứa block {2:I103...}", () => {
@@ -32,7 +32,7 @@ describe("buildMT103", () => {
 
   it("trường :20: reference đúng (tối đa 16 ký tự)", () => {
     const msg = buildMT103(basePayload);
-    expect(msg).toContain(":20:VNKR20260819001");
+    expect(msg).toContain(":20:AXVN20260819001");
   });
 
   it("trường :32A: chứa ngày, currency, số tiền đúng định dạng SWIFT", () => {
@@ -72,10 +72,10 @@ describe("buildMT103", () => {
 
 describe("buildMT202", () => {
   const payload = {
-    senderBIC: "VNKRVNVNXXX",
+    senderBIC: "AXVNVNVNXXX",
     receiverBIC: "CHASUS33XXX",
-    reference: "VNKR20260819002",
-    relatedReference: "VNKR20260819001",
+    reference: "AXVN20260819002",
+    relatedReference: "AXVN20260819001",
     amount: 500_000.0,
     currency: "EUR",
     valueDate: "260819",
@@ -95,7 +95,7 @@ describe("buildMT202", () => {
 
   it("trường :21: relatedReference đúng", () => {
     const msg = buildMT202(payload);
-    expect(msg).toContain(":21:VNKR20260819001");
+    expect(msg).toContain(":21:AXVN20260819001");
   });
 
   it("trường :57A: accountWithInstitution đúng", () => {
@@ -113,7 +113,7 @@ describe("buildMT202", () => {
 
 describe("buildMT940", () => {
   const payload = {
-    senderBIC: "VNKRVNVNXXX",
+    senderBIC: "AXVNVNVNXXX",
     receiverBIC: "CITIUS33XXX",
     reference: "STMT-2026-001",
     accountId: "VN1234567890",
@@ -130,7 +130,7 @@ describe("buildMT940", () => {
         creditDebitMark: "D" as const,
         amount: 500_000.0,
         transactionTypeCode: "NTRF",
-        customerReference: "VNKR20260819001",
+        customerReference: "AXVN20260819001",
         supplementaryDetails: "Payment for services",
       },
     ],
@@ -159,8 +159,8 @@ describe("buildMT940", () => {
   it("trường :61: giao dịch được render đúng", () => {
     const msg = buildMT940(payload);
     // SWIFT MT940 :61: format: valueDate+entryDate+D/C+[fundsCode]+amount+transactionTypeCode+customerRef
-    expect(msg).toContain(":61:2608190819D500000,00NTRFVNKR20260819001");
-    expect(msg).toContain("VNKR20260819001");
+    expect(msg).toContain(":61:2608190819D500000,00NTRFAXVN20260819001");
+    expect(msg).toContain("AXVN20260819001");
   });
 
   it("trường :62F: closing balance đúng", () => {

@@ -1,8 +1,8 @@
 {
-  "name": "explorer-vnkrscan",
+  "name": "explorer-YOUR_INFRAscan",
   "version": "0.1.0",
   "private": true,
-  "description": "[scan.${BRAND_DOMAIN}] App-Chain Block Explorer & Proof of Reserve — VNKR Blockchain Network Ltd.",
+  "description": "[scan.your-project.vn] App-Chain Block Explorer & Proof of Reserve — YOUR_TOKEN Blockchain Network Ltd.",
   "scripts": {
     "dev": "next dev -p 3003",
     "build": "next build",

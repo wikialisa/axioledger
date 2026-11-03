@@ -2,7 +2,7 @@
   "name": "fiat-connector-api",
   "version": "0.1.0",
   "private": true,
-  "description": "[dev-api.${BRAND_DOMAIN}] Fiat Bank Matching Service & Webhook — ${BRAND_ORG_FINTECH} Services JSC",
+  "description": "[dev-api.your-project.vn] Fiat Bank Matching Service & Webhook — Your FinTech Division Name Services JSC",
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "tsc",

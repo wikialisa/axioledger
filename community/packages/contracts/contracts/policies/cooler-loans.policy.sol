@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── cooler-loans.policy.sol — CoolerLoans ────────────────────────────────────
-// Cho phép thế chấp gVNKR để vay tài sản dự trữ (DAI/USDT).
+// Cho phép thế chấp gAXVN để vay tài sản dự trữ (DAI/USDT).
 // Không bị thanh lý cưỡng chế (non-liquidating) — người vay chỉ mất quyền
 // đòi lại collateral nếu không trả nợ đúng hạn.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ error Cooler_LTVExceeded(uint256 maxLoan, uint256 requested);
 struct CoolerLoan {
     uint256 id;
     address borrower;
-    address collateralToken;  // gVNKR
+    address collateralToken;  // gAXVN
     uint256 collateralAmount;
     address debtToken;        // DAI or USDT
     uint256 principal;
@@ -41,7 +41,7 @@ contract CoolerLoans is Policy {
 
     // ─── State ────────────────────────────────────────────────────────────
 
-    address public gvnkr;
+    address public gAXVN;
 
     /// @notice LTV basis points (e.g. 6667 = 66.67% LTV)
     uint256 public ltvBps = 6_667;
@@ -63,8 +63,8 @@ contract CoolerLoans is Policy {
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
-    constructor(Kernel kernel_, address gvnkr_) Policy(kernel_) {
-        gvnkr = gvnkr_;
+    constructor(Kernel kernel_, address gAXVN_) Policy(kernel_) {
+        gAXVN = gAXVN_;
     }
 
     // ─── Policy interface ─────────────────────────────────────────────────
@@ -91,7 +91,7 @@ contract CoolerLoans is Policy {
 
     // ─── Loan lifecycle ───────────────────────────────────────────────────
 
-    /// @notice Open a loan by locking gVNKR collateral
+    /// @notice Open a loan by locking gAXVN collateral
     function borrow(
         address debtToken_,
         uint256 collateralAmount_,
@@ -99,14 +99,14 @@ contract CoolerLoans is Policy {
     ) external returns (uint256 id) {
         if (collateralAmount_ == 0 || loanAmount_ == 0) revert Cooler_InvalidAmount();
 
-        // Fetch gVNKR price from TREAS oracle
-        uint256 gvnkrPrice    = TREAS.tokenPriceVnd(gvnkr);   // 1e18 = 1 VND (bảo chứng tối thiểu)
-        uint256 collateralVnd = (collateralAmount_ * gvnkrPrice) / 1e18;
+        // Fetch gAXVN price from TREAS oracle
+        uint256 gAXVNPrice    = TREAS.tokenPriceVnd(gAXVN);   // 1e18 = 1 VND (bảo chứng tối thiểu)
+        uint256 collateralVnd = (collateralAmount_ * gAXVNPrice) / 1e18;
         uint256 maxLoan       = (collateralVnd * ltvBps) / 10_000;
         if (loanAmount_ > maxLoan) revert Cooler_LTVExceeded(maxLoan, loanAmount_);
 
         // Pull collateral from borrower
-        IERC20(gvnkr).safeTransferFrom(msg.sender, address(this), collateralAmount_);
+        IERC20(gAXVN).safeTransferFrom(msg.sender, address(this), collateralAmount_);
 
         // Pay out loan from treasury
         TREAS.withdraw(debtToken_, msg.sender, loanAmount_);
@@ -117,7 +117,7 @@ contract CoolerLoans is Policy {
         loans[id] = CoolerLoan({
             id:               id,
             borrower:         msg.sender,
-            collateralToken:  gvnkr,
+            collateralToken:  gAXVN,
             collateralAmount: collateralAmount_,
             debtToken:        debtToken_,
             principal:        loanAmount_,
@@ -141,7 +141,7 @@ contract CoolerLoans is Policy {
         IERC20(loan.debtToken).safeTransferFrom(msg.sender, address(TREAS), totalOwed);
 
         loan.repaid = true;
-        IERC20(gvnkr).safeTransfer(loan.borrower, loan.collateralAmount);
+        IERC20(gAXVN).safeTransfer(loan.borrower, loan.collateralAmount);
         emit LoanRepaid(loanId_, totalOwed);
     }
 
@@ -155,7 +155,7 @@ contract CoolerLoans is Policy {
 
         loan.defaulted = true;
         // Collateral goes to treasury
-        IERC20(gvnkr).safeTransfer(address(TREAS), loan.collateralAmount);
+        IERC20(gAXVN).safeTransfer(address(TREAS), loan.collateralAmount);
         emit LoanDefaulted(loanId_, loan.borrower, loan.collateralAmount);
     }
 

@@ -15,7 +15,7 @@ swiftRouter.use(authenticate);
  *
  * Flow:
  *  1. Validate input + PIN.
- *  2. Debit user VND/VNKR balance (pending state).
+ *  2. Debit user VND/YOUR_TOKEN balance (pending state).
  *  3. Forward pacs.008 payload to swift-gateway service (port 4004).
  *  4. Return UETR for client-side tracking.
  *

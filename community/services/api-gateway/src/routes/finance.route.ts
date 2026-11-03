@@ -20,11 +20,11 @@ financeRouter.use(authenticate);
 financeRouter.get("/balances", (req, res) => {
   // TODO: aggregate balances from DB
   ok(res, [
-    { asset: "VND",  network: "VND",   available: "2500000", locked: "0",       usdEquivalent: "100.00"  },
-    { asset: "BTC",  network: "ERC20", available: "0.0842",  locked: "0",       usdEquivalent: "5680.04" },
-    { asset: "ETH",  network: "ERC20", available: "1.25",    locked: "0",       usdEquivalent: "4275.00" },
-    { asset: "SOL",  network: "SOL",   available: "12.5",    locked: "0",       usdEquivalent: "1850.00" },
-    { asset: "USDT", network: "TRC20", available: "500.00",  locked: "100.00",  usdEquivalent: "500.00"  },
+    { asset: "VND", network: "VND", available: "2500000", locked: "0", usdEquivalent: "100.00" },
+    { asset: "BTC", network: "ERC20", available: "0.0842", locked: "0", usdEquivalent: "5680.04" },
+    { asset: "ETH", network: "ERC20", available: "1.25", locked: "0", usdEquivalent: "4275.00" },
+    { asset: "SOL", network: "SOL", available: "12.5", locked: "0", usdEquivalent: "1850.00" },
+    { asset: "USDT", network: "TRC20", available: "500.00", locked: "100.00", usdEquivalent: "500.00" },
   ]);
 });
 
@@ -50,9 +50,9 @@ financeRouter.post("/deposit/fiat", async (req, res) => {
     orderId,
     vietQrContent: `00020101021238540010A000000727012700069704220113${orderId}5303704540${body.amount}5802VN6304`,
     bankAccount: "1234567890",
-    bankName: "VNKR Internal Bank",
+    bankName: "YOUR_TOKEN Internal Bank",
     amount: body.amount,
-    description: body.description ?? `VNKR NAP ${orderId}`,
+    description: body.description ?? `YOUR_TOKEN NAP ${orderId}`,
     expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
   });
 });
@@ -117,7 +117,7 @@ financeRouter.post("/swift/transfer", async (req, res) => {
 
 // ─── GET /api/v1/finance/transactions/history ────────────────────────────────
 financeRouter.get("/transactions/history", (req, res) => {
-  const page  = Number(req.query.page)  || 1;
+  const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 20;
   // TODO: fetch paginated from DB
   paginated(res, [], 0, page, limit);

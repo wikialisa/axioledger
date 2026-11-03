@@ -103,7 +103,7 @@
 │   │   └── index.ts
 │   ├── package.json
 │   └── tsconfig.json
-├── explorer-vnkrscan
+├── explorer-YOUR_INFRAscan
 │   ├── src
 │   │   └── app
 │   │       ├── globals.css

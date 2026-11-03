@@ -1,7 +1,7 @@
 /**
  * ui — Chart
  * Lightweight SVG-native chart components — zero external dependencies
- * Used by: analytics.${BRAND_DOMAIN}, sandbox.${BRAND_DOMAIN}, merchant portal
+ * Used by: analytics.your-project.vn, sandbox.your-project.vn, merchant portal
  *
  * Components:
  *   LineChart  — time-series, multi-series, area fill
@@ -9,7 +9,7 @@
  *   PieChart   — donut / pie, legend
  *
  * Design:
- *   - VNKR brand colors by default
+ *   - YOUR_TOKEN brand colors by default
  *   - Tooltip on hover (inline SVG + foreignObject fallback)
  *   - Responsive via viewBox + preserveAspectRatio
  *   - Grid lines + axis labels
@@ -33,11 +33,11 @@ const CHART_COLORS = [
 // ─── Common types ─────────────────────────────────────────────────────────────
 
 export interface ChartSeries {
-  name:   string;
-  data:   number[];
+  name: string;
+  data: number[];
   color?: string;
   /** Fill area under line (LineChart only) */
-  area?:  boolean;
+  area?: boolean;
 }
 
 export interface ChartLabel {
@@ -51,45 +51,45 @@ export interface ChartLabel {
 // ══════════════════════════════════════════════════════════════════════════════
 
 export interface LineChartProps {
-  series:       ChartSeries[];
+  series: ChartSeries[];
   /** X-axis labels */
-  labels:       string[];
-  width?:       number;
-  height?:      number;
+  labels: string[];
+  width?: number;
+  height?: number;
   /** Show grid lines */
-  grid?:        boolean;
+  grid?: boolean;
   /** Show dots on data points */
-  dots?:        boolean;
+  dots?: boolean;
   /** Show legend */
-  legend?:      boolean;
+  legend?: boolean;
   /** Y-axis label count */
-  yTicks?:      number;
-  style?:       CSSProperties;
-  title?:       string;
+  yTicks?: number;
+  style?: CSSProperties;
+  title?: string;
 }
 
 export function LineChart({
   series,
   labels,
-  width   = 600,
-  height  = 300,
-  grid    = true,
-  dots    = true,
-  legend  = true,
-  yTicks  = 5,
+  width = 600,
+  height = 300,
+  grid = true,
+  dots = true,
+  legend = true,
+  yTicks = 5,
   style,
   title,
 }: LineChartProps) {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; label: string; values: { name: string; value: number; color: string }[] } | null>(null);
 
   const PAD = { top: 20, right: 20, bottom: 40, left: 50 };
-  const W   = width  - PAD.left - PAD.right;
-  const H   = height - PAD.top  - PAD.bottom;
+  const W = width - PAD.left - PAD.right;
+  const H = height - PAD.top - PAD.bottom;
 
-  const allVals   = series.flatMap(s => s.data);
-  const minVal    = Math.min(...allVals, 0);
-  const maxVal    = Math.max(...allVals, 1);
-  const range     = maxVal - minVal || 1;
+  const allVals = series.flatMap(s => s.data);
+  const minVal = Math.min(...allVals, 0);
+  const maxVal = Math.max(...allVals, 1);
+  const range = maxVal - minVal || 1;
 
   const toX = (i: number) => (i / Math.max(labels.length - 1, 1)) * W;
   const toY = (v: number) => H - ((v - minVal) / range) * H;
@@ -139,7 +139,7 @@ export function LineChart({
           {/* Series */}
           {series.map((s, si) => {
             const color = s.color ?? CHART_COLORS[si % CHART_COLORS.length];
-            const pts   = s.data.map((v, i) => `${toX(i)},${toY(v)}`).join(" ");
+            const pts = s.data.map((v, i) => `${toX(i)},${toY(v)}`).join(" ");
             const areaPath = s.data.length > 0
               ? `M${toX(0)},${H} L${s.data.map((v, i) => `${toX(i)},${toY(v)}`).join(" L")} L${toX(s.data.length - 1)},${H} Z`
               : "";
@@ -165,13 +165,13 @@ export function LineChart({
                     style={{ cursor: "pointer" }}
                     onMouseEnter={(e) => {
                       const rect = (e.target as SVGCircleElement).getBoundingClientRect();
-                      const svg  = (e.target as SVGCircleElement).closest("svg")!.getBoundingClientRect();
+                      const svg = (e.target as SVGCircleElement).closest("svg")!.getBoundingClientRect();
                       setTooltip({
                         x: rect.left - svg.left + 8,
-                        y: rect.top  - svg.top  - 8,
-                        label:  labels[i] ?? String(i),
+                        y: rect.top - svg.top - 8,
+                        label: labels[i] ?? String(i),
                         values: series.map((se, idx) => ({
-                          name:  se.name,
+                          name: se.name,
                           value: se.data[i] ?? 0,
                           color: se.color ?? CHART_COLORS[idx % CHART_COLORS.length],
                         })),
@@ -198,48 +198,48 @@ export function LineChart({
 // ══════════════════════════════════════════════════════════════════════════════
 
 export interface BarChartProps {
-  series:     ChartSeries[];
-  labels:     string[];
-  width?:     number;
-  height?:    number;
-  stacked?:   boolean;
-  grid?:      boolean;
-  legend?:    boolean;
-  yTicks?:    number;
+  series: ChartSeries[];
+  labels: string[];
+  width?: number;
+  height?: number;
+  stacked?: boolean;
+  grid?: boolean;
+  legend?: boolean;
+  yTicks?: number;
   barRadius?: number;
-  style?:     CSSProperties;
-  title?:     string;
+  style?: CSSProperties;
+  title?: string;
 }
 
 export function BarChart({
   series,
   labels,
-  width      = 600,
-  height     = 300,
-  stacked    = false,
-  grid       = true,
-  legend     = true,
-  yTicks     = 5,
-  barRadius  = 4,
+  width = 600,
+  height = 300,
+  stacked = false,
+  grid = true,
+  legend = true,
+  yTicks = 5,
+  barRadius = 4,
   style,
   title,
 }: BarChartProps) {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; label: string; values: { name: string; value: number; color: string }[] } | null>(null);
 
-  const PAD    = { top: 20, right: 20, bottom: 40, left: 50 };
-  const W      = width  - PAD.left - PAD.right;
-  const H      = height - PAD.top  - PAD.bottom;
-  const n      = labels.length;
-  const ns     = series.length;
+  const PAD = { top: 20, right: 20, bottom: 40, left: 50 };
+  const W = width - PAD.left - PAD.right;
+  const H = height - PAD.top - PAD.bottom;
+  const n = labels.length;
+  const ns = series.length;
 
-  const allVals  = stacked
+  const allVals = stacked
     ? labels.map((_, i) => series.reduce((s, se) => s + (se.data[i] ?? 0), 0))
     : series.flatMap(s => s.data);
-  const maxVal   = Math.max(...allVals, 1);
+  const maxVal = Math.max(...allVals, 1);
 
-  const GROUP_W  = W / n;
-  const GAP      = GROUP_W * 0.2;
-  const BAR_W    = stacked ? GROUP_W - GAP : (GROUP_W - GAP) / ns;
+  const GROUP_W = W / n;
+  const GAP = GROUP_W * 0.2;
+  const BAR_W = stacked ? GROUP_W - GAP : (GROUP_W - GAP) / ns;
 
   const yTickVals = Array.from({ length: yTicks }, (_, i) => (maxVal / (yTicks - 1)) * i);
 
@@ -266,59 +266,63 @@ export function BarChart({
 
           {stacked
             ? labels.map((_, gi) => {
-                let stackY = H;
-                return (
-                  <g key={gi}>
-                    {series.map((s, si) => {
-                      const color = s.color ?? CHART_COLORS[si % CHART_COLORS.length];
-                      const val   = s.data[gi] ?? 0;
-                      const bh    = (val / maxVal) * H;
-                      const x     = gi * GROUP_W + GAP / 2;
-                      stackY     -= bh;
-                      return (
-                        <rect key={si} x={x} y={stackY} width={BAR_W} height={bh}
-                          fill={color} rx={si === series.length - 1 ? barRadius : 0}
-                          style={{ cursor: "pointer" }}
-                          onMouseEnter={e => {
-                            const rect = (e.target as SVGRectElement).getBoundingClientRect();
-                            const svg  = (e.target as SVGRectElement).closest("svg")!.getBoundingClientRect();
-                            setTooltip({ x: rect.left - svg.left, y: rect.top - svg.top - 8,
-                              label: labels[gi], values: series.map((se, idx) => ({
-                                name: se.name, value: se.data[gi] ?? 0,
-                                color: se.color ?? CHART_COLORS[idx % CHART_COLORS.length],
-                              }))});
-                          }}
-                          onMouseLeave={() => setTooltip(null)}
-                        />
-                      );
-                    })}
-                  </g>
-                );
-              })
+              let stackY = H;
+              return (
+                <g key={gi}>
+                  {series.map((s, si) => {
+                    const color = s.color ?? CHART_COLORS[si % CHART_COLORS.length];
+                    const val = s.data[gi] ?? 0;
+                    const bh = (val / maxVal) * H;
+                    const x = gi * GROUP_W + GAP / 2;
+                    stackY -= bh;
+                    return (
+                      <rect key={si} x={x} y={stackY} width={BAR_W} height={bh}
+                        fill={color} rx={si === series.length - 1 ? barRadius : 0}
+                        style={{ cursor: "pointer" }}
+                        onMouseEnter={e => {
+                          const rect = (e.target as SVGRectElement).getBoundingClientRect();
+                          const svg = (e.target as SVGRectElement).closest("svg")!.getBoundingClientRect();
+                          setTooltip({
+                            x: rect.left - svg.left, y: rect.top - svg.top - 8,
+                            label: labels[gi], values: series.map((se, idx) => ({
+                              name: se.name, value: se.data[gi] ?? 0,
+                              color: se.color ?? CHART_COLORS[idx % CHART_COLORS.length],
+                            }))
+                          });
+                        }}
+                        onMouseLeave={() => setTooltip(null)}
+                      />
+                    );
+                  })}
+                </g>
+              );
+            })
             : series.map((s, si) => {
-                const color = s.color ?? CHART_COLORS[si % CHART_COLORS.length];
-                return (
-                  <g key={si}>
-                    {s.data.map((v, gi) => {
-                      const bh = (v / maxVal) * H;
-                      const x  = gi * GROUP_W + GAP / 2 + si * BAR_W;
-                      return (
-                        <rect key={gi} x={x} y={H - bh} width={BAR_W} height={bh}
-                          fill={color} rx={barRadius}
-                          style={{ cursor: "pointer" }}
-                          onMouseEnter={e => {
-                            const rect = (e.target as SVGRectElement).getBoundingClientRect();
-                            const svg  = (e.target as SVGRectElement).closest("svg")!.getBoundingClientRect();
-                            setTooltip({ x: rect.left - svg.left, y: rect.top - svg.top - 8,
-                              label: labels[gi], values: [{ name: s.name, value: v, color }] });
-                          }}
-                          onMouseLeave={() => setTooltip(null)}
-                        />
-                      );
-                    })}
-                  </g>
-                );
-              })
+              const color = s.color ?? CHART_COLORS[si % CHART_COLORS.length];
+              return (
+                <g key={si}>
+                  {s.data.map((v, gi) => {
+                    const bh = (v / maxVal) * H;
+                    const x = gi * GROUP_W + GAP / 2 + si * BAR_W;
+                    return (
+                      <rect key={gi} x={x} y={H - bh} width={BAR_W} height={bh}
+                        fill={color} rx={barRadius}
+                        style={{ cursor: "pointer" }}
+                        onMouseEnter={e => {
+                          const rect = (e.target as SVGRectElement).getBoundingClientRect();
+                          const svg = (e.target as SVGRectElement).closest("svg")!.getBoundingClientRect();
+                          setTooltip({
+                            x: rect.left - svg.left, y: rect.top - svg.top - 8,
+                            label: labels[gi], values: [{ name: s.name, value: v, color }]
+                          });
+                        }}
+                        onMouseLeave={() => setTooltip(null)}
+                      />
+                    );
+                  })}
+                </g>
+              );
+            })
           }
         </g>
       </svg>
@@ -334,47 +338,47 @@ export function BarChart({
 // ══════════════════════════════════════════════════════════════════════════════
 
 export interface PieChartSegment {
-  label:  string;
-  value:  number;
+  label: string;
+  value: number;
   color?: string;
 }
 
 export interface PieChartProps {
-  segments:  PieChartSegment[];
+  segments: PieChartSegment[];
   /** true = donut (hollow centre) */
-  donut?:    boolean;
-  size?:     number;
-  legend?:   boolean;
+  donut?: boolean;
+  size?: number;
+  legend?: boolean;
   /** Show value label on each slice */
   showValues?: boolean;
-  style?:    CSSProperties;
-  title?:    string;
+  style?: CSSProperties;
+  title?: string;
 }
 
 export function PieChart({
   segments,
-  donut    = true,
-  size     = 220,
-  legend   = true,
+  donut = true,
+  size = 220,
+  legend = true,
   showValues = true,
   style,
   title,
 }: PieChartProps) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
-  const R      = size / 2;
-  const cx     = R;
-  const cy     = R;
+  const R = size / 2;
+  const cx = R;
+  const cy = R;
   const outerR = R - 8;
   const innerR = donut ? outerR * 0.58 : 0;
 
-  const total  = segments.reduce((s, seg) => s + seg.value, 0) || 1;
+  const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
 
   let startAngle = -Math.PI / 2;
 
   const slices = segments.map((seg, i) => {
     const angle = (seg.value / total) * (2 * Math.PI);
-    const end   = startAngle + angle;
+    const end = startAngle + angle;
     const color = seg.color ?? CHART_COLORS[i % CHART_COLORS.length];
     const slice = {
       ...seg,
@@ -382,17 +386,17 @@ export function PieChart({
       startAngle,
       endAngle: end,
       midAngle: startAngle + angle / 2,
-      pct:      ((seg.value / total) * 100).toFixed(1),
+      pct: ((seg.value / total) * 100).toFixed(1),
     };
     startAngle = end;
     return slice;
   });
 
   const arc = (sa: number, ea: number, r: number, ri: number) => {
-    const x1 = cx + r  * Math.cos(sa);
-    const y1 = cy + r  * Math.sin(sa);
-    const x2 = cx + r  * Math.cos(ea);
-    const y2 = cy + r  * Math.sin(ea);
+    const x1 = cx + r * Math.cos(sa);
+    const y1 = cy + r * Math.sin(sa);
+    const x2 = cx + r * Math.cos(ea);
+    const y2 = cy + r * Math.sin(ea);
     const xi1 = cx + ri * Math.cos(sa);
     const yi1 = cy + ri * Math.sin(sa);
     const xi2 = cx + ri * Math.cos(ea);
@@ -410,7 +414,7 @@ export function PieChart({
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ flexShrink: 0 }}>
           {slices.map((s, i) => {
             const isActive = activeIdx === i;
-            const scale    = isActive ? 1.06 : 1;
+            const scale = isActive ? 1.06 : 1;
             return (
               <path
                 key={i}
@@ -419,10 +423,10 @@ export function PieChart({
                 stroke="#fff"
                 strokeWidth={2}
                 style={{
-                  cursor:    "pointer",
+                  cursor: "pointer",
                   transform: `scale(${scale})`,
                   transformOrigin: `${cx}px ${cy}px`,
-                  transition:"transform 0.15s",
+                  transition: "transform 0.15s",
                 }}
                 onMouseEnter={() => setActiveIdx(i)}
                 onMouseLeave={() => setActiveIdx(null)}
@@ -462,14 +466,18 @@ export function PieChart({
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {slices.map((s, i) => (
               <div key={i}
-                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer",
-                  opacity: activeIdx !== null && activeIdx !== i ? 0.5 : 1, transition: "opacity 0.15s" }}
+                style={{
+                  display: "flex", alignItems: "center", gap: 8, cursor: "pointer",
+                  opacity: activeIdx !== null && activeIdx !== i ? 0.5 : 1, transition: "opacity 0.15s"
+                }}
                 onMouseEnter={() => setActiveIdx(i)}
                 onMouseLeave={() => setActiveIdx(null)}
               >
                 <span style={{ width: 10, height: 10, borderRadius: 2, background: s.color, flexShrink: 0 }} />
-                <span style={{ fontSize: 12, color: "#4A5568", fontFamily: "'Work Sans', sans-serif",
-                  fontWeight: activeIdx === i ? 600 : 400 }}>
+                <span style={{
+                  fontSize: 12, color: "#4A5568", fontFamily: "'Work Sans', sans-serif",
+                  fontWeight: activeIdx === i ? 600 : 400
+                }}>
                   {s.label}
                 </span>
                 <span style={{ fontSize: 12, color: "#A0AEC0", fontFamily: "'Work Sans', sans-serif", marginLeft: "auto" }}>
@@ -491,10 +499,10 @@ function ChartShell({ width, height, title, style, children }: {
 }) {
   return (
     <div style={{
-      position:    "relative",
-      width:       "100%",
-      maxWidth:    width,
-      fontFamily:  "'Work Sans', sans-serif",
+      position: "relative",
+      width: "100%",
+      maxWidth: width,
+      fontFamily: "'Work Sans', sans-serif",
       ...style,
     }}>
       {title && (
@@ -513,20 +521,20 @@ function ChartTooltip({ x, y, label, values }: {
 }) {
   return (
     <div style={{
-      position:    "absolute",
-      left:        x,
-      top:         y,
-      background:  "#1A1F36",
-      color:       "#fff",
+      position: "absolute",
+      left: x,
+      top: y,
+      background: "#1A1F36",
+      color: "#fff",
       borderRadius: 8,
-      padding:     "8px 12px",
-      fontSize:    12,
-      fontFamily:  "'Work Sans', sans-serif",
-      boxShadow:   "0 4px 16px rgba(0,0,0,0.2)",
-      pointerEvents:"none",
-      zIndex:      10,
-      whiteSpace:  "nowrap",
-      transform:   "translateX(-50%)",
+      padding: "8px 12px",
+      fontSize: 12,
+      fontFamily: "'Work Sans', sans-serif",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+      pointerEvents: "none",
+      zIndex: 10,
+      whiteSpace: "nowrap",
+      transform: "translateX(-50%)",
     }}>
       <div style={{ fontWeight: 600, marginBottom: 4, color: "#A0AEC0", fontSize: 11 }}>{label}</div>
       {values.map((v, i) => (
@@ -545,8 +553,10 @@ function ChartLegend({ series }: { series: ChartSeries[] }) {
     <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 16px", marginTop: 8, justifyContent: "center" }}>
       {series.map((s, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 12, height: 3, borderRadius: 99,
-            background: s.color ?? CHART_COLORS[i % CHART_COLORS.length], display: "inline-block" }} />
+          <span style={{
+            width: 12, height: 3, borderRadius: 99,
+            background: s.color ?? CHART_COLORS[i % CHART_COLORS.length], display: "inline-block"
+          }} />
           <span style={{ fontSize: 12, color: "#718096", fontFamily: "'Work Sans', sans-serif" }}>{s.name}</span>
         </div>
       ))}
@@ -556,6 +566,6 @@ function ChartLegend({ series }: { series: ChartSeries[] }) {
 
 function formatNum(v: number): string {
   if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
-  if (Math.abs(v) >= 1_000)     return `${(v / 1_000).toFixed(1)}K`;
+  if (Math.abs(v) >= 1_000) return `${(v / 1_000).toFixed(1)}K`;
   return v % 1 === 0 ? String(v) : v.toFixed(1);
 }

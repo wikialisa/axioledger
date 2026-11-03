@@ -10,7 +10,7 @@ COPY packages/config   ./packages/config
 COPY services/fiat-connector-api ./services/fiat-connector-api
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @vnkr/fiat-connector-api build
+RUN pnpm --filter @YOUR_NPM_SCOPE_UPPER/fiat-connector-api build
 
 FROM node:20-alpine AS runner
 WORKDIR /app

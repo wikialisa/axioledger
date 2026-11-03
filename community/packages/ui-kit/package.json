@@ -1,8 +1,8 @@
 {
   "name": "ui-kit",
   "version": "1.0.1",
-  "description": "VNKR exclusive design system component library",
-  "author": "VNKR Organization",
+  "description": "YOUR_TOKEN exclusive design system component library",
+  "author": "YOUR_TOKEN Organization",
   "license": "UNLICENSED",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -46,6 +46,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/YOUR_TOKENvietnam/YOUR_TOKEN-packages.git"
   }
 }

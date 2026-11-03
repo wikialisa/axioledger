@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  VNKR TECH HOLDING — Auto-generate secrets for .env
+#  Your Organisation Full Name — Auto-generate secrets for .env
 #  /var/www/scripts/gen-env-secrets.sh
 #
 #  Logic sinh mật khẩu theo từng loại biến:
@@ -14,7 +14,7 @@
 #    SWIFT_MGW_APIKEY  → 48-char alphanum  (MGW management key)
 #    SWIFT_API_KEY     → 48-char alphanum  (swift-chain-bridge → gateway)
 #    RELAYER_PRIVATE_KEY → 32-byte hex (0x-prefixed EVM private key)
-#    VNKR_INTERNAL_WEBHOOK_SECRET → 64-char hex
+#    YOUR_INFRA_INTERNAL_WEBHOOK_SECRET → 64-char hex
 #
 #  Behaviour:
 #    - Chỉ sinh giá trị cho các biến CÒN RỖNG hoặc là placeholder
@@ -125,7 +125,7 @@ write_env() {
 
 # Ghi password vào 04_roles.sql (thay placeholder của role)
 write_role_pass() {
-  local role="$1"   # e.g. vnkr_fiat_connector
+  local role="$1"   # e.g. your_infra_fiat_connector
   local pass="$2"
   $DRY_RUN && return
   # Escape ký tự đặc biệt trong sed replacement
@@ -148,7 +148,7 @@ fi
 # =============================================================================
 echo ""
 echo -e "${BOLD}${CYAN}╔══════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}${CYAN}║   VNKR — Auto-generate .env Secrets                         ║${NC}"
+echo -e "${BOLD}${CYAN}║   YOUR_INFRA — Auto-generate .env Secrets                         ║${NC}"
 $DRY_RUN && \
 echo -e "${BOLD}${YELLOW}║   MODE: DRY-RUN (không ghi file)                             ║${NC}"
 $FORCE && \
@@ -194,7 +194,7 @@ PG_PASS=$(cat /tmp/gen_env_last_val)
 # Cập nhật DATABASE_URL để dùng password mới
 CUR_DB_URL=$(current_val "DATABASE_URL")
 if $FORCE || [[ "$CUR_DB_URL" == *"YOUR_POSTGRES_PASSWORD"* ]]; then
-  NEW_DB_URL="postgresql://postgres:${PG_PASS}@localhost:5432/vnkr"
+  NEW_DB_URL="postgresql://postgres:${PG_PASS}@localhost:5432/YOUR_INFRA"
   write_env "DATABASE_URL" "$NEW_DB_URL"
   $DRY_RUN && ok "DATABASE_URL [DRY] → updated" \
            || ok "DATABASE_URL → updated với password mới"
@@ -211,15 +211,15 @@ echo ""
 bold "  [2/6] Per-service DB Passwords (khớp 04_roles.sql)"
 
 declare -A DB_PASS_MAP=(
-  ["DB_PASS_FIAT"]="vnkr_fiat_connector"
-  ["DB_PASS_OTC"]="vnkr_otc"
-  ["DB_PASS_INDEXER"]="vnkr_indexer"
-  ["DB_PASS_SWIFT"]="vnkr_swift"
-  ["DB_PASS_KYC_PORTAL"]="vnkr_kyc_portal"
-  ["DB_PASS_MERCHANT"]="vnkr_merchant"
-  ["DB_PASS_SANDBOX"]="vnkr_sandbox"
-  ["DB_PASS_READONLY"]="vnkr_readonly"
-  ["DB_PASS_ADMIN"]="vnkr_admin"
+  ["DB_PASS_FIAT"]="your_infra_fiat_connector"
+  ["DB_PASS_OTC"]="your_infra_otc"
+  ["DB_PASS_INDEXER"]="your_infra_indexer"
+  ["DB_PASS_SWIFT"]="AXVN_swift"
+  ["DB_PASS_KYC_PORTAL"]="AXVN_kyc_portal"
+  ["DB_PASS_MERCHANT"]="AXVN_merchant"
+  ["DB_PASS_SANDBOX"]="AXVN_sandbox"
+  ["DB_PASS_READONLY"]="AXVN_readonly"
+  ["DB_PASS_ADMIN"]="AXVN_admin"
 )
 
 # Thứ tự cố định (bash assoc arrays không giữ thứ tự)
@@ -263,7 +263,7 @@ echo ""
 # =============================================================================
 bold "  [4/6] Webhook & Internal Secrets (64-char hex)"
 handle "BANK_WEBHOOK_SECRET"          gen_hex64 "BANK_WEBHOOK_SECRET"
-handle "VNKR_INTERNAL_WEBHOOK_SECRET" gen_hex64 "VNKR_INTERNAL_WEBHOOK_SECRET"
+handle "YOUR_INFRA_INTERNAL_WEBHOOK_SECRET" gen_hex64 "YOUR_INFRA_INTERNAL_WEBHOOK_SECRET"
 
 echo ""
 # =============================================================================
@@ -320,7 +320,7 @@ else
   echo -e "  ${YELLOW}⚠️  Lưu ý:${NC}"
   echo "    • Sau khi sinh, restart docker containers để nhận password mới:"
   echo "      docker compose -f deploy/docker/docker-compose.yml down"
-  echo "      docker volume rm \$(docker volume ls -q | grep vnkr) 2>/dev/null || true"
+  echo "      docker volume rm \$(docker volume ls -q | grep YOUR_INFRA) 2>/dev/null || true"
   echo "      sudo bash deploy/deploy.sh --skip-build"
   echo ""
   echo "    • Các biến cần nhập thủ công từ portal bên ngoài:"

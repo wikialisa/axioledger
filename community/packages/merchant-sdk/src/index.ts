@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from "axios";
 import type { MerchantCreateOrderRequest, MerchantOrderResponse } from "types";
 import { DEFAULT_API_ENDPOINT } from "config";
 
-export class VNKRMerchantClient {
+export class AXVNMerchantClient {
   private client: AxiosInstance;
 
   constructor(apiKey: string, baseURL = DEFAULT_API_ENDPOINT) {

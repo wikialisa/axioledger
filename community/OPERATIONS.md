@@ -1,6 +1,6 @@
-# 🚀 VNKR TECH HOLDING — Cheat Sheet Vận Hành Hệ Thống
+# 🚀 Your Organisation Full Name — Cheat Sheet Vận Hành Hệ Thống
 
-> Enterprise Monorepo `@vnkr/*` — Quick Reference for Engineering & DevOps
+> Enterprise Monorepo `@YOUR_NPM_SCOPE_UPPER/*` — Quick Reference for Engineering & DevOps
 
 ---
 
@@ -28,20 +28,20 @@ anchor test
 
 ---
 
-## 2. Quản lý & Publish NPM Packages (`@vnkr/*`)
+## 2. Quản lý & Publish NPM Packages (`@YOUR_NPM_SCOPE_UPPER/*`)
 
 ```bash
 # Kiểm tra phiên bản package local so với Registry
-pnpm --filter @vnkr/deploy-npm registry:check
+pnpm --filter @YOUR_NPM_SCOPE_UPPER/deploy-npm registry:check
 
 # Chạy thử nghiệm quá trình publish (Dry-run)
-pnpm --filter @vnkr/deploy-npm publish:dry
+pnpm --filter @YOUR_NPM_SCOPE_UPPER/deploy-npm publish:dry
 
 # Tăng phiên bản Patch (1.0.0 → 1.0.1) cho toàn bộ packages
-pnpm --filter @vnkr/deploy-npm version:patch
+pnpm --filter @YOUR_NPM_SCOPE_UPPER/deploy-npm version:patch
 
-# Publish chính thức toàn bộ @vnkr/* packages lên NPM Registry
-pnpm --filter @vnkr/deploy-npm publish:all
+# Publish chính thức toàn bộ @YOUR_NPM_SCOPE_UPPER/* packages lên NPM Registry
+pnpm --filter @YOUR_NPM_SCOPE_UPPER/deploy-npm publish:all
 ```
 
 ---
@@ -91,9 +91,9 @@ terraform apply -var-file="terraform.tfvars" -auto-approve
 ```bash
 cd /var/www/deploy/kubernetes
 
-# Cài đặt / Cập nhật Helm release cho hệ sinh thái VNKR
-helm upgrade --install vnkr-ecosystem . \
-  --namespace vnkr-production \
+# Cài đặt / Cập nhật Helm release cho hệ sinh thái YOUR_TOKEN
+helm upgrade --install YOUR_TOKEN-ecosystem . \
+  --namespace YOUR_INFRA-production \
   --create-namespace \
   -f values.yaml
 ```
@@ -104,16 +104,16 @@ helm upgrade --install vnkr-ecosystem . \
 
 | Domain | App / Service | Port | Chức năng |
 |---|---|---|---|
-| `holding.${BRAND_DOMAIN}` | `holding-admin-portal` | :3006 | Portal Quản trị IP Asset & Approval |
-| `id.${BRAND_DOMAIN}` | `id-fiat-gateway` | :3001 | KYC, P2P Escrow & Gateway On/Off Ramp |
-| `pay.${BRAND_DOMAIN}` | `pay-portal` | :3002 | Payment Portal & Merchant POS Dashboard |
-| `scan.${BRAND_DOMAIN}` | `explorer-vnkrscan` | :3003 | App-Chain Genesis Block Explorer |
-| `swap.${BRAND_DOMAIN}` | `swap-dex` | :3004 | AMM DEX & Router Thanh khoản |
-| `dao.${BRAND_DOMAIN}` | `dao-portal` | :3005 | Governance & Range Bound Stability Vault |
-| `lab.${BRAND_DOMAIN}` | `digital-twin-engine` | worker | R&D Engine & Digital Twin Simulation |
-| `dev-api.${BRAND_DOMAIN}` | `fiat-connector-api` | :4001 | Webhook nạp/rút Ngân hàng (WAF Protected) |
-| `otc.${BRAND_DOMAIN}` | `otc-liquidity-engine` | :4002 | Institutional OTC Engine (VARA Compliant) |
-| `treasury-subgraph-api.${BRAND_DOMAIN}` | `indexer-subgraph` | :4003 | App-Chain Event Watcher & Indexer |
+| `holding.your-project.vn` | `holding-admin-portal` | :3006 | Portal Quản trị IP Asset & Approval |
+| `id.your-project.vn` | `id-fiat-gateway` | :3001 | KYC, P2P Escrow & Gateway On/Off Ramp |
+| `pay.your-project.vn` | `pay-portal` | :3002 | Payment Portal & Merchant POS Dashboard |
+| `scan.your-project.vn` | `explorer-YOUR_INFRAscan` | :3003 | App-Chain Genesis Block Explorer |
+| `swap.your-project.vn` | `swap-dex` | :3004 | AMM DEX & Router Thanh khoản |
+| `dao.your-project.vn` | `dao-portal` | :3005 | Governance & Range Bound Stability Vault |
+| `lab.your-project.vn` | `digital-twin-engine` | worker | R&D Engine & Digital Twin Simulation |
+| `dev-api.your-project.vn` | `fiat-connector-api` | :4001 | Webhook nạp/rút Ngân hàng (WAF Protected) |
+| `otc.your-project.vn` | `otc-liquidity-engine` | :4002 | Institutional OTC Engine (VARA Compliant) |
+| `treasury-subgraph-api.your-project.vn` | `indexer-subgraph` | :4003 | App-Chain Event Watcher & Indexer |
 
 ---
 

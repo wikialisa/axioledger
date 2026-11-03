@@ -9,15 +9,15 @@ import { ethers } from "hardhat";
 describe("Bophades Kernel — Integration", () => {
   let deployer: any;
 
-  let kernel:   any;
-  let vnkr:     any;
-  let svnkr:    any;
-  let gvnkr:    any;
-  let roles:    any;
-  let mintr:    any;
-  let treas:    any;
-  let staking:  any;
-  let escrow:   any;
+  let kernel: any;
+  let YOUR_TOKEN: any;
+  let sYOUR_TOKEN: any;
+  let gYOUR_TOKEN: any;
+  let roles: any;
+  let mintr: any;
+  let treas: any;
+  let staking: any;
+  let escrow: any;
   let compliance: any;
 
   const Actions = { InstallModule: 0, ActivatePolicy: 2, DeactivatePolicy: 3 };
@@ -26,9 +26,9 @@ describe("Bophades Kernel — Integration", () => {
     [deployer] = await ethers.getSigners();
 
     // Tokens
-    vnkr  = await (await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address)).waitForDeployment();
-    svnkr = await (await (await ethers.getContractFactory("SVNKRToken")).deploy(deployer.address)).waitForDeployment();
-    gvnkr = await (await (await ethers.getContractFactory("GVNKRToken")).deploy(deployer.address)).waitForDeployment();
+    YOUR_TOKEN = await (await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
+    sAXVN = await (await (await ethers.getContractFactory("SYOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
+    gAXVN = await (await (await ethers.getContractFactory("GYOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
 
     // Kernel
     kernel = await (await (await ethers.getContractFactory("Kernel")).deploy(
@@ -39,20 +39,20 @@ describe("Bophades Kernel — Integration", () => {
     roles = await (await (await ethers.getContractFactory("ROLESv1")).deploy(kernel.target)).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, roles.target);
 
-    mintr = await (await (await ethers.getContractFactory("MINTRv1")).deploy(kernel.target, vnkr.target)).waitForDeployment();
+    mintr = await (await (await ethers.getContractFactory("MINTRv1")).deploy(kernel.target, YOUR_TOKEN.target)).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, mintr.target);
-    await vnkr.setMintAuthority(mintr.target);
+    await YOUR_TOKEN.setMintAuthority(mintr.target);
 
     treas = await (await (await ethers.getContractFactory("TREASv1")).deploy(kernel.target)).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, treas.target);
 
     // Policies
     staking = await (await (await ethers.getContractFactory("StakingPolicy")).deploy(
-      kernel.target, vnkr.target, svnkr.target, gvnkr.target
+      kernel.target, YOUR_TOKEN.target, sAXVN.target, gAXVN.target
     )).waitForDeployment();
     await kernel.executeAction(Actions.ActivatePolicy, staking.target);
-    await svnkr.setStakingPolicy(staking.target);
-    await gvnkr.setStakingPolicy(staking.target);
+    await sAXVN.setStakingPolicy(staking.target);
+    await gAXVN.setStakingPolicy(staking.target);
 
     escrow = await (await (await ethers.getContractFactory("VaspEscrowPolicy")).deploy(kernel.target)).waitForDeployment();
     await kernel.executeAction(Actions.ActivatePolicy, escrow.target);

@@ -14,12 +14,12 @@ export default function ConfirmPinPage() {
   const [error, setError] = useState(false);
 
   function handleComplete(value: string) {
-    const expected = sessionStorage.getItem("vnkr_pin_temp") ?? "";
+    const expected = sessionStorage.getItem("AXVN_pin_temp") ?? "";
     if (value === expected) {
       // Save PIN and mark as onboarded
-      localStorage.setItem("vnkr_pin", value);
-      localStorage.setItem("vnkr_auth_state", "onboarded");
-      sessionStorage.removeItem("vnkr_pin_temp");
+      localStorage.setItem("AXVN_pin", value);
+      localStorage.setItem("AXVN_auth_state", "onboarded");
+      sessionStorage.removeItem("AXVN_pin_temp");
       router.replace("/home");
     } else {
       setError(true);
@@ -34,13 +34,13 @@ export default function ConfirmPinPage() {
 
   return (
     <div style={{
-      minHeight:     "100vh",
-      background:    "#FFFFFF",
-      display:       "flex",
+      minHeight: "100vh",
+      background: "#FFFFFF",
+      display: "flex",
       flexDirection: "column",
-      alignItems:    "center",
-      fontFamily:    "'Work Sans', sans-serif",
-      padding:       "64px 24px 48px",
+      alignItems: "center",
+      fontFamily: "'Work Sans', sans-serif",
+      padding: "64px 24px 48px",
     }}>
       {/* Title */}
       <div style={{ width: "100%", maxWidth: 360, textAlign: "center", marginBottom: 40 }}>
@@ -58,8 +58,8 @@ export default function ConfirmPinPage() {
       {error && (
         <p style={{
           marginTop: 16,
-          color:     "#FF3D71",
-          fontSize:  "0.875rem",
+          color: "#FF3D71",
+          fontSize: "0.875rem",
           textAlign: "center",
         }}>
           PIN không khớp, thử lại
@@ -86,14 +86,14 @@ function PinDots({ filled, total, error }: { filled: number; total: number; erro
         <div
           key={i}
           style={{
-            width:        16,
-            height:       16,
+            width: 16,
+            height: 16,
             borderRadius: "50%",
-            background:   i < filled
+            background: i < filled
               ? (error ? "#FF3D71" : "#000000")
               : "#E5E7EB",
-            transition:   "background 0.15s",
-            border:       `2px solid ${i < filled ? (error ? "#FF3D71" : "#000000") : "#CBD5E0"}`,
+            transition: "background 0.15s",
+            border: `2px solid ${i < filled ? (error ? "#FF3D71" : "#000000") : "#CBD5E0"}`,
           }}
         />
       ))}

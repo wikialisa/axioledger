@@ -258,7 +258,7 @@ monorepo/
 │   │       ├── bonds/            │  Phát hành trái phiếu token hóa
 │   │       └── rbs-monitor/      │  Giám sát Range Bound Stability
 │   │
-│   ├── explorer-AXVNscan/        ← Block explorer · Proof of Reserve công khai
+│   ├── explorer-YOUR_INFRAscan/        ← Block explorer · Proof of Reserve công khai
 │   │   └── src/app/(explorer)/
 │   │       ├── blocks/           │  Danh sách block · TPS real-time
 │   │       ├── txs/              │  Giao dịch · filter by type/address

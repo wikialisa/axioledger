@@ -11,7 +11,7 @@ export interface LauHeader {
 }
 
 /** Application identifier included in every LAU header. */
-const APP_ID = 'vnkrvietnam-swift-sdk';
+const APP_ID = 'AXVNvietnam-swift-sdk';
 
 /**
  * Signs outbound SWIFT messages by computing a Local Authentication (LAU)

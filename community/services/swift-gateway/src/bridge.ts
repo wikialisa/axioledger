@@ -12,11 +12,11 @@ import { MGWClient } from "./mgw-client.js";
 
 // ─── Stream / Group constants ─────────────────────────────────────────────────
 
-/** Tên stream: VNKR Network → SWIFT (outbound) */
-export const OUTBOUND_STREAM = "vnkr:swift:outbound";
+/** Tên stream: YOUR_TOKEN Network → SWIFT (outbound) */
+export const OUTBOUND_STREAM = "YOUR_TOKEN:swift:outbound";
 
-/** Tên stream: SWIFT → VNKR Network (inbound ACK / credit notification) */
-export const INBOUND_STREAM = "vnkr:swift:inbound";
+/** Tên stream: SWIFT → YOUR_TOKEN Network (inbound ACK / credit notification) */
+export const INBOUND_STREAM = "YOUR_TOKEN:swift:inbound";
 
 /** Consumer group cho swift-gateway */
 export const CONSUMER_GROUP = "swift-gateway-group";
@@ -37,18 +37,18 @@ interface OutboundStreamEvent {
 }
 
 /**
- * VNKRSwiftBridge — Redis Streams Event Bus Connector
+ * BrandSwiftBridge — Redis Streams Event Bus Connector
  *
  * Kiến trúc luồng dữ liệu:
  *   otc-liquidity-engine / fiat-connector-api
- *     → XADD vnkr:swift:outbound
+ *     → XADD YOUR_TOKEN:swift:outbound
  *     → [bridge.ts XREADGROUP] → buildMT103/MT202/pacs008 → MGWClient
- *     → XADD vnkr:swift:inbound (ACK / status)
+ *     → XADD YOUR_TOKEN:swift:inbound (ACK / status)
  *     → fiat-connector-api / P2P Escrow
  *
- * Vendor reference: TODO/6.md — "SWIFT ↔ VNKR Event Bus"
+ * Vendor reference: TODO/6.md — "SWIFT ↔ YOUR_TOKEN Event Bus"
  */
-export class VNKRSwiftBridge {
+export class BrandSwiftBridge {
   private readonly signer: LAUSigner;
   private readonly mgw: MGWClient;
   private running = false;
@@ -80,7 +80,7 @@ export class VNKRSwiftBridge {
     }
 
     this.running = true;
-    log.info(`[bridge] 🔗 VNKR SWIFT Bridge started. Consumer: ${CONSUMER_NAME}`);
+    log.info(`[bridge] 🔗 YOUR_TOKEN SWIFT Bridge started. Consumer: ${CONSUMER_NAME}`);
 
     // Vòng lặp polling Redis Stream (blocking read, timeout 2 giây)
     while (this.running) {
@@ -174,7 +174,7 @@ export class VNKRSwiftBridge {
     let uetr: string | undefined;
     try {
       const mgwResult = await this.mgw.forwardMessage({
-        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "VNKRVNVN",
+        businessApplication: process.env["SWIFT_BIC_CODE"] ?? "AXVNVNVN",
         rawMessage,
         lauSignature,
         lauTimestamp: timestamp,
@@ -209,10 +209,10 @@ export class VNKRSwiftBridge {
 // ─── Inbound listener ─────────────────────────────────────────────────────────
 
 /**
- * initInboundListener — lắng nghe stream vnkr:swift:inbound để forward
+ * initInboundListener — lắng nghe stream YOUR_TOKEN:swift:inbound để forward
  * credit notification đến fiat-connector-api qua HTTP.
  *
- * Được gọi khi có điện incoming từ SWIFT vào hệ thống VNKR
+ * Được gọi khi có điện incoming từ SWIFT vào hệ thống YOUR_TOKEN
  * (ví dụ: đối tác gửi MT103 → SWIFT giao điện cho Alliance Access
  *  → MGW → swift-gateway → bắn event inbound).
  */

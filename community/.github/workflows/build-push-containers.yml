@@ -31,8 +31,8 @@ jobs:
           - app_name: pay-portal
             dockerfile: ./apps/pay-portal/Dockerfile
             context: .
-          - app_name: explorer-vnkrscan
-            dockerfile: ./apps/explorer-vnkrscan/Dockerfile
+          - app_name: explorer-YOUR_INFRAscan
+            dockerfile: ./apps/explorer-YOUR_INFRAscan/Dockerfile
             context: .
           - app_name: swap-dex
             dockerfile: ./apps/swap-dex/Dockerfile

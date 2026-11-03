@@ -6,13 +6,13 @@ declare_id!(env!("PROGRAM_ID_TREASURY_RBS", "11111111111111111111111111111111"))
 /// Range Bound Stability (RBS) Treasury — Cayman Foundation DAO governance.
 /// Manages reserve assets and enforces a price stability corridor.
 #[program]
-pub mod vnkr_treasury_rbs {
+pub mod AXVN_treasury_rbs {
     use super::*;
 
     /// Initialize the treasury with initial price bounds.
     pub fn initialize(
         ctx: Context<InitializeTreasury>,
-        lower_bound: u64, // lamports / AXVN (scaled by 1e6)
+        lower_bound: u64, // lamports / YOUR_TOKEN (scaled by 1e6)
         upper_bound: u64,
     ) -> Result<()> {
         require!(lower_bound < upper_bound, RbsError::InvalidBounds);

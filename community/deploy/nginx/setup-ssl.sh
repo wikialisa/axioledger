@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════════════
 #  deploy/nginx/setup-ssl.sh
-#  Cấu hình Nginx + Let's Encrypt TLS cho app.${BRAND_DOMAIN} → localhost:3010
+#  Cấu hình Nginx + Let's Encrypt TLS cho app.your-project.vn → localhost:3010
 #
 #  Chạy: sudo bash deploy/nginx/setup-ssl.sh
 #  Yêu cầu:
 #    - Ubuntu 20.04 / 22.04 / 24.04
-#    - DNS app.${BRAND_DOMAIN} đã trỏ đúng về IP của server này
+#    - DNS app.your-project.vn đã trỏ đúng về IP của server này
 #    - Port 80 và 443 mở trên firewall
 #    - Next.js app đang chạy tại localhost:3010
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -14,8 +14,8 @@
 set -euo pipefail
 
 # ── Config ─────────────────────────────────────────────────────────────────────
-DOMAIN="app.${BRAND_DOMAIN}"
-EMAIL="ops@${BRAND_DOMAIN}"          # email nhận cảnh báo cert sắp hết hạn
+DOMAIN="app.your-project.vn"
+EMAIL="ops@your-project.vn"          # email nhận cảnh báo cert sắp hết hạn
 APP_PORT=3010
 NGINX_CONF_DIR="/etc/nginx/sites-available"
 NGINX_ENABLED_DIR="/etc/nginx/sites-enabled"
@@ -34,7 +34,7 @@ error()   { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════╗"
-echo "║   VNKR — Nginx + Let's Encrypt SSL Setup               ║"
+echo "║   YOUR_INFRA — Nginx + Let's Encrypt SSL Setup               ║"
 echo "║   Domain: $DOMAIN → localhost:$APP_PORT              ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
@@ -88,7 +88,7 @@ info "Bước 5/6: Triển khai nginx config..."
 rm -f "$NGINX_ENABLED_DIR/default" 2>/dev/null || true
 
 # Copy HTTP-only config trước để certbot có thể dùng
-cp "$SCRIPT_DIR/app.${BRAND_DOMAIN}.conf.http-only" "$NGINX_CONF_DIR/$DOMAIN"
+cp "$SCRIPT_DIR/app.your-project.vn.conf.http-only" "$NGINX_CONF_DIR/$DOMAIN"
 ln -sf "$NGINX_CONF_DIR/$DOMAIN" "$NGINX_ENABLED_DIR/$DOMAIN"
 
 # Test config
@@ -114,7 +114,7 @@ if [[ "$DNS_OK" == true ]]; then
 
     # Chuyển sang HTTPS full config
     info "Chuyển sang HTTPS config đầy đủ..."
-    cp "$SCRIPT_DIR/app.${BRAND_DOMAIN}.conf" "$NGINX_CONF_DIR/$DOMAIN"
+    cp "$SCRIPT_DIR/app.your-project.vn.conf" "$NGINX_CONF_DIR/$DOMAIN"
     nginx -t 2>&1 || error "HTTPS nginx config lỗi"
     systemctl reload nginx
     success "HTTPS đã kích hoạt cho $DOMAIN"

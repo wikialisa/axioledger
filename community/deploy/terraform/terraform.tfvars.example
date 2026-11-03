@@ -9,5 +9,5 @@ cloudflare_api_token  = "YOUR_CLOUDFLARE_API_TOKEN"
 cloudflare_account_id = "YOUR_CLOUDFLARE_ZONE_AND_ACCOUNT_ID"
 cloudflare_zone_id    = "YOUR_CLOUDFLARE_ZONE_AND_ACCOUNT_ID"
 
-lb_origin             = "lb.${BRAND_DOMAIN}"
+lb_origin             = "lb.your-project.vn"
 environment           = "prod"

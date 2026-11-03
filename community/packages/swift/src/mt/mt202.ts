@@ -4,7 +4,7 @@ import type { SWIFTMT202Payload } from "../types.js";
  * Generates a SWIFT MT202 message (General Financial Institution Transfer).
  *
  * Used for interbank cover payments and nostro/vostro settlement between
- * VNKR MENA correspondent banks.
+ * YOUR_TOKEN MENA correspondent banks.
  *
  * Reference: SWIFT SR 2025 MT202 field specification.
  */

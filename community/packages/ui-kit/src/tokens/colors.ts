@@ -1,40 +1,40 @@
 /**
  * ui — Color Tokens
- * Source: VNKR Design-system / Color-palette / Color-palette.png
+ * Source: YOUR_TOKEN Design-system / Color-palette / Color-palette.png
  *
- * Palette gốc VNKR:
+ * Palette gốc YOUR_TOKEN:
  *  - Dark / Info / Success / Warning / Error / Greyscale
  *  - Brand accents: dark, grey, magenta, orange, greeny, violet, blue, yellow
  *  - 8 shades mỗi semantic tone (dark → light)
  */
 
 // ─── Semantic base ────────────────────────────────────────────────────────────
-export const colorDark      = "#000000";
-export const colorInfo      = "#0095FF";
-export const colorSuccess   = "#00D68F";
-export const colorWarning   = "#FFAA00";
-export const colorError     = "#FF3D71";
+export const colorDark = "#000000";
+export const colorInfo = "#0095FF";
+export const colorSuccess = "#00D68F";
+export const colorWarning = "#FFAA00";
+export const colorError = "#FF3D71";
 export const colorGreyscale = "#2E3A59";
-export const colorWhite     = "#FFFFFF";
+export const colorWhite = "#FFFFFF";
 
-// ─── VNKR Brand palette ───────────────────────────────────────────────────────
+// ─── YOUR_TOKEN Brand palette ───────────────────────────────────────────────────────
 export const colorBrand = {
   /** Solid black — primary brand colour */
-  dark:    "#000000",
+  dark: "#000000",
   /** Light grey — secondary neutral */
-  grey:    "#EFEFEF",
+  grey: "#EFEFEF",
   /** Magenta/hot-pink accent */
   magenta: "#FD9FDD",
   /** Warm orange accent */
-  orange:  "#FC7339",
+  orange: "#FC7339",
   /** Lime green accent */
-  greeny:  "#BEFF6C",
+  greeny: "#BEFF6C",
   /** Soft violet accent */
-  violet:  "#AF96FB",
+  violet: "#AF96FB",
   /** Teal/aqua accent */
-  blue:    "#49DBC8",
+  blue: "#49DBC8",
   /** Lemon yellow accent */
-  yellow:  "#FFF172",
+  yellow: "#FFF172",
 } as const;
 
 // ─── Shade scales (index 0 = darkest, 7 = lightest) ──────────────────────────
@@ -66,29 +66,29 @@ export const colorBackground = {
   /** App background */
   surface: "#FFFFFF",
   /** Subtle off-white card surface */
-  muted:   "#F5F6FA",
+  muted: "#F5F6FA",
   /** Screen-specific brand backgrounds */
-  violet:  "#AF96FB",
-  pink:    "#FD9FDD",
-  greeny:  "#BEFF6C",
-  yellow:  "#FFF172",
-  orange:  "#FC7339",
+  violet: "#AF96FB",
+  pink: "#FD9FDD",
+  greeny: "#BEFF6C",
+  yellow: "#FFF172",
+  orange: "#FC7339",
 } as const;
 
 // ─── Unified export ───────────────────────────────────────────────────────────
 export const colors = {
-  dark:       colorDark,
-  info:       colorInfo,
-  success:    colorSuccess,
-  warning:    colorWarning,
-  error:      colorError,
-  greyscale:  colorGreyscale,
-  white:      colorWhite,
-  brand:      colorBrand,
-  shades:     colorShades,
+  dark: colorDark,
+  info: colorInfo,
+  success: colorSuccess,
+  warning: colorWarning,
+  error: colorError,
+  greyscale: colorGreyscale,
+  white: colorWhite,
+  brand: colorBrand,
+  shades: colorShades,
   background: colorBackground,
 } as const;
 
-export type ColorBrand      = keyof typeof colorBrand;
+export type ColorBrand = keyof typeof colorBrand;
 export type ColorBackground = keyof typeof colorBackground;
-export type SemanticColor   = "info" | "success" | "warning" | "error" | "greyscale";
+export type SemanticColor = "info" | "success" | "warning" | "error" | "greyscale";

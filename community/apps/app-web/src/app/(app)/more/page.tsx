@@ -1,7 +1,7 @@
 "use client";
 /**
  * /more — Settings / Profile / All Features
- * Components: Toggle · ListItem (menu) · Modal · Badge · VnkrLogo
+ * Components: Toggle · ListItem (menu) · Modal · Badge · AXVNLogo
  */
 import React, { useState } from "react";
 import {
@@ -11,7 +11,7 @@ import {
   Button,
   Text,
   Badge,
-  VnkrLogo,
+  AXVNLogo,
   UserCircle,
   ShieldCheck,
   Bell,
@@ -37,25 +37,25 @@ import {
 const ChatIcon = Bell;
 
 export default function SettingsPage() {
-  const [biometric,     setBiometric]   = useState(true);
-  const [pushNotif,     setPushNotif]   = useState(true);
-  const [promoNotif,    setPromoNotif]  = useState(false);
-  const [darkMode,      setDarkMode]    = useState(false);
-  const [language,      setLanguage]    = useState<"vi" | "en">("vi");
-  const [logoutModal,   setLogoutModal] = useState(false);
+  const [biometric, setBiometric] = useState(true);
+  const [pushNotif, setPushNotif] = useState(true);
+  const [promoNotif, setPromoNotif] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [language, setLanguage] = useState<"vi" | "en">("vi");
+  const [logoutModal, setLogoutModal] = useState(false);
 
   return (
     <div style={{ paddingBottom: 40 }}>
 
       {/* ── Profile card ─────────────────────────────────────────────────── */}
       <div style={{
-        margin:         "16px 16px 0",
-        background:     "#000",
-        borderRadius:   20,
-        padding:        "20px",
-        display:        "flex",
-        alignItems:     "center",
-        gap:            14,
+        margin: "16px 16px 0",
+        background: "#000",
+        borderRadius: 20,
+        padding: "20px",
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
       }}>
         <div style={{
           width: 56, height: 56, borderRadius: "50%",
@@ -69,7 +69,7 @@ export default function SettingsPage() {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <Text variant="subtitle1" weight="semibold" color="#FFFFFF">Nguyễn Văn A</Text>
-          <Text variant="caption" color="rgba(255,255,255,0.6)">nguyen.van.a@${BRAND_DOMAIN}</Text>
+          <Text variant="caption" color="rgba(255,255,255,0.6)">nguyen.van.a@your-project.vn</Text>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
             <Badge variant="label" color="greeny" label="KYC Cấp 2" />
           </div>
@@ -109,8 +109,8 @@ export default function SettingsPage() {
           onClick={() => window.location.href = "/uetr"}
         />
         <ListItem
-          title="Nạp / Rút VNKR"
-          subtitle="On-Ramp / Off-Ramp VND ↔ VNKR Stablecoin"
+          title="Nạp / Rút YOUR_TOKEN"
+          subtitle="On-Ramp / Off-Ramp VND ↔ YOUR_TOKEN Stablecoin"
           avatar={{ icon: <ArrowSwap size={18} color="#FFAA00" />, iconBg: "#FFFBEB", size: 40 }}
           showArrow divider
           onClick={() => window.location.href = "/onramp"}
@@ -241,15 +241,15 @@ export default function SettingsPage() {
                     key={l}
                     onClick={() => setLanguage(l)}
                     style={{
-                      padding:      "2px 8px",
+                      padding: "2px 8px",
                       borderRadius: 6,
-                      border:       "1px solid #E5E7EB",
-                      background:   language === l ? "#000" : "#fff",
-                      color:        language === l ? "#fff" : "#4A5568",
-                      fontSize:     11,
-                      fontWeight:   700,
-                      cursor:       "pointer",
-                      fontFamily:   "'Work Sans', sans-serif",
+                      border: "1px solid #E5E7EB",
+                      background: language === l ? "#000" : "#fff",
+                      color: language === l ? "#fff" : "#4A5568",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      fontFamily: "'Work Sans', sans-serif",
                     }}
                   >
                     {l.toUpperCase()}
@@ -314,8 +314,8 @@ export default function SettingsPage() {
 
       {/* ── Version / logo ────────────────────────────────────────────────── */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "20px 0 8px" }}>
-        <VnkrLogo variant="dark" size="xs" />
-        <Text variant="caption" color="#CBD5E0">v1.1.0 · app.${BRAND_DOMAIN}</Text>
+        <AXVNLogo variant="dark" size="xs" />
+        <Text variant="caption" color="#CBD5E0">v1.1.0 · app.your-project.vn</Text>
       </div>
 
       {/* ── Logout modal ─────────────────────────────────────────────────── */}

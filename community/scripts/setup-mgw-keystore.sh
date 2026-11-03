@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─── scripts/setup-mgw-keystore.sh ────────────────────────────────────────────
-# VNKR TECH HOLDING JSC — SWIFT MGW Keystore & Config Encryption
+# Your Organisation Full Name JSC — SWIFT MGW Keystore & Config Encryption
 #
 # Thực hiện 3 bước:
 #   1. Tạo AES-256 Secret Keystore (PKCS12) để mã hóa config MGW
@@ -10,13 +10,13 @@
 # Yêu cầu: Java 11+ (keytool) & JDK trong PATH
 #
 # Usage:
-#   bash scripts/setup-mgw-keystore.sh [--env TEST|LIVE] [--bic ${SWIFT_BIC_CODE}XXX]
+#   bash scripts/setup-mgw-keystore.sh [--env TEST|LIVE] [--bic YOURBICXXXXXXX]
 # ──────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
 # ─── Arguments ────────────────────────────────────────────────────────────────
 SWIFT_ENV="${SWIFT_ENV:-TEST}"
-SWIFT_BIC="${SWIFT_BIC:-${SWIFT_BIC_CODE}XXX}"
+SWIFT_BIC="${SWIFT_BIC:-YOURBICXXXXXXX}"
 CERTS_DIR="${CERTS_DIR:-./certs}"
 MGW_VENDOR_DIR="${MGW_VENDOR_DIR:-./services/swift-gateway/vendor/swift-mgw-2.0.17-1}"
 ALIAS="swift-mgw-secret"
@@ -40,7 +40,7 @@ fi
 
 echo ""
 echo "╔═══════════════════════════════════════════════════════════════╗"
-echo "║  VNKR SWIFT MGW — Keystore & Config Encryption Setup         ║"
+echo "║  YOUR_INFRA SWIFT MGW — Keystore & Config Encryption Setup         ║"
 printf "║  BIC: %-10s   Environment: %-25s   ║\n" "$SWIFT_BIC" "$SWIFT_ENV"
 echo "╚═══════════════════════════════════════════════════════════════╝"
 echo ""
@@ -97,7 +97,7 @@ else
 fi
 
 cat > "${PLAIN_CONFIG}" <<YAML
-### VNKR TECH HOLDING — SWIFT MGW Configuration
+### Your Organisation Full Name — SWIFT MGW Configuration
 ### Environment: ${MGW_ENV}
 ### Generated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
 ### ⚠️  NHẠY CẢM — KHÔNG COMMIT FILE NÀY VÀO GIT
@@ -118,7 +118,7 @@ configuration:
   services:
     metadata:
       url: jdbc:h2:file:/opt/swift-mgw/db/mgwdb;CIPHER=AES;AUTO_RECONNECT=TRUE
-      username: vnkr_mgw
+      username: AXVN_mgw
       filePassword: <DB_FILE_PASSWORD>
       userPassword: <DB_USER_PASSWORD>
       h2_console_enabled: false

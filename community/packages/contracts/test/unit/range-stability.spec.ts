@@ -3,14 +3,14 @@ import { ethers } from "hardhat";
 
 // ─── range-stability.spec.ts ──────────────────────────────────────────────────
 // Unit tests for RangeBoundStability (RBS Engine).
-// Đơn vị giá: VND (1 VNKR ≈ 25.000 VND theo cơ chế bảo chứng Kho bạc)
+// Đơn vị giá: VND (1 YOUR_TOKEN ≈ 25.000 VND theo cơ chế bảo chứng Kho bạc)
 // ─────────────────────────────────────────────────────────────────────────────
 
 describe("RangeBoundStability", () => {
   let deployer: Awaited<ReturnType<typeof ethers.getSigners>>[0];
-  let keeper:   Awaited<ReturnType<typeof ethers.getSigners>>[0];
+  let keeper: Awaited<ReturnType<typeof ethers.getSigners>>[0];
 
-  let kernel: any, mintr: any, treas: any, rbs: any, vnkr: any, dai: any;
+  let kernel: any, mintr: any, treas: any, rbs: any, YOUR_TOKEN: any, dai: any;
 
   const toVnd = (n: string) => ethers.parseUnits(n, 18); // n = VND đơn vị
   const Actions = { InstallModule: 0, ActivatePolicy: 2 };
@@ -18,12 +18,12 @@ describe("RangeBoundStability", () => {
   beforeEach(async () => {
     [deployer, keeper] = await ethers.getSigners();
 
-    // Deploy VNKR
-    vnkr = await (await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address)).waitForDeployment();
+    // Deploy YOUR_TOKEN
+    YOUR_TOKEN = await (await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
 
     // Deploy mock ERC-20 DAI
-    const MockERC20 = await ethers.getContractFactory("VNKRToken"); // reuse as simple ERC-20
-    dai  = await (await MockERC20.deploy(deployer.address)).waitForDeployment();
+    const MockERC20 = await ethers.getContractFactory("YOUR_TOKENToken"); // reuse as simple ERC-20
+    dai = await (await MockERC20.deploy(deployer.address)).waitForDeployment();
     await dai.setMintAuthority(deployer.address);
     await dai.mint(deployer.address, toUsd("1000000"));
 
@@ -34,10 +34,10 @@ describe("RangeBoundStability", () => {
 
     // Deploy + install MINTR
     mintr = await (await (await ethers.getContractFactory("MINTRv1")).deploy(
-      kernel.target, vnkr.target
+      kernel.target, YOUR_TOKEN.target
     )).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, mintr.target);
-    await vnkr.setMintAuthority(mintr.target);
+    await YOUR_TOKEN.setMintAuthority(mintr.target);
 
     // Deploy + install TREAS
     treas = await (await (await ethers.getContractFactory("TREASv1")).deploy(kernel.target)).waitForDeployment();
@@ -47,7 +47,7 @@ describe("RangeBoundStability", () => {
     rbs = await (await (await ethers.getContractFactory("RangeBoundStability")).deploy(
       kernel.target,
       dai.target,
-      vnkr.target,
+      YOUR_TOKEN.target,
       toVnd("20000"),        // wallLow:     20.000 VND
       toVnd("22000"),        // cushionLow:  22.000 VND
       toVnd("28000"),        // cushionHigh: 28.000 VND

@@ -95,7 +95,7 @@ export function ColorPalette() {
   return (
     <div style={{ fontFamily: "'Work Sans', sans-serif", padding: 40, background: "#FFFFFF", maxWidth: 960 }}>
       <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 4, color: "#000" }}>Color Palette</div>
-      <div style={{ fontSize: 13, color: "#8F9BB3", marginBottom: 48 }}>VNKR Design System — Brand & Semantic Colors</div>
+      <div style={{ fontSize: 13, color: "#8F9BB3", marginBottom: 48 }}>YOUR_TOKEN Design System — Brand & Semantic Colors</div>
 
       {/* Brand Accents */}
       <Section title="Brand Palette">
@@ -110,10 +110,10 @@ export function ColorPalette() {
       <Section title="Semantic Colors">
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
           {[
-            { label: "Info",      hex: colorInfo    },
-            { label: "Success",   hex: colorSuccess  },
-            { label: "Warning",   hex: colorWarning  },
-            { label: "Error",     hex: colorError    },
+            { label: "Info", hex: colorInfo },
+            { label: "Success", hex: colorSuccess },
+            { label: "Warning", hex: colorWarning },
+            { label: "Error", hex: colorError },
           ].map(({ label, hex }) => (
             <Swatch key={label} color={hex} label={label} hex={hex} size={64} />
           ))}

@@ -15,7 +15,7 @@ referralRouter.get("/info", (req, res) => {
   // TODO: fetch from DB
   ok(res, {
     referralCode: userId.slice(0, 8).toUpperCase(),
-    referralLink: `https://app.${BRAND_DOMAIN}/register?ref=${userId.slice(0, 8).toUpperCase()}`,
+    referralLink: `https://app.your-project.vn/register?ref=${userId.slice(0, 8).toUpperCase()}`,
     tier: "SILVER",
     totalReferrals: 12,
     totalEarned: "2450000",

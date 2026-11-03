@@ -2,7 +2,7 @@
   "name": "indexer-subgraph",
   "version": "0.1.0",
   "private": true,
-  "description": "[treasury-subgraph-api.${BRAND_DOMAIN}] Subgraph / Helius Indexer Service — VNKR Blockchain Network Ltd.",
+  "description": "[treasury-subgraph-api.your-project.vn] Subgraph / Helius Indexer Service — YOUR_TOKEN Blockchain Network Ltd.",
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "tsc",

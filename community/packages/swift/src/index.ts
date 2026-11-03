@@ -1,5 +1,5 @@
 // ─── swift-adapter ─────────────────────────────────────────────────────
-// SWIFT SDK wrapper for VNKR Institutional Banking (GVI Labs MENA / VNKR FinTech)
+// SWIFT SDK wrapper for YOUR_TOKEN Institutional Banking (GVI Labs MENA / YOUR_TOKEN FinTech)
 // Covers: MT103, MT202, MT940 (ISO 15022)
 //         pacs.008, pacs.009, camt.053 (ISO 20022 MX)
 //         LAU signing · RMA
@@ -25,4 +25,4 @@ export { RMARegistry } from "./security/rma.js";
 export type { RMARecord } from "./security/rma.js";
 
 // Event Bus client (Redis Streams producer)
-export { VNKRSwiftClient } from "./client.js";
+export { AXVNSwiftClient } from "./client.js";

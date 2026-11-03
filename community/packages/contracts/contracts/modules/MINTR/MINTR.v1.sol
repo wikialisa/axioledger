@@ -6,7 +6,7 @@ import "./interfaces/IMINTR.v1.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 // ─── MINTR.v1.sol — Protected Mint/Burn Controller ───────────────────────────
-// Kiểm soát đúc/đốt VNKR dựa trên Tỷ lệ Bảo chứng (Backing Ratio).
+// Kiểm soát đúc/đốt YOUR_TOKEN dựa trên Tỷ lệ Bảo chứng (Backing Ratio).
 // Circuit Breaker tự động ngắt nếu phát hiện hành vi đúc token trái phép.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -28,10 +28,10 @@ interface ITRSRYForMINTR {
 contract MINTRv1 is Module, IMINTR {
     // ─── State ────────────────────────────────────────────────────────────
 
-    IMintable public vnkr;
+    IMintable public YOUR_TOKEN;
     address   public trsryModule;
 
-    /// @notice Cung tối đa: 10.000.000.000.000 VNKR (18 decimals)
+    /// @notice Cung tối đa: 10.000.000.000.000 YOUR_TOKEN (18 decimals)
     uint256 public constant RESERVE_CAP = 10_000_000_000_000 * 1e18;
 
     /// @notice Tỷ lệ bảo chứng tối thiểu (basis points) — 10000 = 100%
@@ -43,8 +43,8 @@ contract MINTRv1 is Module, IMINTR {
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
-    constructor(Kernel kernel_, address vnkr_, address trsryModule_) Module(kernel_) {
-        vnkr        = IMintable(vnkr_);
+    constructor(Kernel kernel_, address YOUR_TOKEN_, address trsryModule_) Module(kernel_) {
+        YOUR_TOKEN        = IMintable(AXVN_);
         trsryModule = trsryModule_;
     }
 
@@ -55,10 +55,10 @@ contract MINTRv1 is Module, IMINTR {
 
     // ─── Permissioned writes ──────────────────────────────────────────────
 
-    function mintVnkr(address to_, uint256 amount_) external override permissioned {
+    function mintYOUR_TOKEN(address to_, uint256 amount_) external override permissioned {
         if (circuitBreakerActive) revert MINTR_CircuitBreakerActive();
         if (amount_ == 0) revert MINTR_ZeroAmount();
-        uint256 newSupply = vnkr.totalSupply() + amount_;
+        uint256 newSupply = YOUR_TOKEN.totalSupply() + amount_;
         if (newSupply > RESERVE_CAP) revert MINTR_CapExceeded(RESERVE_CAP, newSupply);
 
         // Kiểm tra Backing Ratio: reserveVnd / newSupply >= minBackingBps / 10000
@@ -69,14 +69,14 @@ contract MINTRv1 is Module, IMINTR {
             revert MINTR_BackingRatioViolation(minBackingBps, (reserveVnd * 10_000) / newSupply);
 
         totalMinted += amount_;
-        vnkr.mint(to_, amount_);
+        YOUR_TOKEN.mint(to_, amount_);
         emit Minted(to_, amount_);
     }
 
-    function burnVnkr(address from_, uint256 amount_) external override permissioned {
+    function burnYOUR_TOKEN(address from_, uint256 amount_) external override permissioned {
         if (amount_ == 0) revert MINTR_ZeroAmount();
         totalBurned += amount_;
-        vnkr.burn(from_, amount_);
+        YOUR_TOKEN.burn(from_, amount_);
         emit Burned(from_, amount_);
     }
 
@@ -98,9 +98,9 @@ contract MINTRv1 is Module, IMINTR {
 
     // ─── Views ────────────────────────────────────────────────────────────
 
-    function circulatingSupply() external view override returns (uint256) { return vnkr.totalSupply(); }
+    function circulatingSupply() external view override returns (uint256) { return YOUR_TOKEN.totalSupply(); }
     function remainingCap() external view override returns (uint256) {
-        uint256 s = vnkr.totalSupply();
+        uint256 s = YOUR_TOKEN.totalSupply();
         return s < RESERVE_CAP ? RESERVE_CAP - s : 0;
     }
     function backingRatioBps() external view override returns (uint256) { return minBackingBps; }

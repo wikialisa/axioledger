@@ -10,27 +10,27 @@ import {
   Gift, ArrowRight, TrendUp,
 } from "ui-kit";
 
-const REFERRAL_CODE = "VNKR8A4F";
-const REFERRAL_LINK = `https://app.${BRAND_DOMAIN}/register?ref=${REFERRAL_CODE}`;
+const REFERRAL_CODE = "AXVN8A4F";
+const REFERRAL_LINK = `https://app.your-project.vn/register?ref=${REFERRAL_CODE}`;
 
 const TREE_DATA = {
   f1: [
-    { userId: "u001", name: "Trần Thị B",  level: 1 as const, joinedAt: "01/03/2024", volume: "5.000.000đ",  commission: "50.000đ",  color: "#AF96FB", initials: "TB" },
-    { userId: "u002", name: "Lê Minh C",   level: 1 as const, joinedAt: "15/04/2024", volume: "2.000.000đ",  commission: "20.000đ",  color: "#49DBC8", initials: "LC" },
-    { userId: "u003", name: "Hoàng Thị D", level: 1 as const, joinedAt: "01/05/2024", volume: "8.500.000đ",  commission: "85.000đ",  color: "#FC7339", initials: "HD" },
+    { userId: "u001", name: "Trần Thị B", level: 1 as const, joinedAt: "01/03/2024", volume: "5.000.000đ", commission: "50.000đ", color: "#AF96FB", initials: "TB" },
+    { userId: "u002", name: "Lê Minh C", level: 1 as const, joinedAt: "15/04/2024", volume: "2.000.000đ", commission: "20.000đ", color: "#49DBC8", initials: "LC" },
+    { userId: "u003", name: "Hoàng Thị D", level: 1 as const, joinedAt: "01/05/2024", volume: "8.500.000đ", commission: "85.000đ", color: "#FC7339", initials: "HD" },
   ],
   f2: [
-    { userId: "u004", name: "Ngô Văn E",   level: 2 as const, joinedAt: "20/04/2024", volume: "1.200.000đ",  commission: "6.000đ",   color: "#FD9FDD", initials: "NE" },
-    { userId: "u005", name: "Bùi Thị F",   level: 2 as const, joinedAt: "10/05/2024", volume: "3.400.000đ",  commission: "17.000đ",  color: "#BEFF6C", initials: "BF" },
+    { userId: "u004", name: "Ngô Văn E", level: 2 as const, joinedAt: "20/04/2024", volume: "1.200.000đ", commission: "6.000đ", color: "#FD9FDD", initials: "NE" },
+    { userId: "u005", name: "Bùi Thị F", level: 2 as const, joinedAt: "10/05/2024", volume: "3.400.000đ", commission: "17.000đ", color: "#BEFF6C", initials: "BF" },
   ],
   f3: [],
 };
 
 const COMMISSION_HISTORY = [
-  { id: "c1", from: "Trần Thị B",  amount: "+50.000đ",  type: "F1", date: "27/06/2024", source: "TRADE" },
-  { id: "c2", from: "Lê Minh C",   amount: "+20.000đ",  type: "F1", date: "25/06/2024", source: "SWAP"  },
-  { id: "c3", from: "Ngô Văn E",   amount: "+6.000đ",   type: "F2", date: "22/06/2024", source: "TRADE" },
-  { id: "c4", from: "Hoàng Thị D", amount: "+85.000đ",  type: "F1", date: "20/06/2024", source: "DEPOSIT" },
+  { id: "c1", from: "Trần Thị B", amount: "+50.000đ", type: "F1", date: "27/06/2024", source: "TRADE" },
+  { id: "c2", from: "Lê Minh C", amount: "+20.000đ", type: "F1", date: "25/06/2024", source: "SWAP" },
+  { id: "c3", from: "Ngô Văn E", amount: "+6.000đ", type: "F2", date: "22/06/2024", source: "TRADE" },
+  { id: "c4", from: "Hoàng Thị D", amount: "+85.000đ", type: "F1", date: "20/06/2024", source: "DEPOSIT" },
 ];
 
 const LEVEL_COLORS: Record<number, string> = { 1: "#00D68F", 2: "#FFAA00", 3: "#AF96FB" };
@@ -39,7 +39,7 @@ export default function ReferralPage() {
   const [tab, setTab] = useState<"overview" | "tree" | "history">("overview");
   const [claimLoading, setClaimLoading] = useState(false);
 
-  const totalEarned      = 178_000;
+  const totalEarned = 178_000;
   const claimableBalance = 156_000;
 
   const copyCode = () => {
@@ -122,9 +122,9 @@ export default function ReferralPage() {
             <Text variant="caption" weight="semibold" color="#A0AEC0" style={{ textTransform: "uppercase", letterSpacing: "0.06em" }}>Hoa hồng theo cấp</Text>
             <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 12 }}>
               {[
-                { level: "F1", rate: "1%",   desc: "Từ giao dịch của tuyến trực tiếp",   color: "#00D68F" },
-                { level: "F2", rate: "0.5%", desc: "Từ giao dịch của tuyến cấp 2",       color: "#FFAA00" },
-                { level: "F3", rate: "0.2%", desc: "Từ giao dịch của tuyến cấp 3",       color: "#AF96FB" },
+                { level: "F1", rate: "1%", desc: "Từ giao dịch của tuyến trực tiếp", color: "#00D68F" },
+                { level: "F2", rate: "0.5%", desc: "Từ giao dịch của tuyến cấp 2", color: "#FFAA00" },
+                { level: "F3", rate: "0.2%", desc: "Từ giao dịch của tuyến cấp 3", color: "#AF96FB" },
               ].map(r => (
                 <div key={r.level} style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: r.color + "20", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>

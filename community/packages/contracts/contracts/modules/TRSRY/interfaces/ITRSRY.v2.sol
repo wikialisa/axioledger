@@ -28,5 +28,5 @@ interface ITRSRY {
     function reserveBalance(address token) external view returns (uint256);
     function lockedBalance(address token) external view returns (uint256);
     function tokenPriceVnd(address token) external view returns (uint256);
-    function circulatingVnkr() external view returns (uint256);
+    function circulatingAXVN() external view returns (uint256);
 }

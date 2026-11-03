@@ -6,22 +6,22 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// ─── gVNKRToken.sol — Governance Index Wrapped Cross-Chain Token ──────────────
-// Governance VNKR (Non-rebase, ERC20Votes).
-// Chỉ số nhân (Index) tích lũy theo Epoch — 1 gVNKR = index × sVNKR.
+// ─── gYOUR_TOKENToken.sol — Governance Index Wrapped Cross-Chain Token ──────────────
+// Governance YOUR_TOKEN (Non-rebase, ERC20Votes).
+// Chỉ số nhân (Index) tích lũy theo Epoch — 1 gAXVN = index × sAXVN.
 // Dùng để biểu quyết DAO, giao dịch Cross-Chain và thế chấp tín chấp.
 // ─────────────────────────────────────────────────────────────────────────────
 
-error GVNKRToken_NotAuthorized(address caller);
+error GYOUR_TOKENToken_NotAuthorized(address caller);
 
-contract GVNKRToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
+contract GYOUR_TOKENToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
     address public stakingPolicy;
 
     event StakingPolicyUpdated(address indexed prev, address indexed next);
 
     constructor(address admin_)
-        ERC20("Governance VNKR", "gVNKR")
-        ERC20Permit("gVNKR")
+        ERC20("Governance YOUR_TOKEN", "gAXVN")
+        ERC20Permit("gAXVN")
         Ownable(admin_)
     {}
 
@@ -31,7 +31,7 @@ contract GVNKRToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
     }
 
     modifier onlyStaking() {
-        if (msg.sender != stakingPolicy) revert GVNKRToken_NotAuthorized(msg.sender);
+        if (msg.sender != stakingPolicy) revert GYOUR_TOKENToken_NotAuthorized(msg.sender);
         _;
     }
 

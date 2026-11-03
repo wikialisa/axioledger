@@ -115,12 +115,12 @@ export function registerSwiftWebhookRoutes(
    * POST /internal/swift/inbound-credit
    *
    * Được gọi bởi swift-gateway sau khi xác thực LAU và xác nhận inbound SWIFT payment.
-   * Header bắt buộc: X-VNKR-Webhook-Secret (để xác thực nội bộ giữa 2 services).
+   * Header bắt buộc: X-YOUR_TOKEN-Webhook-Secret (để xác thực nội bộ giữa 2 services).
    */
   fastify.post<{ Body: SwiftInboundCreditPayload }>(
     "/internal/swift/inbound-credit",
     async (req, reply) => {
-      const secret = req.headers["x-vnkr-webhook-secret"] as string | undefined;
+      const secret = req.headers["x-YOUR_TOKEN-webhook-secret"] as string | undefined;
       if (!secret || secret !== webhookSecret) {
         fastify.log.warn({ ip: req.ip }, "[webhook] Unauthorized inbound credit attempt");
         return reply.code(401).send({ error: "Unauthorized" });
@@ -159,7 +159,7 @@ export function registerSwiftWebhookRoutes(
   fastify.post<{ Body: { uetr: string; transmissionId: string; status: string } }>(
     "/internal/swift/outbound-ack",
     async (req, reply) => {
-      const secret = req.headers["x-vnkr-webhook-secret"] as string | undefined;
+      const secret = req.headers["x-YOUR_TOKEN-webhook-secret"] as string | undefined;
       if (!secret || secret !== webhookSecret) {
         return reply.code(401).send({ error: "Unauthorized" });
       }

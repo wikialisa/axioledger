@@ -1,6 +1,6 @@
 import { ethers, type Contract, type Provider } from "ethers";
 
-// ─── ABI thu gọn VNKRSwiftBridge (chỉ events + functions cần thiết) ─────────
+// ─── ABI thu gọn BrandSwiftBridge (chỉ events + functions cần thiết) ─────────
 
 export const BRIDGE_ABI = [
   // Events
@@ -14,26 +14,26 @@ export const BRIDGE_ABI = [
 ];
 
 export interface OutboundEventData {
-  uetrHash:           string;   // bytes32 hex
-  uetr:               string;   // original UUID (decoded nếu có)
-  sender:             string;   // địa chỉ EVM người gửi
-  receiverBic:        string;
-  amount:             bigint;   // USD micro (1e6)
-  tokenAmountBurned:  bigint;
-  blockNumber:        number;
-  txHash:             string;
+  uetrHash: string;   // bytes32 hex
+  uetr: string;   // original UUID (decoded nếu có)
+  sender: string;   // địa chỉ EVM người gửi
+  receiverBic: string;
+  amount: bigint;   // USD micro (1e6)
+  tokenAmountBurned: bigint;
+  blockNumber: number;
+  txHash: string;
 }
 
 /**
- * OnChainListener — lắng nghe event SwiftOutboundRequested từ VNKRSwiftBridge.sol
- * Chạy trên VNKR App-Chain EVM (Hyperledger Besu).
+ * OnChainListener — lắng nghe event SwiftOutboundRequested từ BrandSwiftBridge.sol
+ * Chạy trên YOUR_TOKEN App-Chain EVM (Hyperledger Besu).
  */
 export class OnChainListener {
   private readonly contract: Contract;
   private readonly provider: Provider;
 
   constructor(
-    rpcUrl: string = process.env["VNKR_EVM_RPC"] ?? "http://localhost:8545",
+    rpcUrl: string = process.env["YOUR_INFRA_EVM_RPC"] ?? "http://localhost:8545",
     contractAddress: string = process.env["BRIDGE_CONTRACT_ADDRESS"] ?? ethers.ZeroAddress
   ) {
     this.provider = new ethers.JsonRpcProvider(rpcUrl);
@@ -50,7 +50,7 @@ export class OnChainListener {
     onError: (err: unknown) => void,
     logger: { info: (msg: string) => void; error: (msg: string, ...a: unknown[]) => void }
   ): () => void {
-    logger.info("[onchain] Subscribing to SwiftOutboundRequested events on VNKRSwiftBridge");
+    logger.info("[onchain] Subscribing to SwiftOutboundRequested events on BrandSwiftBridge");
 
     const handler = async (
       uetrHash: string,
@@ -68,7 +68,7 @@ export class OnChainListener {
         amount,
         tokenAmountBurned,
         blockNumber: event.blockNumber,
-        txHash:      event.transactionHash,
+        txHash: event.transactionHash,
       };
       try {
         logger.info(`[onchain] ⚡ SwiftOutboundRequested  receiver=${receiverBic}  amount=${amount}  tx=${event.transactionHash}`);
@@ -95,20 +95,20 @@ export class OnChainListener {
     toBlock: number | "latest" = "latest"
   ): Promise<OutboundEventData[]> {
     const filter = this.contract.filters["SwiftOutboundRequested"]();
-    const logs   = await this.contract.queryFilter(filter, fromBlock, toBlock);
+    const logs = await this.contract.queryFilter(filter, fromBlock, toBlock);
     return logs
       .filter((l): l is ethers.EventLog => l instanceof ethers.EventLog)
       .map((log) => {
         const [uetrHash, sender, receiverBic, amount, tokenAmountBurned] = log.args as unknown as [string, string, string, bigint, bigint];
         return {
           uetrHash,
-          uetr:       uetrHash,
+          uetr: uetrHash,
           sender,
           receiverBic,
           amount,
           tokenAmountBurned,
           blockNumber: log.blockNumber,
-          txHash:      log.transactionHash,
+          txHash: log.transactionHash,
         };
       });
   }

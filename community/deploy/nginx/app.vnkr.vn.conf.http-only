@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-#  VNKR — Nginx Config (HTTP-only, dùng TRƯỚC khi cấp SSL)
-#  Domain  : app.${BRAND_DOMAIN}
+#  YOUR_INFRA — Nginx Config (HTTP-only, dùng TRƯỚC khi cấp SSL)
+#  Domain  : app.your-project.vn
 #  Upstream: localhost:3010 (Next.js 14 — production)
 #  NOTE    : Sau khi certbot cấp cert → chạy setup-ssl.sh để switch HTTPS
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -13,7 +13,7 @@ upstream app_web {
 server {
     listen 80;
     listen [::]:80;
-    server_name app.${BRAND_DOMAIN};
+    server_name app.your-project.vn;
 
     # ACME challenge (Let's Encrypt HTTP-01)
     location /.well-known/acme-challenge/ {
@@ -47,6 +47,6 @@ server {
         proxy_busy_buffers_size    32k;
     }
 
-    access_log /var/log/nginx/app.${BRAND_DOMAIN}.access.log;
-    error_log  /var/log/nginx/app.${BRAND_DOMAIN}.error.log warn;
+    access_log /var/log/nginx/app.your-project.vn.access.log;
+    error_log  /var/log/nginx/app.your-project.vn.error.log warn;
 }

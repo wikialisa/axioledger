@@ -5,7 +5,7 @@ import "../../kernel/Module.sol";
 import "./interfaces/IRANGE.v1.sol";
 
 // ─── RANGE.v1.sol — Range Bound Stability Reserve Storage ────────────────────
-// Lưu trữ dải biên độ giá VNKR/VND (Wall & Cushion).
+// Lưu trữ dải biên độ giá YOUR_TOKEN/VND (Wall & Cushion).
 // Tách biệt lưu trữ trạng thái ra khỏi logic can thiệp (RangeBound Policy).
 // ─────────────────────────────────────────────────────────────────────────────
 

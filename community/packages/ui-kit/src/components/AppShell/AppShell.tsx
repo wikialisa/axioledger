@@ -1,11 +1,11 @@
 /**
  * ui — AppShell
- * Universal layout wrapper for all VNKR apps
+ * Universal layout wrapper for all YOUR_TOKEN apps
  *
  * Layouts:
- *   default  — TopNavbar + content area (${BRAND_DOMAIN}, docs, kyc)
+ *   default  — TopNavbar + content area (your-project.vn, docs, kyc)
  *   sidebar  — Sidebar + content area  (merchant, admin, sandbox, analytics)
- *   app      — content + BottomNavbar  (app.${BRAND_DOMAIN} — mobile PWA)
+ *   app      — content + BottomNavbar  (app.your-project.vn — mobile PWA)
  *   blank    — no chrome               (auth pages, fullscreen)
  *
  * Features:
@@ -19,64 +19,64 @@ import React from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { ToastProvider } from "../Toast/Toast";
 import type { ToastPosition } from "../Toast/Toast";
-import { injectVnkrTokens } from "../../tokens/cssVariables";
+import { injectYOUR_TOKENTokens } from "../../tokens/cssVariables";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type AppShellLayout = "default" | "sidebar" | "app" | "blank";
 
 export interface PageHeaderProps {
-  title:         string;
+  title: string;
   /** Breadcrumb path: [{ label, onClick? }] */
-  breadcrumb?:   { label: string; onClick?: () => void }[];
-  subtitle?:     string;
+  breadcrumb?: { label: string; onClick?: () => void }[];
+  subtitle?: string;
   /** Right-side actions slot */
-  actions?:      ReactNode;
+  actions?: ReactNode;
 }
 
 export interface AppShellProps {
-  layout?:        AppShellLayout;
+  layout?: AppShellLayout;
   /** TopNavbar slot (default/app layouts) */
-  topNav?:        ReactNode;
+  topNav?: ReactNode;
   /** Sidebar slot (sidebar layout) */
-  sidebar?:       ReactNode;
+  sidebar?: ReactNode;
   /** BottomNavbar slot (app layout) */
-  bottomNav?:     ReactNode;
+  bottomNav?: ReactNode;
   /** Optional page header inside content area */
-  pageHeader?:    PageHeaderProps;
-  children:       ReactNode;
+  pageHeader?: PageHeaderProps;
+  children: ReactNode;
   /** Toast notification position */
   toastPosition?: ToastPosition;
   /** Background color of content area */
-  bg?:            string;
-  style?:         CSSProperties;
+  bg?: string;
+  style?: CSSProperties;
   /** Additional class on the root element */
-  className?:     string;
+  className?: string;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function AppShell({
-  layout        = "default",
+  layout = "default",
   topNav,
   sidebar,
   bottomNav,
   pageHeader,
   children,
   toastPosition = "top-right",
-  bg            = "#F5F6FA",
+  bg = "#F5F6FA",
   style,
   className,
 }: AppShellProps) {
   // Inject design tokens once on mount
-  React.useEffect(() => { injectVnkrTokens(); }, []);
+  React.useEffect(() => { injectYOUR_TOKENTokens(); }, []);
 
   const rootStyle: CSSProperties = {
-    display:       "flex",
+    display: "flex",
     flexDirection: "column",
-    minHeight:     "100vh",
-    background:    bg,
-    fontFamily:    "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    minHeight: "100vh",
+    background: bg,
+    fontFamily: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     ...style,
   };
 
@@ -144,8 +144,8 @@ export function AppShell({
 function PageHeader({ title, breadcrumb, subtitle, actions }: PageHeaderProps) {
   return (
     <div style={{
-      padding:        "20px 24px 0",
-      background:     "transparent",
+      padding: "20px 24px 0",
+      background: "transparent",
     }}>
       {/* Breadcrumb */}
       {breadcrumb && breadcrumb.length > 0 && (
@@ -160,10 +160,10 @@ function PageHeader({ title, breadcrumb, subtitle, actions }: PageHeaderProps) {
               )}
               <span
                 style={{
-                  fontSize:   12,
+                  fontSize: 12,
                   fontWeight: crumb.onClick ? 500 : 600,
-                  color:      crumb.onClick ? "#718096" : "#1A1F36",
-                  cursor:     crumb.onClick ? "pointer" : "default",
+                  color: crumb.onClick ? "#718096" : "#1A1F36",
+                  cursor: crumb.onClick ? "pointer" : "default",
                   fontFamily: "'Work Sans', sans-serif",
                 }}
                 onClick={crumb.onClick}
@@ -179,10 +179,10 @@ function PageHeader({ title, breadcrumb, subtitle, actions }: PageHeaderProps) {
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 20 }}>
         <div>
           <h1 style={{
-            fontSize:   22,
+            fontSize: 22,
             fontWeight: 700,
-            color:      "#1A1F36",
-            margin:     0,
+            color: "#1A1F36",
+            margin: 0,
             lineHeight: 1.2,
             fontFamily: "'Work Sans', sans-serif",
           }}>
@@ -190,10 +190,10 @@ function PageHeader({ title, breadcrumb, subtitle, actions }: PageHeaderProps) {
           </h1>
           {subtitle && (
             <p style={{
-              fontSize:  13,
-              color:     "#718096",
-              margin:    "4px 0 0",
-              fontFamily:"'Work Sans', sans-serif",
+              fontSize: 13,
+              color: "#718096",
+              margin: "4px 0 0",
+              fontFamily: "'Work Sans', sans-serif",
             }}>
               {subtitle}
             </p>

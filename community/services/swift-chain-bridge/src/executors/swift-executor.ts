@@ -16,12 +16,12 @@ export class SwiftExecutor {
 
   constructor(
     gatewayUrl: string = process.env["SWIFT_GATEWAY_URL"] ?? "http://localhost:4004",
-    apiKey:     string = process.env["SWIFT_API_KEY"]     ?? "",
-    bic:        string = process.env["SWIFT_BIC_CODE"]    ?? "VNKRVNVNXXX"
+    apiKey: string = process.env["SWIFT_API_KEY"] ?? "",
+    bic: string = process.env["SWIFT_BIC_CODE"] ?? "AXVNVNVNXXX"
   ) {
     this.gatewayUrl = gatewayUrl;
-    this.apiKey     = apiKey;
-    this.bic        = bic;
+    this.apiKey = apiKey;
+    this.bic = bic;
   }
 
   /**
@@ -51,16 +51,16 @@ export class SwiftExecutor {
     transmissionId?: string;
   }> {
     const payload: SWIFTMT103Payload = {
-      senderBIC:          this.bic,
-      receiverBIC:        params.receiverBic.padEnd(11, "X").slice(0, 11),
-      reference:          `BRIDGE-${params.uetr.slice(0, 10)}`,
-      amount:             params.amountUsd,
-      currency:           params.currency ?? "USD",
-      orderingAccount:    params.senderAddress.slice(0, 34),
-      orderingName:       "VNKR ON-CHAIN USER",
+      senderBIC: this.bic,
+      receiverBIC: params.receiverBic.padEnd(11, "X").slice(0, 11),
+      reference: `BRIDGE-${params.uetr.slice(0, 10)}`,
+      amount: params.amountUsd,
+      currency: params.currency ?? "USD",
+      orderingAccount: params.senderAddress.slice(0, 34),
+      orderingName: "YOUR_TOKEN ON-CHAIN USER",
       beneficiaryAccount: params.beneficiaryAccount,
-      beneficiaryName:    params.beneficiaryName,
-      chargesCode:        "OUR",
+      beneficiaryName: params.beneficiaryName,
+      chargesCode: "OUR",
     };
 
     const response = await axios.post(
@@ -76,10 +76,10 @@ export class SwiftExecutor {
     );
 
     return {
-      success:        response.data.success ?? true,
-      messageId:      response.data.messageId,
-      lauSignature:   response.data.lauSignature,
-      status:         response.data.status,
+      success: response.data.success ?? true,
+      messageId: response.data.messageId,
+      lauSignature: response.data.lauSignature,
+      status: response.data.status,
       transmissionId: response.data.transmissionId,
     };
   }
@@ -100,18 +100,18 @@ export class SwiftExecutor {
     const response = await axios.post(
       `${this.gatewayUrl}/api/v1/swift/send-pacs008`,
       {
-        msgId:          params.msgId,
-        instrId:        `INSTR-${Date.now()}`,
-        endToEndId:     `E2E-BRIDGE-${Date.now()}`,
-        txId:           params.msgId,
+        msgId: params.msgId,
+        instrId: `INSTR-${Date.now()}`,
+        endToEndId: `E2E-BRIDGE-${Date.now()}`,
+        txId: params.msgId,
         intrBkSttlmAmt: params.amountUsd,
-        currency:       params.currency ?? "USD",
-        dbtrName:       params.senderName,
-        dbtrAcctIBAN:   params.senderIBAN,
-        dbtrAgtBIC:     this.bic,
-        cdtrAgtBIC:     params.receiverBic,
-        cdtrName:       params.beneficiaryName,
-        cdtrAcctIBAN:   params.beneficiaryIBAN,
+        currency: params.currency ?? "USD",
+        dbtrName: params.senderName,
+        dbtrAcctIBAN: params.senderIBAN,
+        dbtrAgtBIC: this.bic,
+        cdtrAgtBIC: params.receiverBic,
+        cdtrName: params.beneficiaryName,
+        cdtrAcctIBAN: params.beneficiaryIBAN,
       },
       {
         headers: { "Content-Type": "application/json", ...(this.apiKey ? { "x-api-key": this.apiKey } : {}) },

@@ -68,11 +68,11 @@ async function fetchFromVietcombank(currency: string): Promise<number | null> {
 async function fetchFromSBV(currency: string): Promise<number | null> {
   try {
     const apiKey = process.env["SBV_API_KEY"];
-    const url    = process.env["SBV_FX_API_URL"] ??
+    const url = process.env["SBV_FX_API_URL"] ??
       `https://apiv2.sbv.gov.vn/ExchangeRates?CurrencyCode=${currency.toUpperCase()}`;
 
     const headers = apiKey ? { "Authorization": `Bearer ${apiKey}` } : {};
-    const resp    = await axios.get(url, { timeout: 5_000, headers });
+    const resp = await axios.get(url, { timeout: 5_000, headers });
 
     // SBV trả JSON array: [{ "CurrencyCode": "USD", "TransferRate": 25450.00, ... }]
     const data = resp.data as Array<{ CurrencyCode: string; TransferRate?: number; SellRate?: number }>;
@@ -86,10 +86,10 @@ async function fetchFromSBV(currency: string): Promise<number | null> {
   }
 }
 
-// ─── VNKRBrokerFXOracle ───────────────────────────────────────────────────────
+// ─── YOUR_TOKENBrokerFXOracle ───────────────────────────────────────────────────────
 
 /**
- * VNKRBrokerFXOracle — FX Rate Engine cho VNKR SWIFT Chain Bridge.
+ * YOUR_TOKENBrokerFXOracle — FX Rate Engine cho YOUR_TOKEN SWIFT Chain Bridge.
  *
  * Nguồn tỷ giá theo thứ tự ưu tiên:
  *   1. SBV Open API (Ngân hàng Nhà nước Việt Nam) — nguồn pháp lý chính thức
@@ -101,7 +101,7 @@ async function fetchFromSBV(currency: string): Promise<number | null> {
  *
  * Vendor reference: TODO/6-V3.md — Section 3 "FX Oracle Integration"
  */
-export class VNKRBrokerFXOracle {
+export class AXVNBrokerFXOracle {
   /** Cache in-memory để tránh gọi API liên tục — TTL: 5 phút */
   private readonly cache = new Map<string, { rate: number; fetchedAt: number; source: FXRateResult["source"] }>();
   private readonly cacheTtlMs: number;
@@ -143,13 +143,13 @@ export class VNKRBrokerFXOracle {
 
     // 2. Fallback → Vietcombank
     if (!rate) {
-      rate   = await fetchFromVietcombank(sym);
+      rate = await fetchFromVietcombank(sym);
       source = "VIETCOMBANK";
     }
 
     // 3. Fallback → hardcoded
     if (!rate) {
-      rate   = FALLBACK_RATES[sym] ?? null;
+      rate = FALLBACK_RATES[sym] ?? null;
       source = "FALLBACK";
     }
 
@@ -164,41 +164,41 @@ export class VNKRBrokerFXOracle {
   }
 
   /**
-   * Tính toán VNKR minted cho một giao dịch SWIFT inbound.
+   * Tính toán YOUR_TOKEN minted cho một giao dịch SWIFT inbound.
    * Trả về breakdown đầy đủ để log và audit.
    */
   async computeConversion(params: {
     originalAmount: number;
     currency: string;
     bridgeFeeBps?: number;          // default: 10 (0.1%)
-    baseGasFeeVnkr?: number;        // default: 10_000 VNKR
+    baseGasFeeAXVN?: number;        // default: 10_000 YOUR_TOKEN
   }): Promise<{
-    fxRate:          number;
-    grossVnkr:       number;
-    bridgeFeeVnkr:   number;
-    baseGasFeeVnkr:  number;
-    totalFeeVnkr:    number;
-    netVnkr:         number;
-    source:          FXRateResult["source"];
+    fxRate: number;
+    grossAXVN: number;
+    bridgeFeeAXVN: number;
+    baseGasFeeAXVN: number;
+    totalFeeAXVN: number;
+    netAXVN: number;
+    source: FXRateResult["source"];
   }> {
     const { originalAmount, currency } = params;
-    const bridgeFeeBps  = params.bridgeFeeBps  ?? 10;
-    const baseGasFee    = params.baseGasFeeVnkr ?? 10_000;
+    const bridgeFeeBps = params.bridgeFeeBps ?? 10;
+    const baseGasFee = params.baseGasFeeAXVN ?? 10_000;
 
     const { rateToVnd, source } = await this.getFullFXRate(currency);
 
-    const grossVnkr      = originalAmount * rateToVnd;
-    const bridgeFeeVnkr  = Math.floor((grossVnkr * bridgeFeeBps) / 10_000);
-    const totalFeeVnkr   = baseGasFee + bridgeFeeVnkr;
-    const netVnkr        = grossVnkr > totalFeeVnkr ? grossVnkr - totalFeeVnkr : 0;
+    const grossAXVN = originalAmount * rateToVnd;
+    const bridgeFeeAXVN = Math.floor((grossAXVN * bridgeFeeBps) / 10_000);
+    const totalFeeAXVN = baseGasFee + bridgeFeeAXVN;
+    const netAXVN = grossAXVN > totalFeeAXVN ? grossAXVN - totalFeeAXVN : 0;
 
     return {
-      fxRate:         rateToVnd,
-      grossVnkr,
-      bridgeFeeVnkr,
-      baseGasFeeVnkr: baseGasFee,
-      totalFeeVnkr,
-      netVnkr,
+      fxRate: rateToVnd,
+      grossAXVN,
+      bridgeFeeAXVN,
+      baseGasFeeAXVN: baseGasFee,
+      totalFeeAXVN,
+      netAXVN,
       source,
     };
   }

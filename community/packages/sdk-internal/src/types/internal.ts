@@ -65,7 +65,7 @@ export interface SWIFTConfig {
   lauKeyHex: string;
   /** SWIFT Microgateway REST API base URL */
   gatewayUrl?: string;
-  /** Redis Stream key prefix — defaults to "vnkr:swift" */
+  /** Redis Stream key prefix — defaults to "YOUR_TOKEN:swift" */
   redisStreamPrefix?: string;
   /** Path to config-swift-sdk.yaml (plain-text) */
   configFilePath?: string;

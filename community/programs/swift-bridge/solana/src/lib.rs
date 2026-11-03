@@ -2,27 +2,27 @@ use anchor_lang::prelude::*;
 
 declare_id!(env!("PROGRAM_ID_SWIFT_BRIDGE", "11111111111111111111111111111111"));
 
-// ─── VNKR Swift Bridge — Solana Anchor Program ────────────────────────────────
+// ─── YOUR_TOKEN Swift Bridge — Solana Anchor Program ────────────────────────────────
 //
-// Phiên bản Solana của VNKRSwiftBridge (tương đương VNKRSwiftBridge.sol trên EVM).
+// Phiên bản Solana của BrandSwiftBridge (tương đương BrandSwiftBridge.sol trên EVM).
 //
-// Luồng INBOUND  (SWIFT Fiat → Mint SPL Token AXVN):
+// Luồng INBOUND  (SWIFT Fiat → Mint SPL Token YOUR_TOKEN):
 //   Relayer (swift-chain-bridge) gọi settle_inbound_swift() sau khi nhận
 //   xác nhận điện MT103/pacs.008 từ swift-gateway.
 //
 // Luồng OUTBOUND (Burn SPL Token → SWIFT Fiat):
-//   Người dùng gọi request_outbound_swift() → Burn AXVN từ ATA
+//   Người dùng gọi request_outbound_swift() → Burn YOUR_TOKEN từ ATA
 //   → Emit event → Relayer bắt log → gọi swift-gateway /send-mt103.
 
 #[program]
-pub mod vnkr_swift_bridge {
+pub mod AXVN_swift_bridge {
     use super::*;
 
     // ─── Khởi tạo Bridge State ────────────────────────────────────────────────
 
     pub fn initialize(
         ctx: Context<Initialize>,
-        conversion_rate: u64,   // Tỷ lệ AXVN/USD, default 1_000_000 (1:1 với 6 decimals)
+        conversion_rate: u64,   // Tỷ lệ YOUR_TOKEN/USD, default 1_000_000 (1:1 với 6 decimals)
         bridge_fee_bps: u16,    // Phí basis points (100 = 1%), max 1000
     ) -> Result<()> {
         require!(conversion_rate > 0, BridgeError::ZeroConversionRate);
@@ -49,7 +49,7 @@ pub mod vnkr_swift_bridge {
     // ─── INBOUND: Relayer settle sau khi SWIFT ACK ────────────────────────────
 
     /// Relayer gọi hàm này sau khi swift-gateway xác nhận nhận điện inbound.
-    /// Mint AXVN SPL Token tương ứng cho ví beneficiary.
+    /// Mint YOUR_TOKEN SPL Token tương ứng cho ví beneficiary.
     pub fn settle_inbound_swift(
         ctx: Context<SettleInbound>,
         uetr: [u8; 36],            // UUID v4 dạng bytes (36 chars)
@@ -80,7 +80,7 @@ pub mod vnkr_swift_bridge {
         // Ghi record
         record.uetr              = uetr;
         record.sender_bic        = sender_bic;
-        record.receiver_bic      = *b"VNKRVNVNXXX";
+        record.receiver_bic      = *b"AXVNVNVNXXX";
         record.amount_usd_micro  = amount_usd_micro;
         record.token_amount      = token_amount;
         record.beneficiary       = ctx.accounts.beneficiary.key();
@@ -91,7 +91,7 @@ pub mod vnkr_swift_bridge {
         state.total_inbound = state.total_inbound.checked_add(token_amount)
             .ok_or(BridgeError::Overflow)?;
 
-        // Mint AXVN cho beneficiary (CPI vào Token Program)
+        // Mint YOUR_TOKEN cho beneficiary (CPI vào Token Program)
         let seeds: &[&[u8]] = &[b"bridge_state", &[state.bump]];
         let signer = &[seeds];
 
@@ -136,7 +136,7 @@ pub mod vnkr_swift_bridge {
 
     // ─── OUTBOUND: User burn token → kích hoạt SWIFT transfer ────────────────
 
-    /// Người dùng/Định chế burn AXVN Token để yêu cầu chuyển tiền SWIFT.
+    /// Người dùng/Định chế burn YOUR_TOKEN Token để yêu cầu chuyển tiền SWIFT.
     /// Relayer sẽ bắt event SwiftOutboundRequested → gọi swift-gateway.
     pub fn request_outbound_swift(
         ctx: Context<RequestOutbound>,
@@ -157,7 +157,7 @@ pub mod vnkr_swift_bridge {
         let token_amount_to_burn = ((amount_usd_micro as u128 * state.conversion_rate as u128)
             / 1_000_000) as u64;
 
-        // Burn AXVN từ ATA của người dùng
+        // Burn YOUR_TOKEN từ ATA của người dùng
         anchor_spl::token::burn(
             CpiContext::new(
                 ctx.accounts.token_program.to_account_info(),
@@ -171,7 +171,7 @@ pub mod vnkr_swift_bridge {
         )?;
 
         record.uetr             = uetr;
-        record.sender_bic       = *b"VNKRVNVNXXX";
+        record.sender_bic       = *b"AXVNVNVNXXX";
         record.receiver_bic     = receiver_bic;
         record.amount_usd_micro = amount_usd_micro;
         record.token_amount     = token_amount_to_burn;

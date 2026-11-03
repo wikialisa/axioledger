@@ -1,18 +1,18 @@
 import type { Redis as RedisType } from "ioredis";
 
 /**
- * VNKRSwiftClient — Producer SDK cho VNKR Event Bus
+ * YOUR_TOKENSwiftClient — Producer SDK cho YOUR_TOKEN Event Bus
  *
  * Các service như `otc-liquidity-engine` và `fiat-connector-api` import
  * class này từ `swift-adapter` để đẩy yêu cầu chuyển tiền SWIFT
- * vào Redis Stream `vnkr:swift:outbound` mà không cần gọi HTTP trực tiếp
+ * vào Redis Stream `YOUR_TOKEN:swift:outbound` mà không cần gọi HTTP trực tiếp
  * vào swift-gateway.
  *
  * Pattern: Event-Driven / Fire-and-Forget có ACK qua inbound stream.
  *
  * Vendor reference: TODO/6.md — Section 3 "Client Module"
  */
-export class VNKRSwiftClient {
+export class AXVNSwiftClient {
   private readonly redis: RedisType;
   private readonly outboundStream: string;
 
@@ -21,7 +21,7 @@ export class VNKRSwiftClient {
     options?: { outboundStream?: string }
   ) {
     this.redis = redis;
-    this.outboundStream = options?.outboundStream ?? "vnkr:swift:outbound";
+    this.outboundStream = options?.outboundStream ?? "YOUR_TOKEN:swift:outbound";
   }
 
   // ─── MT103 ─────────────────────────────────────────────────────────────────
@@ -47,8 +47,8 @@ export class VNKRSwiftClient {
     const streamId = await (this.redis as any).xadd(
       this.outboundStream,
       "*",
-      "event",   "SWIFT_MT103_REQUESTED",
-      "data",    JSON.stringify(payload),
+      "event", "SWIFT_MT103_REQUESTED",
+      "data", JSON.stringify(payload),
       "traceId", traceId ?? `trace-${Date.now()}`
     ) as string;
 
@@ -74,8 +74,8 @@ export class VNKRSwiftClient {
     const streamId = await (this.redis as any).xadd(
       this.outboundStream,
       "*",
-      "event",   "SWIFT_MT202_REQUESTED",
-      "data",    JSON.stringify(payload),
+      "event", "SWIFT_MT202_REQUESTED",
+      "data", JSON.stringify(payload),
       "traceId", traceId ?? `trace-${Date.now()}`
     ) as string;
 
@@ -106,8 +106,8 @@ export class VNKRSwiftClient {
     const streamId = await (this.redis as any).xadd(
       this.outboundStream,
       "*",
-      "event",   "SWIFT_PACS008_REQUESTED",
-      "data",    JSON.stringify(payload),
+      "event", "SWIFT_PACS008_REQUESTED",
+      "data", JSON.stringify(payload),
       "traceId", traceId ?? `trace-${Date.now()}`
     ) as string;
 
@@ -123,13 +123,13 @@ export class VNKRSwiftClient {
    * @param onEvent - callback nhận mỗi event
    * @param options.group - tên consumer group
    * @param options.consumer - tên consumer
-   * @param options.stream - inbound stream name (default: vnkr:swift:inbound)
+   * @param options.stream - inbound stream name (default: YOUR_TOKEN:swift:inbound)
    */
   async subscribeInbound(
     onEvent: (type: string, payload: Record<string, unknown>) => Promise<void>,
     options?: { group?: string; consumer?: string; stream?: string }
   ): Promise<() => void> {
-    const stream = options?.stream ?? "vnkr:swift:inbound";
+    const stream = options?.stream ?? "YOUR_TOKEN:swift:inbound";
     const group = options?.group ?? "swift-client-sub";
     const consumer = options?.consumer ?? `sub-${Date.now()}`;
 

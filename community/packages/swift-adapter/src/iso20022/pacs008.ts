@@ -12,7 +12,7 @@ const builder = new XMLBuilder({
  * Builds a pacs.008.001.08 FIToFI Customer Credit Transfer XML message.
  *
  * Used for ISO 20022 MX payment routing through SWIFT gpi / SWIFTNet
- * as mandated by the CBDC / RT1 corridor for VNKR Institutional Banking.
+ * as mandated by the CBDC / RT1 corridor for YOUR_TOKEN Institutional Banking.
  *
  * Vendor reference: swift-messaging-sdk-1.17.4.jar, message type pacs.008.001.08
  */

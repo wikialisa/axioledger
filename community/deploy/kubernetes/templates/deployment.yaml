@@ -1,6 +1,6 @@
 {{/*
 ───────────────────────────────────────────────────────────────────────────────
-  VNKR Services — Generic Deployment template
+  YOUR_INFRA Services — Generic Deployment template
   Iterates over .Values.services map and creates a Deployment per service.
 ───────────────────────────────────────────────────────────────────────────────
 */}}
@@ -14,7 +14,7 @@ metadata:
   name: {{ $svc.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "vnkr-services.labels" $ | nindent 4 }}
+    {{- include "YOUR_INFRA-services.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $svc.name }}
 spec:
   replicas: {{ $svc.replicas | default 1 }}
@@ -51,7 +51,7 @@ spec:
             - name: {{ $secretKey }}
               valueFrom:
                 secretKeyRef:
-                  name: vnkr-secrets
+                  name: YOUR_INFRA-secrets
                   key: {{ $secretKey }}
                   optional: true
             {{- end }}

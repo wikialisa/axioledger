@@ -7,7 +7,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import {
   SidebarLayout,
-  VnkrLogo,
+  AXVNLogo,
   Badge,
   Text,
   Monitor,
@@ -24,23 +24,23 @@ const SECTIONS: SidebarSection[] = [
   {
     label: "Giám sát",
     items: [
-      { id: "/overview",        label: "Tổng quan",       icon: <Monitor   size={18} /> },
-      { id: "/tiers",           label: "Tier Matrix",     icon: <BarChartIcon size={18} /> },
-      { id: "/alerts",          label: "Cảnh báo",        icon: <Bell      size={18} />, badge: 3 },
+      { id: "/overview", label: "Tổng quan", icon: <Monitor size={18} /> },
+      { id: "/tiers", label: "Tier Matrix", icon: <BarChartIcon size={18} /> },
+      { id: "/alerts", label: "Cảnh báo", icon: <Bell size={18} />, badge: 3 },
     ],
   },
   {
     label: "Kiểm soát",
     items: [
       { id: "/circuit-breaker", label: "Circuit Breaker", icon: <AlertTriangle size={18} /> },
-      { id: "/logs",            label: "Emergency Log",   icon: <FileText  size={18} /> },
+      { id: "/logs", label: "Emergency Log", icon: <FileText size={18} /> },
     ],
   },
   {
     label: "Báo cáo",
     items: [
-      { id: "/compliance",      label: "Compliance",      icon: <ShieldCheck size={18} /> },
-      { id: "/audit",           label: "Audit Trail",     icon: <BookOpen  size={18} /> },
+      { id: "/compliance", label: "Compliance", icon: <ShieldCheck size={18} /> },
+      { id: "/audit", label: "Audit Trail", icon: <BookOpen size={18} /> },
     ],
   },
 ];
@@ -75,7 +75,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       sections={SECTIONS}
       activeId={pathname}
       onNavChange={(id) => { window.location.href = id; }}
-      logo={<VnkrLogo variant="light" size="sm" />}
+      logo={<AXVNLogo variant="light" size="sm" />}
       sidebarBottom={<BottomSlot />}
       topNavVariant="dark"
       bg="#0D0F14"

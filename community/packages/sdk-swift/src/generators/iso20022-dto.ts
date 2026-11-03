@@ -1,5 +1,5 @@
 // ─── ISO 20022 TypeScript DTOs ───────────────────────────────────────────────
-// Full type definitions for SWIFT MX message families used in VNKR Network.
+// Full type definitions for SWIFT MX message families used in YOUR_TOKEN Network.
 // Covers: pacs.008, pacs.009, camt.053, pain.001
 
 // ─── Shared types ─────────────────────────────────────────────────────────────
@@ -316,8 +316,8 @@ export interface AuditLogEntry {
   eventType: string;
   /** SWIFT UETR if applicable */
   uetr?: string;
-  /** Internal VNKR transaction ID */
-  vnkrTxId?: string;
+  /** Internal YOUR_TOKEN transaction ID */
+  AXVNTxId?: string;
   /** On-chain transaction hash if applicable */
   onChainTxHash?: string;
   /** Actor BIC or user identifier */

@@ -2,7 +2,7 @@
 /**
  * @file        services/role-engine/role-engine.js
  * @package     role-engine
- * @description Global Leadership Automation Engine — ${BRAND_ORG_FULL} JSC
+ * @description Global Leadership Automation Engine — Your Organisation Full Name JSC
  *              Event-driven Worker Node that maps 10 Leadership Roles to their
  *              Execution Frameworks via a continuous Event-Loop monitor.
  *

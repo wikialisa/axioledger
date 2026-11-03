@@ -1,5 +1,5 @@
 /**
- * IconGallery — visual reference for all VNKR icons
+ * IconGallery — visual reference for all YOUR_TOKEN icons
  * Grouped by category, useful in Storybook / docs pages.
  */
 import React, { useState } from "react";
@@ -7,25 +7,25 @@ import { IconMap } from "./icons";
 import type { IconName } from "./icons";
 
 const CATEGORIES: Record<string, IconName[]> = {
-  Arrow:         ["ArrowRight","ArrowLeft","ArrowUp","ArrowDown","ChevronRight","ChevronLeft","ChevronUp","ChevronDown","ArrowSwap","ArrowRefresh","ArrowExport","ArrowImport"],
-  Archive:       ["Bookmark","BookmarkCheck","BookmarkPlus","BookmarkMinus","BookOpen"],
-  Business:      ["BarChartIcon","LineChartIcon","PieChartIcon","TrendUp","TrendDown","Activity","Monitor"],
-  Call:          ["Phone","PhoneCall","PhonePlus","PhoneMissed","PhoneOff"],
-  Files:         ["Folder","FolderPlus","FolderMinus","FolderHeart","FolderCloud","FileText"],
-  Money:         ["Wallet","CreditCard","DollarSign","Receipt","Percent","Tag","Ticket","Safe","Bitcoin","Cashback"],
-  Users:         ["User","Users","UserPlus","UserMinus","UserCheck","UserX","UserCircle","UserShield"],
-  Security:      ["Shield","ShieldCheck","Lock","Unlock","Eye","EyeOff","Key","Fingerprint"],
-  Settings:      ["Settings2","Sliders","ToggleLeft","ToggleRight","MoreHorizontal","MoreVertical"],
-  Notifications: ["Bell","BellOff","BellPlus"],
-  Location:      ["MapPin","Navigation","Compass","Globe"],
-  Search:        ["Search","SearchPlus","SearchMinus"],
-  Shop:          ["ShoppingBag","ShoppingCart","Package","Store"],
-  Time:          ["Clock","Calendar","Timer"],
-  Grid:          ["Grid","LayoutGrid","List","Menu","Home"],
-  Content:       ["Image","Camera","Video","Mic","Play","Pause"],
-  Delivery:      ["Truck","Car"],
-  Building:      ["Building","Bank"],
-  Essential:     ["Info","AlertCircle","AlertTriangle","CheckCircle","XCircle","Plus","Minus","X","Check","Edit","Trash","Copy","Share","Heart","Star","QrCode","Send","Download","Upload"],
+  Arrow: ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", "ChevronRight", "ChevronLeft", "ChevronUp", "ChevronDown", "ArrowSwap", "ArrowRefresh", "ArrowExport", "ArrowImport"],
+  Archive: ["Bookmark", "BookmarkCheck", "BookmarkPlus", "BookmarkMinus", "BookOpen"],
+  Business: ["BarChartIcon", "LineChartIcon", "PieChartIcon", "TrendUp", "TrendDown", "Activity", "Monitor"],
+  Call: ["Phone", "PhoneCall", "PhonePlus", "PhoneMissed", "PhoneOff"],
+  Files: ["Folder", "FolderPlus", "FolderMinus", "FolderHeart", "FolderCloud", "FileText"],
+  Money: ["Wallet", "CreditCard", "DollarSign", "Receipt", "Percent", "Tag", "Ticket", "Safe", "Bitcoin", "Cashback"],
+  Users: ["User", "Users", "UserPlus", "UserMinus", "UserCheck", "UserX", "UserCircle", "UserShield"],
+  Security: ["Shield", "ShieldCheck", "Lock", "Unlock", "Eye", "EyeOff", "Key", "Fingerprint"],
+  Settings: ["Settings2", "Sliders", "ToggleLeft", "ToggleRight", "MoreHorizontal", "MoreVertical"],
+  Notifications: ["Bell", "BellOff", "BellPlus"],
+  Location: ["MapPin", "Navigation", "Compass", "Globe"],
+  Search: ["Search", "SearchPlus", "SearchMinus"],
+  Shop: ["ShoppingBag", "ShoppingCart", "Package", "Store"],
+  Time: ["Clock", "Calendar", "Timer"],
+  Grid: ["Grid", "LayoutGrid", "List", "Menu", "Home"],
+  Content: ["Image", "Camera", "Video", "Mic", "Play", "Pause"],
+  Delivery: ["Truck", "Car"],
+  Building: ["Building", "Bank"],
+  Essential: ["Info", "AlertCircle", "AlertTriangle", "CheckCircle", "XCircle", "Plus", "Minus", "X", "Check", "Edit", "Trash", "Copy", "Share", "Heart", "Star", "QrCode", "Send", "Download", "Upload"],
 };
 
 export function IconGallery() {

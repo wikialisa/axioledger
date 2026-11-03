@@ -4,7 +4,7 @@ RUN apk add --no-cache libc6-compat
 RUN npm install -g turbo@latest
 WORKDIR /app
 COPY . .
-ARG APP_NAME=explorer-vnkrscan
+ARG APP_NAME=explorer-YOUR_INFRAscan
 RUN turbo prune --scope=${APP_NAME} --docker
 
 # ── Stage 2: Install & Build ──────────────────────────────────────────────────
@@ -19,7 +19,7 @@ RUN pnpm install --frozen-lockfile
 
 COPY --from=pruner /app/out/full/ .
 COPY turbo.json turbo.json
-ARG APP_NAME=explorer-vnkrscan
+ARG APP_NAME=explorer-YOUR_INFRAscan
 RUN pnpm turbo run build --filter=${APP_NAME}...
 
 # ── Stage 3: Runner ───────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser  --system --uid 1001 appuser
 
-ARG APP_NAME=explorer-vnkrscan
+ARG APP_NAME=explorer-YOUR_INFRAscan
 COPY --from=builder /app/apps/${APP_NAME}/public             ./public
 COPY --from=builder --chown=appuser:nodejs \
      /app/apps/${APP_NAME}/.next/standalone ./

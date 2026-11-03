@@ -1,4 +1,4 @@
-# ─── Terraform: VNKR Infrastructure as Code ──────────────────────────────────
+# ─── Terraform: YOUR_INFRA Infrastructure as Code ──────────────────────────────────
 # Provider versions
 terraform {
   required_providers {
@@ -15,7 +15,7 @@ terraform {
 
   # Remote state — S3 backend (update bucket/key per environment)
   backend "s3" {
-    bucket  = "vnkr-terraform-state"
+    bucket  = "YOUR_INFRA-terraform-state"
     key     = "infra/terraform.tfstate"
     region  = "ap-southeast-1"
     encrypt = true
@@ -53,7 +53,7 @@ variable "cloudflare_account_id" {
 }
 
 variable "cloudflare_zone_id" {
-  description = "Cloudflare Zone ID for ${BRAND_DOMAIN}"
+  description = "Cloudflare Zone ID for your-project.vn"
   type        = string
   # default from .env.example: YOUR_CLOUDFLARE_ZONE_AND_ACCOUNT_ID
 }
@@ -61,7 +61,7 @@ variable "cloudflare_zone_id" {
 variable "lb_origin" {
   description = "Load-balancer / origin CNAME for all subdomain records"
   type        = string
-  default     = "lb.${BRAND_DOMAIN}"
+  default     = "lb.your-project.vn"
 }
 
 variable "environment" {
@@ -73,13 +73,13 @@ variable "environment" {
 variable "ecr_repository_prefix" {
   description = "ECR image repository prefix"
   type        = string
-  default     = "vnkr"
+  default     = "YOUR_INFRA"
 }
 
 # ─── ECS Cluster ──────────────────────────────────────────────────────────────
 
-resource "aws_ecs_cluster" "vnkr_main" {
-  name = "vnkr-main-cluster-${var.environment}"
+resource "aws_ecs_cluster" "AXVN_main" {
+  name = "YOUR_INFRA-main-cluster-${var.environment}"
 
   setting {
     name  = "containerInsights"
@@ -87,7 +87,7 @@ resource "aws_ecs_cluster" "vnkr_main" {
   }
 
   tags = {
-    Project     = "vnkr-tech-holding"
+    Project     = "YOUR_INFRA-tech-holding"
     Environment = var.environment
   }
 }
@@ -103,7 +103,7 @@ locals {
   ]
 }
 
-resource "aws_ecr_repository" "vnkr_services" {
+resource "aws_ecr_repository" "AXVN_services" {
   for_each             = toset(local.microservices)
   name                 = "${var.ecr_repository_prefix}/${each.key}"
   image_tag_mutability = "MUTABLE"
@@ -113,7 +113,7 @@ resource "aws_ecr_repository" "vnkr_services" {
   }
 
   tags = {
-    Project     = "vnkr-tech-holding"
+    Project     = "YOUR_INFRA-tech-holding"
     Environment = var.environment
   }
 }
@@ -122,27 +122,27 @@ resource "aws_ecr_repository" "vnkr_services" {
 
 locals {
   dns_records = {
-    # ${BRAND_ORG_FINTECH}
+    # Your FinTech Division Name
     "id"  = { subdomain = "id",  comment = "P2P Escrow & Fiat Gateway" }
     "pay" = { subdomain = "pay", comment = "Payment Gateway & Merchant Dashboard" }
 
-    # VNKR Blockchain Infra
+    # YOUR_INFRA Blockchain Infra
     "scan"                  = { subdomain = "scan",                  comment = "Block Explorer & Proof of Reserve" }
     "treasury-subgraph-api" = { subdomain = "treasury-subgraph-api", comment = "Subgraph Indexer API" }
 
-    # VNKR Global SG
+    # YOUR_INFRA Global SG
     "swap" = { subdomain = "swap", comment = "AMM DEX & Liquidity Router" }
 
-    # VNKR Capital
+    # YOUR_INFRA Capital
     "dao" = { subdomain = "dao", comment = "Treasury & Governance Portal" }
 
-    # ${BRAND_ORG_MENA}
+    # Your MENA Division Name
     "otc" = { subdomain = "otc", comment = "Institutional OTC Liquidity Engine" }
 
-    # VNKR Holding
+    # YOUR_INFRA Holding
     "holding" = { subdomain = "holding", comment = "Admin Portal — IP Asset & Whitelist" }
 
-    # VNKR R&D
+    # YOUR_INFRA R&D
     "lab" = { subdomain = "lab", comment = "Digital Twin Engine & AI Lab" }
 
     # Developer API
@@ -150,7 +150,7 @@ locals {
   }
 }
 
-resource "cloudflare_record" "vnkr_subdomains" {
+resource "cloudflare_record" "AXVN_subdomains" {
   for_each = local.dns_records
 
   zone_id = var.cloudflare_zone_id
@@ -160,14 +160,14 @@ resource "cloudflare_record" "vnkr_subdomains" {
   proxied = true
   ttl     = 1   # automatic when proxied = true
 
-  comment = "VNKR — ${each.value.comment}"
+  comment = "YOUR_INFRA — ${each.value.comment}"
 }
 
 # ─── Cloudflare WAF — rate limiting for API endpoints ─────────────────────────
 
-resource "cloudflare_ruleset" "vnkr_rate_limit" {
+resource "cloudflare_ruleset" "AXVN_rate_limit" {
   zone_id     = var.cloudflare_zone_id
-  name        = "VNKR API Rate Limiting"
+  name        = "YOUR_INFRA API Rate Limiting"
   description = "Protect dev-api and otc endpoints from abuse"
   kind        = "zone"
   phase       = "http_ratelimit"
@@ -180,7 +180,7 @@ resource "cloudflare_ruleset" "vnkr_rate_limit" {
       requests_per_period   = 100
       mitigation_timeout    = 600
     }
-    expression  = "(http.host eq \"dev-api.${BRAND_DOMAIN}\") or (http.host eq \"otc.${BRAND_DOMAIN}\")"
+    expression  = "(http.host eq \"dev-api.your-project.vn\") or (http.host eq \"otc.your-project.vn\")"
     description = "Rate limit API surfaces to 100 req/min"
     enabled     = true
   }
@@ -190,15 +190,15 @@ resource "cloudflare_ruleset" "vnkr_rate_limit" {
 
 output "ecs_cluster_arn" {
   description = "ARN of the ECS cluster"
-  value       = aws_ecs_cluster.vnkr_main.arn
+  value       = aws_ecs_cluster.AXVN_main.arn
 }
 
 output "ecr_repository_urls" {
   description = "ECR image URLs for each microservice"
-  value       = { for k, v in aws_ecr_repository.vnkr_services : k => v.repository_url }
+  value       = { for k, v in aws_ecr_repository.AXVN_services : k => v.repository_url }
 }
 
 output "cloudflare_dns_records" {
   description = "Created Cloudflare DNS record names"
-  value       = { for k, v in cloudflare_record.vnkr_subdomains : k => "${v.name}.${BRAND_DOMAIN}" }
+  value       = { for k, v in cloudflare_record.AXVN_subdomains : k => "${v.name}.your-project.vn" }
 }

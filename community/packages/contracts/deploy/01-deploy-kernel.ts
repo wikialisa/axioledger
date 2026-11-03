@@ -8,29 +8,29 @@ import path from "path";
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  const network    = (await ethers.provider.getNetwork()).name;
+  const network = (await ethers.provider.getNetwork()).name;
   console.log(`\n🚀  [01] Deploy Kernel — deployer: ${deployer.address}  network: ${network}\n`);
 
-  const vnkr  = await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address);
-  await vnkr.waitForDeployment();
-  console.log(`  ✅ VNKRToken   → ${await vnkr.getAddress()}`);
+  const YOUR_TOKEN = await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address);
+  await YOUR_TOKEN.waitForDeployment();
+  console.log(`  ✅ YOUR_TOKENToken   → ${await YOUR_TOKEN.getAddress()}`);
 
-  const svnkr = await (await ethers.getContractFactory("SVNKRToken")).deploy(deployer.address);
-  await svnkr.waitForDeployment();
-  console.log(`  ✅ sVNKRToken  → ${await svnkr.getAddress()}`);
+  const sAXVN = await (await ethers.getContractFactory("SYOUR_TOKENToken")).deploy(deployer.address);
+  await sAXVN.waitForDeployment();
+  console.log(`  ✅ sYOUR_TOKENToken  → ${await sAXVN.getAddress()}`);
 
-  const gvnkr = await (await ethers.getContractFactory("GVNKRToken")).deploy(deployer.address);
-  await gvnkr.waitForDeployment();
-  console.log(`  ✅ gVNKRToken  → ${await gvnkr.getAddress()}`);
+  const gAXVN = await (await ethers.getContractFactory("GYOUR_TOKENToken")).deploy(deployer.address);
+  await gAXVN.waitForDeployment();
+  console.log(`  ✅ gYOUR_TOKENToken  → ${await gAXVN.getAddress()}`);
 
   const kernel = await (await ethers.getContractFactory("Kernel")).deploy(deployer.address, deployer.address);
   await kernel.waitForDeployment();
   console.log(`  ✅ Kernel      → ${await kernel.getAddress()}`);
 
   _save(network, {
-    VNKR_TOKEN: await vnkr.getAddress(),
-    SVNKR_TOKEN: await svnkr.getAddress(),
-    GVNKR_TOKEN: await gvnkr.getAddress(),
+    YOUR_TOKEN_TOKEN: await YOUR_TOKEN.getAddress(),
+    SAXVN_TOKEN: await sAXVN.getAddress(),
+    GAXVN_TOKEN: await gAXVN.getAddress(),
     KERNEL: await kernel.getAddress(),
   });
 }

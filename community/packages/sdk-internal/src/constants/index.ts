@@ -27,7 +27,7 @@ export enum SettlementMethod {
   INGA = "INGA",
 }
 
-/** Internal VNKR transaction lifecycle statuses */
+/** Internal YOUR_TOKEN transaction lifecycle statuses */
 export enum TransactionStatus {
   QUEUED = "QUEUED",
   SUBMITTED = "SUBMITTED",
@@ -48,7 +48,7 @@ export const SWIFT_FIELD_LIMITS = {
   AMOUNT: 15,
 } as const;
 
-/** Supported ISO 4217 currency codes in the VNKR system */
+/** Supported ISO 4217 currency codes in the YOUR_TOKEN system */
 export const SUPPORTED_CURRENCIES = [
   "USD", "EUR", "GBP", "JPY", "CNY",
   "VND", "SGD", "HKD", "KRW", "THB",

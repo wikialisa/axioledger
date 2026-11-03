@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── bond-teller.policy.sol — BondTeller ─────────────────────────────────────
 // Cơ chế Trái phiếu (Bonding): Nhà đầu tư nộp tài sản dự trữ / LP Token
-// để nhận VNKR với giá chiết khấu, vesting 5-7 ngày.
+// để nhận YOUR_TOKEN với giá chiết khấu, vesting 5-7 ngày.
 // ─────────────────────────────────────────────────────────────────────────────
 
 using SafeERC20 for IERC20;
@@ -22,18 +22,18 @@ error BondTeller_MaxPayoutExceeded(uint256 maxPayout, uint256 requested);
 
 struct BondMarket {
     address quoteToken;    // asset being deposited (DAI, USDT…)
-    uint256 price;         // VNKR per quoteToken (18 dec)
+    uint256 price;         // YOUR_TOKEN per quoteToken (18 dec)
     uint256 discount;      // basis points discount off market price
     uint256 vestingSeconds;
-    uint256 maxPayout;     // max VNKR per single bond
-    uint256 totalSold;     // total VNKR already sold
-    uint256 capacity;      // total VNKR available in this market
+    uint256 maxPayout;     // max YOUR_TOKEN per single bond
+    uint256 totalSold;     // total YOUR_TOKEN already sold
+    uint256 capacity;      // total YOUR_TOKEN available in this market
     bool    active;
 }
 
 struct BondNote {
     uint256 marketId;
-    uint256 payout;        // VNKR owed
+    uint256 payout;        // YOUR_TOKEN owed
     uint256 vestingEnd;
     bool    redeemed;
 }
@@ -53,7 +53,7 @@ contract BondTeller is Policy {
     // ─── Events ───────────────────────────────────────────────────────────
 
     event MarketCreated(uint256 indexed id, address quoteToken, uint256 capacity);
-    event BondPurchased(uint256 indexed marketId, address indexed buyer, uint256 quoteAmount, uint256 vnkrPayout);
+    event BondPurchased(uint256 indexed marketId, address indexed buyer, uint256 quoteAmount, uint256 AXVNPayout);
     event BondRedeemed(address indexed user, uint256 noteIndex, uint256 payout);
     event MarketClosed(uint256 indexed id);
 
@@ -83,7 +83,7 @@ contract BondTeller is Policy {
     {
         reqs    = new Permissions[](2);
         reqs[0] = Permissions({ keycode: "TREAS", funcSelector: TREASv1.deposit.selector });
-        reqs[1] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintVnkr.selector });
+        reqs[1] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintAXVN.selector });
     }
 
     // ─── Market management ────────────────────────────────────────────────
@@ -119,7 +119,7 @@ contract BondTeller is Policy {
 
     // ─── Bonding ──────────────────────────────────────────────────────────
 
-    /// @notice Purchase a bond — deposit quoteToken → receive VNKR on vesting
+    /// @notice Purchase a bond — deposit quoteToken → receive YOUR_TOKEN on vesting
     function purchase(uint256 marketId_, uint256 quoteAmount_) external returns (uint256 payout) {
         BondMarket storage mkt = markets[marketId_];
         if (!mkt.active) revert BondTeller_MarketClosed(marketId_);
@@ -135,8 +135,8 @@ contract BondTeller is Policy {
         // Pull quote token into treasury
         TREAS.deposit(mkt.quoteToken, msg.sender, quoteAmount_);
 
-        // Mint VNKR to this contract — user redeems after vesting
-        MINTR.mintVnkr(address(this), payout);
+        // Mint YOUR_TOKEN to this contract — user redeems after vesting
+        MINTR.mintYOUR_TOKEN(address(this), payout);
 
         userNotes[msg.sender].push(BondNote({
             marketId:   marketId_,
@@ -156,7 +156,7 @@ contract BondTeller is Policy {
             revert BondTeller_VestingNotComplete(note.vestingEnd);
 
         note.redeemed = true;
-        IERC20(MINTR.vnkr()).safeTransfer(msg.sender, note.payout);
+        IERC20(MINTR.YOUR_TOKEN()).safeTransfer(msg.sender, note.payout);
         emit BondRedeemed(msg.sender, noteIndex_, note.payout);
     }
 

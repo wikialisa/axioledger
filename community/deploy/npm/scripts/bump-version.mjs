@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * bump-version.mjs — Bump version of all publishable @vnkr/* packages
+ * bump-version.mjs — Bump version of all publishable @YOUR_NPM_SCOPE_UPPER/* packages
  *
  * Usage:
  *   node scripts/bump-version.mjs patch   # 1.0.0 → 1.0.1
@@ -15,7 +15,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT      = resolve(__dirname, "../../..");
+const ROOT = resolve(__dirname, "../../..");
 
 const RELEASE_TYPE = process.argv[2];
 if (!["patch", "minor", "major"].includes(RELEASE_TYPE ?? "")) {

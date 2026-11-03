@@ -4,21 +4,21 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// ─── VNKRToken.sol — Reserve Currency Token (10T Max Supply) ─────────────────
-// VNKR Reserve Currency (ERC-20).
+// ─── YOUR_TOKENToken.sol — Reserve Currency Token (10T Max Supply) ─────────────────
+// YOUR_TOKEN Reserve Currency (ERC-20).
 // Bảo chứng 1:1 với tài sản Kho bạc (≥ 1 VND / 1 token).
 // Quyền mint/burn được uỷ quyền cho MINTR.v1.sol — chỉ được đúc khi Backing Ratio đảm bảo.
 // ─────────────────────────────────────────────────────────────────────────────
 
-error VNKRToken_NotAuthorized(address caller);
+error YOUR_TOKENToken_NotAuthorized(address caller);
 
-contract VNKRToken is ERC20, Ownable {
+contract YOUR_TOKENToken is ERC20, Ownable {
     address public mintAuthority;
 
     event MintAuthorityUpdated(address indexed prev, address indexed next);
 
     constructor(address admin_)
-        ERC20("VNKR Reserve Token", "VNKR")
+        ERC20("YOUR_TOKEN Reserve Token", "YOUR_TOKEN")
         Ownable(admin_)
     {}
 
@@ -28,7 +28,7 @@ contract VNKRToken is ERC20, Ownable {
     }
 
     modifier onlyMintAuthority() {
-        if (msg.sender != mintAuthority) revert VNKRToken_NotAuthorized(msg.sender);
+        if (msg.sender != mintAuthority) revert YOUR_TOKENToken_NotAuthorized(msg.sender);
         _;
     }
 

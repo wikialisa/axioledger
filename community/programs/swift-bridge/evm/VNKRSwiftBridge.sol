@@ -9,26 +9,26 @@ interface IERC20Mintable {
     function balanceOf(address account) external view returns (uint256);
 }
 
-// ─── VNKRSwiftBridge ──────────────────────────────────────────────────────────
+// ─── BrandSwiftBridge ──────────────────────────────────────────────────────────
 //
-// Smart Contract quản lý trạng thái kết nối SWIFT <-> VNKR App-Chain EVM.
+// Smart Contract quản lý trạng thái kết nối SWIFT <-> YOUR_TOKEN App-Chain EVM.
 //
 // Luồng INBOUND  (Fiat → On-Chain):
 //   Ngân hàng gửi SWIFT MT103/pacs.008
 //   → swift-gateway (Port 4004) nhận & xác thực LAU
 //   → swift-chain-bridge (Relayer) gọi settleInboundSwift()
-//   → Contract Mint AXVN Token cho ví beneficiary
+//   → Contract Mint YOUR_TOKEN Token cho ví beneficiary
 //
 // Luồng OUTBOUND (On-Chain → Fiat SWIFT):
 //   Người dùng gọi requestOutboundSwift() kèm UETR
-//   → Contract Burn AXVN Token từ ví người gửi
+//   → Contract Burn YOUR_TOKEN Token từ ví người gửi
 //   → Emit SwiftOutboundRequested event
 //   → swift-chain-bridge (Relayer) bắt event → gọi swift-gateway /send-mt103
 //
-// Deployed on: VNKR Enterprise App-Chain EVM (Hyperledger Besu)
-// Program ID: EVM_CONTRACTS.VNKR_SWIFT_BRIDGE (packages/config/src/index.ts)
+// Deployed on: YOUR_TOKEN Enterprise App-Chain EVM (Hyperledger Besu)
+// Program ID: EVM_CONTRACTS.YOUR_INFRA_SWIFT_BRIDGE (packages/config/src/index.ts)
 
-contract VNKRSwiftBridge {
+contract BrandSwiftBridge {
 
     // ─── State Variables ─────────────────────────────────────────────────────
 
@@ -41,11 +41,11 @@ contract VNKRSwiftBridge {
     /// Owner contract (quản trị: set relayer, upgrade)
     address public owner;
 
-    /// Token AXVN (hoặc RWA Stablecoin) được mint/burn bởi bridge
+    /// Token YOUR_TOKEN (hoặc RWA Stablecoin) được mint/burn bởi bridge
     IERC20Mintable public axvnToken;
 
-    /// Tỷ lệ quy đổi: 1 USD fiat = bao nhiêu AXVN token (18 decimals)
-    /// Default: 1:1 (1 USD = 1e18 AXVN)
+    /// Tỷ lệ quy đổi: 1 USD fiat = bao nhiêu YOUR_TOKEN token (18 decimals)
+    /// Default: 1:1 (1 USD = 1e18 YOUR_TOKEN)
     uint256 public conversionRate;
 
     /// Phí bridge tính theo basis points (100 = 1%)
@@ -63,7 +63,7 @@ contract VNKRSwiftBridge {
         string  senderBic;
         string  receiverBic;
         uint256 amount;         // Số tiền fiat (đơn vị: USD cents hoặc wei tương đương)
-        uint256 tokenAmount;    // Số AXVN token mint/burn tương ứng
+        uint256 tokenAmount;    // Số YOUR_TOKEN token mint/burn tương ứng
         address beneficiary;    // Ví nhận token (inbound) hoặc người gửi (outbound)
         TransactionStatus status;
         uint256 settledAt;      // Unix timestamp khi settled
@@ -113,12 +113,12 @@ contract VNKRSwiftBridge {
     // ─── Modifiers ────────────────────────────────────────────────────────────
 
     modifier onlyRelayer() {
-        require(msg.sender == oracleRelayer, "VNKR: Only Relayer Authorized");
+        require(msg.sender == oracleRelayer, "YOUR_TOKEN: Only Relayer Authorized");
         _;
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "VNKR: Only Owner");
+        require(msg.sender == owner, "YOUR_TOKEN: Only Owner");
         _;
     }
 
@@ -131,11 +131,11 @@ contract VNKRSwiftBridge {
         uint256 _conversionRate,
         uint256 _bridgeFeeBps
     ) {
-        require(_axvnToken != address(0),      "VNKR: Zero token address");
-        require(_oracleRelayer != address(0),  "VNKR: Zero relayer address");
-        require(_feeRecipient != address(0),   "VNKR: Zero fee recipient");
-        require(_conversionRate > 0,           "VNKR: Zero conversion rate");
-        require(_bridgeFeeBps <= 1000,         "VNKR: Fee exceeds 10%");
+        require(_axvnToken != address(0),      "YOUR_TOKEN: Zero token address");
+        require(_oracleRelayer != address(0),  "YOUR_TOKEN: Zero relayer address");
+        require(_feeRecipient != address(0),   "YOUR_TOKEN: Zero fee recipient");
+        require(_conversionRate > 0,           "YOUR_TOKEN: Zero conversion rate");
+        require(_bridgeFeeBps <= 1000,         "YOUR_TOKEN: Fee exceeds 10%");
 
         axvnToken      = IERC20Mintable(_axvnToken);
         oracleRelayer  = _oracleRelayer;
@@ -153,7 +153,7 @@ contract VNKRSwiftBridge {
      *
      * @param uetr          Unique End-to-End Transaction Reference (UUID v4)
      * @param senderBic     BIC của ngân hàng gửi điện
-     * @param beneficiary   Địa chỉ EVM ví nhận token AXVN
+     * @param beneficiary   Địa chỉ EVM ví nhận token YOUR_TOKEN
      * @param amount        Số tiền fiat (đơn vị: USD * 1e6, tức là micro-dollar)
      */
     function settleInboundSwift(
@@ -162,13 +162,13 @@ contract VNKRSwiftBridge {
         address          beneficiary,
         uint256          amount
     ) external onlyRelayer {
-        require(beneficiary != address(0), "VNKR: Zero beneficiary");
-        require(amount > 0, "VNKR: Zero amount");
+        require(beneficiary != address(0), "YOUR_TOKEN: Zero beneficiary");
+        require(amount > 0, "YOUR_TOKEN: Zero amount");
 
         bytes32 uetrHash = keccak256(abi.encodePacked(uetr));
         require(
             swiftRecords[uetrHash].status == TransactionStatus.NONE,
-            "VNKR: UETR already processed"
+            "YOUR_TOKEN: UETR already processed"
         );
 
         // Tính số token sau khi trừ phí bridge
@@ -179,7 +179,7 @@ contract VNKRSwiftBridge {
         swiftRecords[uetrHash] = SwiftRecord({
             uetrHash:    uetrHash,
             senderBic:   senderBic,
-            receiverBic: "VNKRVNVNXXX",
+            receiverBic: "AXVNVNVNXXX",
             amount:      amount,
             tokenAmount: tokenAmount,
             beneficiary: beneficiary,
@@ -189,7 +189,7 @@ contract VNKRSwiftBridge {
 
         totalInboundBridged += tokenAmount;
 
-        // Mint AXVN Token cho beneficiary
+        // Mint YOUR_TOKEN Token cho beneficiary
         axvnToken.mint(beneficiary, tokenAmount);
 
         // Mint phí cho feeRecipient
@@ -204,7 +204,7 @@ contract VNKRSwiftBridge {
     // ─── Outbound: On-Chain → SWIFT ───────────────────────────────────────────
 
     /**
-     * @notice Người dùng / Định chế khóa/burn AXVN Token để kích hoạt chuyển tiền
+     * @notice Người dùng / Định chế khóa/burn YOUR_TOKEN Token để kích hoạt chuyển tiền
      *         SWIFT Fiat ra ngân hàng quốc tế. Relayer sẽ bắt event và bắn MT103.
      *
      * @param uetr          UETR do client tạo (UUID v4, phải unique)
@@ -216,23 +216,23 @@ contract VNKRSwiftBridge {
         string calldata receiverBic,
         uint256         amount
     ) external {
-        require(amount > 0, "VNKR: Zero amount");
-        require(bytes(receiverBic).length >= 8, "VNKR: Invalid BIC");
+        require(amount > 0, "YOUR_TOKEN: Zero amount");
+        require(bytes(receiverBic).length >= 8, "YOUR_TOKEN: Invalid BIC");
 
         bytes32 uetrHash = keccak256(abi.encodePacked(uetr));
         require(
             swiftRecords[uetrHash].status == TransactionStatus.NONE,
-            "VNKR: Duplicate UETR"
+            "YOUR_TOKEN: Duplicate UETR"
         );
 
         uint256 tokenAmountToBurn = (amount * conversionRate) / 1e6;
 
-        // Burn AXVN Token từ ví người gửi (yêu cầu approve trước)
+        // Burn YOUR_TOKEN Token từ ví người gửi (yêu cầu approve trước)
         axvnToken.burnFrom(msg.sender, tokenAmountToBurn);
 
         swiftRecords[uetrHash] = SwiftRecord({
             uetrHash:    uetrHash,
-            senderBic:   "VNKRVNVNXXX",
+            senderBic:   "AXVNVNVNXXX",
             receiverBic: receiverBic,
             amount:      amount,
             tokenAmount: tokenAmountToBurn,
@@ -256,7 +256,7 @@ contract VNKRSwiftBridge {
         bytes32 uetrHash = keccak256(abi.encodePacked(uetr));
         require(
             swiftRecords[uetrHash].status == TransactionStatus.PENDING,
-            "VNKR: Record not PENDING"
+            "YOUR_TOKEN: Record not PENDING"
         );
         swiftRecords[uetrHash].status    = TransactionStatus.SETTLED;
         swiftRecords[uetrHash].settledAt = block.timestamp;
@@ -270,8 +270,8 @@ contract VNKRSwiftBridge {
     function refundOutboundSwift(string calldata uetr) external onlyRelayer {
         bytes32 uetrHash = keccak256(abi.encodePacked(uetr));
         SwiftRecord storage record = swiftRecords[uetrHash];
-        require(record.status == TransactionStatus.PENDING, "VNKR: Record not PENDING");
-        require(record.beneficiary != address(0), "VNKR: No beneficiary");
+        require(record.status == TransactionStatus.PENDING, "YOUR_TOKEN: Record not PENDING");
+        require(record.beneficiary != address(0), "YOUR_TOKEN: No beneficiary");
 
         record.status    = TransactionStatus.REFUNDED;
         record.settledAt = block.timestamp;
@@ -292,25 +292,25 @@ contract VNKRSwiftBridge {
     // ─── Admin ────────────────────────────────────────────────────────────────
 
     function proposeRelayer(address newRelayer) external onlyOwner {
-        require(newRelayer != address(0), "VNKR: Zero address");
+        require(newRelayer != address(0), "YOUR_TOKEN: Zero address");
         pendingRelayer = newRelayer;
     }
 
     function acceptRelayer() external {
-        require(msg.sender == pendingRelayer, "VNKR: Not pending relayer");
+        require(msg.sender == pendingRelayer, "YOUR_TOKEN: Not pending relayer");
         emit OracleRelayerChanged(oracleRelayer, pendingRelayer);
         oracleRelayer  = pendingRelayer;
         pendingRelayer = address(0);
     }
 
     function setConversionRate(uint256 newRate) external onlyOwner {
-        require(newRate > 0, "VNKR: Zero rate");
+        require(newRate > 0, "YOUR_TOKEN: Zero rate");
         emit ConversionRateUpdated(conversionRate, newRate);
         conversionRate = newRate;
     }
 
     function setBridgeFee(uint256 newBps) external onlyOwner {
-        require(newBps <= 1000, "VNKR: Fee exceeds 10%");
+        require(newBps <= 1000, "YOUR_TOKEN: Fee exceeds 10%");
         emit BridgeFeeUpdated(bridgeFeeBps, newBps);
         bridgeFeeBps = newBps;
     }

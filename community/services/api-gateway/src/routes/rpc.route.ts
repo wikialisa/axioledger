@@ -54,7 +54,7 @@ const METHODS: Record<string, RpcHandler> = {
   eth_getBalance: (params) => {
     const [address] = params as [string, string?];
     if (!address) throw JSON_RPC_ERRORS.INVALID_PARAMS;
-    // TODO: proxy to EVM RPC (VNKR_EVM_RPC)
+    // TODO: proxy to EVM RPC (YOUR_INFRA_EVM_RPC)
     return "0x" + (1_000_000_000_000_000_000n).toString(16);
   },
 
@@ -87,7 +87,7 @@ const METHODS: Record<string, RpcHandler> = {
 
   net_version: () => process.env.CHAIN_ID ?? "1",
 
-  web3_clientVersion: () => "VNKR/1.0.0/linux/node",
+  web3_clientVersion: () => "YOUR_TOKEN/1.0.0/linux/node",
 
   // ── Solana-compatible ────────────────────────────────────────────────────
   sol_getBalance: (params) => {

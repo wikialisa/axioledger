@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # ─── scripts/test-swift-gateway.sh ────────────────────────────────────────────
-# VNKR TECH HOLDING JSC — SWIFT Gateway Integration Test Suite
+# Your Organisation Full Name JSC — SWIFT Gateway Integration Test Suite
 # Target service: swift-gateway (Port 4004)
 #
 # Usage:
 #   bash scripts/test-swift-gateway.sh
-#   SWIFT_GATEWAY_URL=https://otc.${BRAND_DOMAIN} bash scripts/test-swift-gateway.sh
+#   SWIFT_GATEWAY_URL=https://otc.your-project.vn bash scripts/test-swift-gateway.sh
 # ──────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
@@ -37,7 +37,7 @@ check() {
 
 echo -e "${CYAN}"
 echo "══════════════════════════════════════════════════════════════"
-echo "  VNKR SWIFT GATEWAY INTEGRATION TEST SUITE"
+echo "  YOUR_INFRA SWIFT GATEWAY INTEGRATION TEST SUITE"
 echo "  Target: ${BASE_URL}"
 echo "══════════════════════════════════════════════════════════════"
 echo -e "${NC}"
@@ -65,13 +65,13 @@ MT103_RES=$(curl -s -w "\n%{http_code}" -X POST "${BASE_URL}/api/v1/swift/send-m
   -H "Content-Type: application/json" \
   -H "x-api-key: ${API_KEY}" \
   -d '{
-    "senderBIC": "${SWIFT_BIC_CODE}XXX",
+    "senderBIC": "YOURBICXXXXXXX",
     "receiverBIC": "BNPAFRPPXXX",
-    "reference": "VNKR20260819001",
+    "reference": "AXVN20260819001",
     "amount": 1500000,
     "currency": "USD",
     "orderingAccount": "1029384756",
-    "orderingName": "VNKR TECH HOLDING JSC",
+    "orderingName": "Your Organisation Full Name JSC",
     "beneficiaryAccount": "9876543210",
     "beneficiaryName": "GLOBAL TECH SUPPLIER INC",
     "chargesCode": "OUR",
@@ -92,10 +92,10 @@ MT202_HTTP=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${BASE_URL}/api/v1/
   -H "Content-Type: application/json" \
   -H "x-api-key: ${API_KEY}" \
   -d '{
-    "senderBIC": "${SWIFT_BIC_CODE}XXX",
+    "senderBIC": "YOURBICXXXXXXX",
     "receiverBIC": "CHASUS33XXX",
-    "reference": "VNKR20260819002",
-    "relatedReference": "VNKR20260819001",
+    "reference": "AXVN20260819002",
+    "relatedReference": "AXVN20260819001",
     "amount": 500000,
     "currency": "EUR",
     "valueDate": "260819",
@@ -111,19 +111,19 @@ PACS008_HTTP=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${BASE_URL}/api/v
   -H "Content-Type: application/json" \
   -H "x-api-key: ${API_KEY}" \
   -d '{
-    "msgId": "VNKR/20260819/PACS008/001",
+    "msgId": "YOUR_INFRA/20260819/PACS008/001",
     "creDtTm": "2026-08-19T04:24:00Z",
     "nbOfTxs": 1,
     "sttlmMtd": "CLRG",
     "instrId": "INSTR-001",
-    "endToEndId": "E2E-VNKR-20260819",
+    "endToEndId": "E2E-YOUR_INFRA-20260819",
     "txId": "c3d4e5f6-a7b8-9012-3456-7890abcdef12",
     "intrBkSttlmAmt": 750000.50,
     "currency": "EUR",
     "intrBkSttlmDt": "2026-08-19",
-    "dbtrName": "VNKR TECH HOLDING JSC",
+    "dbtrName": "Your Organisation Full Name JSC",
     "dbtrAcctIBAN": "VN1234567890",
-    "dbtrAgtBIC": "${SWIFT_BIC_CODE}XXX",
+    "dbtrAgtBIC": "YOURBICXXXXXXX",
     "cdtrAgtBIC": "DEUTDEFFXXX",
     "cdtrName": "DEUTSCHE INDUSTRIAL GMBH",
     "cdtrAcctIBAN": "DE89370400440532013000"

@@ -22,7 +22,7 @@ const BADGES: CryptoBadgeData[] = [
   { ticker: "BTC",  percent: "12.7%", trend: "up"   },
   { ticker: "ETH",  percent: "5.2%",  trend: "up"   },
   { ticker: "SOL",  percent: "−3.1%", trend: "down" },
-  { ticker: "AXVN", percent: "8.4%",  trend: "up"   },
+  { ticker: "YOUR_TOKEN", percent: "8.4%",  trend: "up"   },
 ];
 
 const CHART_SERIES: ChartSeries[] = [
@@ -39,7 +39,7 @@ const HOLDINGS = [
   { coin: "Bitcoin",   ticker: "BTC",  amount: "0.0842 BTC",   usd: "$5,120.40", change: "+12.7%", up: true,  color: "#FC7339" },
   { coin: "Ethereum",  ticker: "ETH",  amount: "1.25 ETH",     usd: "$4,250.00", change: "+5.2%",  up: true,  color: "#AF96FB" },
   { coin: "Solana",    ticker: "SOL",  amount: "12.5 SOL",     usd: "$1,875.00", change: "−3.1%",  up: false, color: "#49DBC8" },
-  { coin: "AXVN Token",ticker: "AXVN", amount: "50,000 AXVN",  usd: "$840.00",   change: "+8.4%",  up: true,  color: "#BEFF6C" },
+  { coin: "YOUR_TOKEN Token",ticker: "YOUR_TOKEN", amount: "50,000 YOUR_TOKEN",  usd: "$840.00",   change: "+8.4%",  up: true,  color: "#BEFF6C" },
   { coin: "Gold Token", ticker: "GLD", amount: "2.0 GLD",      usd: "$360.00",   change: "+0.3%",  up: true,  color: "#FFF172" },
 ];
 

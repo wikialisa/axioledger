@@ -6,7 +6,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import {
   SidebarLayout,
-  VnkrLogo,
+  AXVNLogo,
   BarChartIcon,
   Users,
   ShieldCheck,
@@ -21,28 +21,28 @@ const ADMIN_NAV: SidebarSection[] = [
   {
     label: "Tổng quan",
     items: [
-      { id: "dashboard", label: "Dashboard",        icon: <BarChartIcon size={18} />, href: "/admin/dashboard" },
+      { id: "dashboard", label: "Dashboard", icon: <BarChartIcon size={18} />, href: "/admin/dashboard" },
     ],
   },
   {
     label: "Quản lý",
     items: [
-      { id: "users",      label: "Người dùng",       icon: <Users       size={18} />, href: "/admin/users"    },
-      { id: "kyc",        label: "Xác minh eKYC",    icon: <ShieldCheck size={18} />, href: "/admin/kyc"      },
-      { id: "finance",    label: "Tài chính",        icon: <Wallet      size={18} />, href: "/admin/finance"  },
+      { id: "users", label: "Người dùng", icon: <Users size={18} />, href: "/admin/users" },
+      { id: "kyc", label: "Xác minh eKYC", icon: <ShieldCheck size={18} />, href: "/admin/kyc" },
+      { id: "finance", label: "Tài chính", icon: <Wallet size={18} />, href: "/admin/finance" },
     ],
   },
   {
     label: "Nội dung & Tuân thủ",
     items: [
-      { id: "cms",        label: "CMS & Học thuật",  icon: <FileText    size={18} />, href: "/admin/cms"        },
-      { id: "compliance", label: "Tuân thủ NQ/NĐ",  icon: <Activity    size={18} />, href: "/admin/compliance" },
+      { id: "cms", label: "CMS & Học thuật", icon: <FileText size={18} />, href: "/admin/cms" },
+      { id: "compliance", label: "Tuân thủ NQ/NĐ", icon: <Activity size={18} />, href: "/admin/compliance" },
     ],
   },
   {
     label: "Hệ thống",
     items: [
-      { id: "system",     label: "Cài đặt Hệ thống", icon: <Settings2  size={18} />, href: "/admin/system"    },
+      { id: "system", label: "Cài đặt Hệ thống", icon: <Settings2 size={18} />, href: "/admin/system" },
     ],
   },
 ];
@@ -61,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }}
       logo={
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <VnkrLogo variant="dark" size="xs" />
+          <AXVNLogo variant="dark" size="xs" />
           <span style={{ fontSize: 11, fontWeight: 700, color: "#A0AEC0", letterSpacing: "0.05em" }}>ADMIN</span>
         </div>
       }

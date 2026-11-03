@@ -1,14 +1,14 @@
 /**
  * sdk-internal
  *
- * Centralised internal SDK for the VNKR ecosystem.
+ * Centralised internal SDK for the YOUR_TOKEN ecosystem.
  * Re-exports the full public surface of swift-adapter and adds
  * internal utilities, validation helpers, error classes, and typed constants
  * that all 10+ apps and services can consume from a single import.
  *
  * @example
  * import {
- *   buildMT103, LAUSigner, VNKRSwiftClient,
+ *   buildMT103, LAUSigner, AXVNSwiftClient,
  *   loadSWIFTConfig, createSWIFTLogger,
  *   formatBIC, TransactionStatus, ChargeBearerCode,
  * } from "sdk-internal";
@@ -81,7 +81,7 @@ export {
 export type { RMARecord as RMARecordAlias } from "./security/index.js";
 
 // ─── Event Bus (Redis Streams) ────────────────────────────────────────────────
-export { VNKRSwiftClient } from "./events/index.js";
+export { AXVNSwiftClient } from "./events/index.js";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 export {

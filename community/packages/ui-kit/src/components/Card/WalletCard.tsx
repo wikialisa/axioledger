@@ -1,6 +1,6 @@
 /**
  * ui — WalletCard
- * Flip animation front/back — extracted from VNKR UI-screens/Card.png & Card-flipped.png
+ * Flip animation front/back — extracted from YOUR_TOKEN UI-screens/Card.png & Card-flipped.png
  *
  * Front: card name, balance, color pills, cardholder name, network logo
  * Back:  card number (grouped), expiry, CVV, copy action
@@ -14,12 +14,12 @@ export type CardBg = "greeny" | "violet" | "pink" | "dark" | "orange" | "yellow"
 export type CardNetwork = "visa" | "mastercard" | "crypto";
 
 const BG_MAP: Record<CardBg, { bg: string; fg: string; accent: string }> = {
-  greeny:  { bg: "#BEFF6C", fg: "#000000", accent: "#FD9FDD" },
-  violet:  { bg: "#AF96FB", fg: "#000000", accent: "#BEFF6C" },
-  pink:    { bg: "#FD9FDD", fg: "#000000", accent: "#AF96FB" },
-  dark:    { bg: "#1a1a1a", fg: "#FFFFFF", accent: "#BEFF6C" },
-  orange:  { bg: "#FC7339", fg: "#000000", accent: "#FFF172" },
-  yellow:  { bg: "#FFF172", fg: "#000000", accent: "#FC7339" },
+  greeny: { bg: "#BEFF6C", fg: "#000000", accent: "#FD9FDD" },
+  violet: { bg: "#AF96FB", fg: "#000000", accent: "#BEFF6C" },
+  pink: { bg: "#FD9FDD", fg: "#000000", accent: "#AF96FB" },
+  dark: { bg: "#1a1a1a", fg: "#FFFFFF", accent: "#BEFF6C" },
+  orange: { bg: "#FC7339", fg: "#000000", accent: "#FFF172" },
+  yellow: { bg: "#FFF172", fg: "#000000", accent: "#FC7339" },
 };
 
 // ─── Color-pill dot row (decorative, from the front card design) ──────────────
@@ -44,9 +44,9 @@ function ColorPills() {
 function NfcIcon({ color }: { color: string }) {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <path d="M6 9a8 8 0 0 1 12 0"   stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <path d="M6 9a8 8 0 0 1 12 0" stroke={color} strokeWidth="2" strokeLinecap="round" />
       <path d="M8.5 11.5a5 5 0 0 1 7 0" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      <path d="M11 14a2 2 0 0 1 2 0"   stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <path d="M11 14a2 2 0 0 1 2 0" stroke={color} strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -77,40 +77,40 @@ function CopyIcon({ color }: { color: string }) {
 // ─── Props ─────────────────────────────────────────────────────────────────────
 export interface WalletCardProps {
   /** Card display name */
-  name?:       string;
+  name?: string;
   /** Cardholder full name */
-  holder?:     string;
+  holder?: string;
   /** Last 4 digits shown on front */
-  last4?:      string;
+  last4?: string;
   /** Full 16-digit card number (grouped on back) */
   cardNumber?: string;
   /** Expiry MM/YY */
-  expiry?:     string;
+  expiry?: string;
   /** CVV 3-digit */
-  cvv?:        string;
+  cvv?: string;
   /** Background color variant */
-  bg?:         CardBg;
+  bg?: CardBg;
   /** Card network */
-  network?:    CardNetwork;
+  network?: CardNetwork;
   /** Card width in px — height auto 1.586:1 ratio */
-  width?:      number;
+  width?: number;
   /** Force flipped state (controlled) */
-  flipped?:    boolean;
+  flipped?: boolean;
   /** Callback on flip */
-  onFlip?:     (flipped: boolean) => void;
-  style?:      CSSProperties;
+  onFlip?: (flipped: boolean) => void;
+  style?: CSSProperties;
 }
 
 export function WalletCard({
-  name       = "Cashie",
-  holder     = "VNKR CARDHOLDER",
-  last4      = "7890",
+  name = "Cashie",
+  holder = "YOUR_TOKEN CARDHOLDER",
+  last4 = "7890",
   cardNumber = "0823 4567 8900 2345",
-  expiry     = "07/25",
-  cvv        = "234",
-  bg         = "greeny",
-  network    = "visa",
-  width      = 320,
+  expiry = "07/25",
+  cvv = "234",
+  bg = "greeny",
+  network = "visa",
+  width = 320,
   flipped: controlledFlipped,
   onFlip,
   style,
@@ -137,24 +137,24 @@ export function WalletCard({
   };
 
   const inner: CSSProperties = {
-    position:       "relative",
-    width:          "100%",
-    height:         "100%",
+    position: "relative",
+    width: "100%",
+    height: "100%",
     transformStyle: "preserve-3d",
-    transition:     "transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1)",
-    transform:      isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+    transition: "transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1)",
+    transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
   };
 
   const face: CSSProperties = {
-    position:       "absolute",
-    inset:          0,
-    borderRadius:   20,
+    position: "absolute",
+    inset: 0,
+    borderRadius: 20,
     backfaceVisibility: "hidden",
     WebkitBackfaceVisibility: "hidden",
-    overflow:       "hidden",
-    padding:        Math.round(width * 0.072),
-    boxSizing:      "border-box",
-    boxShadow:      "0 8px 32px rgba(0,0,0,0.15)",
+    overflow: "hidden",
+    padding: Math.round(width * 0.072),
+    boxSizing: "border-box",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
   };
 
   const pad = Math.round(width * 0.072);
@@ -195,11 +195,11 @@ export function WalletCard({
 
           {/* Row bottom: holder + network */}
           <div style={{
-            position:   "absolute",
-            bottom:     pad,
-            left:       pad,
-            right:      pad,
-            display:    "flex",
+            position: "absolute",
+            bottom: pad,
+            left: pad,
+            right: pad,
+            display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-end",
           }}>
@@ -219,8 +219,8 @@ export function WalletCard({
         <div style={{
           ...face,
           background: "#121212",
-          transform:  "rotateY(180deg)",
-          display:    "flex",
+          transform: "rotateY(180deg)",
+          display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
         }}>
@@ -235,13 +235,13 @@ export function WalletCard({
 
           {/* Color pills on left edge (vertical) */}
           <div style={{
-            position:  "absolute",
-            left:      pad,
-            top:       "50%",
+            position: "absolute",
+            left: pad,
+            top: "50%",
             transform: "translateY(-50%) rotate(90deg)",
             transformOrigin: "center",
-            display:   "flex",
-            gap:       4,
+            display: "flex",
+            gap: 4,
           }}>
             {PILL_COLORS.map(col => (
               <div key={col} style={{ width: 14, height: 22, borderRadius: 99, background: col }} />
@@ -251,12 +251,12 @@ export function WalletCard({
           {/* Card details on right */}
           <div style={{
             position: "absolute",
-            right:    pad,
-            top:      "50%",
+            right: pad,
+            top: "50%",
             transform: "translateY(-50%)",
-            display:  "flex",
+            display: "flex",
             flexDirection: "column",
-            gap:      10,
+            gap: 10,
             alignItems: "flex-start",
           }}>
             <div>
@@ -291,13 +291,13 @@ export function WalletCard({
 
           {/* Card name vertical (left side) */}
           <div style={{
-            position:  "absolute",
-            left:      pad + 28,
-            top:       "50%",
+            position: "absolute",
+            left: pad + 28,
+            top: "50%",
             transform: "translateY(-50%) rotate(-90deg)",
-            fontSize:  width * 0.05,
+            fontSize: width * 0.05,
             fontWeight: 600,
-            color:     "#fff",
+            color: "#fff",
             fontFamily: "'Work Sans', sans-serif",
             whiteSpace: "nowrap",
             letterSpacing: "0.05em",

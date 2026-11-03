@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
   SidebarLayout,
-  VnkrLogo,
+  AXVNLogo,
   Badge,
 } from "ui-kit";
 import type { SidebarSection } from "ui-kit";
@@ -112,7 +112,7 @@ export default function PortalLayout({
     if (item?.href) router.push(item.href);
   };
 
-  const logo = <VnkrLogo variant="dark" size="sm" />;
+  const logo = <AXVNLogo variant="dark" size="sm" />;
 
   const sidebarBottom = (
     <div

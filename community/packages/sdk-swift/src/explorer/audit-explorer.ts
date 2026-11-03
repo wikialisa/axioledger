@@ -22,7 +22,7 @@ export interface AuditExplorerOptions {
  * AuditExplorer — Immutable Audit Log API for NQ-05 / NĐ-284 Compliance.
  *
  * Provides structured, tamper-evident logging for all SWIFT and on-chain
- * financial events processed by the VNKR ecosystem. Every entry is assigned
+ * financial events processed by the YOUR_TOKEN ecosystem. Every entry is assigned
  * a deterministic `auditId` (SHA-256 of key fields) to enable deduplication
  * and chain-of-custody verification.
  *
@@ -98,10 +98,10 @@ export class AuditExplorer {
   }
 
   /**
-   * Query entries by internal VNKR transaction ID.
+   * Query entries by internal YOUR_TOKEN transaction ID.
    */
-  getByVNKRTxId(vnkrTxId: string): AuditLogEntry[] {
-    return this.entries.filter((e) => e.vnkrTxId === vnkrTxId);
+  getByAXVNTxId(AXVNTxId: string): AuditLogEntry[] {
+    return this.entries.filter((e) => e.AXVNTxId === AXVNTxId);
   }
 
   /**
@@ -185,7 +185,7 @@ export class AuditExplorer {
     entry: Omit<AuditLogEntry, "auditId" | "timestamp">,
     timestamp: string
   ): string {
-    const input = `${timestamp}:${entry.eventType}:${entry.actor}:${entry.uetr ?? ""}:${entry.vnkrTxId ?? ""}:${entry.onChainTxHash ?? ""}`;
+    const input = `${timestamp}:${entry.eventType}:${entry.actor}:${entry.uetr ?? ""}:${entry.AXVNTxId ?? ""}:${entry.onChainTxHash ?? ""}`;
     return crypto.createHash("sha256").update(input, "utf8").digest("hex").substring(0, 32);
   }
 

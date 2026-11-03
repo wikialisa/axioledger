@@ -7,7 +7,7 @@ import { ethers } from "hardhat";
 
 describe("CapitalControl", () => {
   let deployer: any, alice: any, bob: any;
-  let kernel: any, compl: any, trsry: any, capCtrl: any, vnkr: any;
+  let kernel: any, compl: any, trsry: any, capCtrl: any, YOUR_TOKEN: any;
 
   const Actions = { InstallModule: 0, ActivatePolicy: 2 };
   const toVnd = (n: string) => ethers.parseUnits(n, 18);
@@ -15,14 +15,14 @@ describe("CapitalControl", () => {
   beforeEach(async () => {
     [deployer, alice, bob] = await ethers.getSigners();
 
-    vnkr = await (await (await ethers.getContractFactory("VNKRToken")).deploy(deployer.address)).waitForDeployment();
+    YOUR_TOKEN = await (await (await ethers.getContractFactory("YOUR_TOKENToken")).deploy(deployer.address)).waitForDeployment();
 
     kernel = await (await (await ethers.getContractFactory("Kernel")).deploy(
       deployer.address, deployer.address
     )).waitForDeployment();
 
     trsry = await (await (await ethers.getContractFactory("TRSRYv2")).deploy(
-      kernel.target, vnkr.target
+      kernel.target, YOUR_TOKEN.target
     )).waitForDeployment();
     await kernel.executeAction(Actions.InstallModule, trsry.target);
 

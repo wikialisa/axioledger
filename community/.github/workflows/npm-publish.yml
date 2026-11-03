@@ -30,7 +30,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm --filter "@${BRAND_NPM_SCOPE}/*" build
+        run: pnpm --filter "@your-npm-org/*" build
 
       # ── Public packages → npmjs.com ─────────────────────────────────────────
       - name: Publish public packages to npm

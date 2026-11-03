@@ -2,7 +2,7 @@
   "name": "id-fiat-gateway",
   "version": "0.1.0",
   "private": true,
-  "description": "[id.${BRAND_DOMAIN}] P2P Escrow, Identity & Fiat On/Off Ramp — ${BRAND_ORG_FINTECH} Services JSC",
+  "description": "[id.your-project.vn] P2P Escrow, Identity & Fiat On/Off Ramp — Your FinTech Division Name Services JSC",
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",

@@ -2,7 +2,7 @@
   "name": "swift-chain-bridge",
   "version": "0.1.0",
   "private": true,
-  "description": "[otc.${BRAND_DOMAIN}] SWIFT ↔ Blockchain Bi-Directional Relayer — Oracle Engine kết nối swift-gateway với VNKR App-Chain EVM & Solana",
+  "description": "[otc.your-project.vn] SWIFT ↔ Blockchain Bi-Directional Relayer — Oracle Engine kết nối swift-gateway với YOUR_TOKEN App-Chain EVM & Solana",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",

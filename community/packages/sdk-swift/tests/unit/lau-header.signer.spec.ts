@@ -64,7 +64,7 @@ describe('LauHeaderSigner', () => {
 
     it('should include the expected appId', () => {
       const header = signer.buildHeader('body');
-      expect(header.appId).toBe('vnkrvietnam-swift-sdk');
+      expect(header.appId).toBe('AXVNvietnam-swift-sdk');
     });
 
     it('should produce consistent signature given the same body and a fixed timestamp', () => {

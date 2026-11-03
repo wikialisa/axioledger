@@ -22,7 +22,7 @@ export function loadSWIFTConfig(): SWIFTConfig {
   return {
     lauKeyHex,
     gatewayUrl: process.env["SWIFT_GATEWAY_URL"],
-    redisStreamPrefix: process.env["SWIFT_REDIS_STREAM_PREFIX"] ?? "vnkr:swift",
+    redisStreamPrefix: process.env["SWIFT_REDIS_STREAM_PREFIX"] ?? "YOUR_TOKEN:swift",
     configFilePath: process.env["SWIFT_CONFIG_FILE_PATH"],
     encryptedConfigPath: process.env["SWIFT_ENCRYPTED_CONFIG_PATH"],
     encryptionKey: process.env["SWIFT_CONFIG_ENCRYPTION_KEY"],

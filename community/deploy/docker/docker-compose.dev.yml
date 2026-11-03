@@ -39,11 +39,11 @@ services:
       target: dev
     environment:
       NODE_ENV: development
-      DATABASE_URL: postgresql://vnkr_fiat_connector:CHANGE_ME_fiat_connector_2026@pgbouncer:5432/vnkr
+      DATABASE_URL: postgresql://your_infra_fiat_connector:CHANGE_ME_fiat_connector_2026@pgbouncer:5432/YOUR_INFRA
     volumes:
       - ../../services/fiat-connector-api/src:/app/services/fiat-connector-api/src:ro
       - ../../packages:/app/packages:ro
-    command: pnpm --filter @vnkr/fiat-connector-api dev
+    command: pnpm --filter @YOUR_NPM_SCOPE_UPPER/fiat-connector-api dev
 
   # ── otc-liquidity-engine — local dev mode
   otc-liquidity-engine:
@@ -53,11 +53,11 @@ services:
       target: dev
     environment:
       NODE_ENV: development
-      DATABASE_URL: postgresql://vnkr_otc:CHANGE_ME_otc_2026@pgbouncer:5432/vnkr
+      DATABASE_URL: postgresql://your_infra_otc:CHANGE_ME_otc_2026@pgbouncer:5432/YOUR_INFRA
     volumes:
       - ../../services/otc-liquidity-engine/src:/app/services/otc-liquidity-engine/src:ro
       - ../../packages:/app/packages:ro
-    command: pnpm --filter @vnkr/otc-liquidity-engine dev
+    command: pnpm --filter @YOUR_NPM_SCOPE_UPPER/otc-liquidity-engine dev
 
   # ── indexer-subgraph — local dev mode
   indexer-subgraph:
@@ -67,11 +67,11 @@ services:
       target: dev
     environment:
       NODE_ENV: development
-      DATABASE_URL: postgresql://vnkr_indexer:CHANGE_ME_indexer_2026@pgbouncer:5432/vnkr
+      DATABASE_URL: postgresql://your_infra_indexer:CHANGE_ME_indexer_2026@pgbouncer:5432/YOUR_INFRA
     volumes:
       - ../../services/indexer-subgraph/src:/app/services/indexer-subgraph/src:ro
       - ../../packages:/app/packages:ro
-    command: pnpm --filter @vnkr/indexer-subgraph dev
+    command: pnpm --filter @YOUR_NPM_SCOPE_UPPER/indexer-subgraph dev
 
   # ── swift-gateway — local dev mode
   swift-gateway:
@@ -84,7 +84,7 @@ services:
     volumes:
       - ../../services/swift-gateway/src:/app/services/swift-gateway/src:ro
       - ../../packages:/app/packages:ro
-    command: pnpm --filter @vnkr/swift-gateway dev
+    command: pnpm --filter @YOUR_NPM_SCOPE_UPPER/swift-gateway dev
 
   # ── swift-chain-bridge — local dev mode
   swift-chain-bridge:
@@ -97,7 +97,7 @@ services:
     volumes:
       - ../../services/swift-chain-bridge/src:/app/services/swift-chain-bridge/src:ro
       - ../../packages:/app/packages:ro
-    command: pnpm --filter @vnkr/swift-chain-bridge dev
+    command: pnpm --filter @YOUR_NPM_SCOPE_UPPER/swift-chain-bridge dev
 
   # ── Redis — unchanged from production, already suitable for dev
   redis:
@@ -117,8 +117,8 @@ services:
     build:
       context: ../..
       dockerfile: services/mock-mgw/Dockerfile
-    image: vnkr/mock-mgw-daemon:dev
-    container_name: vnkr-swift-mgw-mock
+    image: your-registry/mock-mgw-daemon:dev
+    container_name: YOUR_INFRA-swift-mgw-mock
     ports:
       - "9003:9003"
     environment:

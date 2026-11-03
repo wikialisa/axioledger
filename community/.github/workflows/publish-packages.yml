@@ -1,4 +1,4 @@
-name: Publish @vnkr Packages to GitHub Packages
+name: Publish @YOUR_NPM_SCOPE_UPPER Packages to GitHub Packages
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@${BRAND_NPM_SCOPE}'
+          scope: '@your-npm-org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -41,12 +41,12 @@ jobs:
         run: pnpm turbo run build --filter="./packages/*"
 
       - name: Verify package versions (no drift)
-        run: pnpm --filter @vnkr/deploy-npm registry:check
+        run: pnpm --filter @YOUR_NPM_SCOPE_UPPER/deploy-npm registry:check
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
-      - name: Publish @vnkr/* packages to GitHub Packages
+      - name: Publish @YOUR_NPM_SCOPE_UPPER/* packages to GitHub Packages
         run: pnpm --filter "./packages/*" publish --no-git-checks --access restricted
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

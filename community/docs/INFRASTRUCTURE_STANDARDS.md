@@ -1,9 +1,9 @@
-# Chuẩn Hóa Hạ Tầng Mã Nguồn & Quản Lý Gói npm (`@${BRAND_NPM_SCOPE}`)
+# Chuẩn Hóa Hạ Tầng Mã Nguồn & Quản Lý Gói npm (`@your-npm-org`)
 
-> **Phạm vi:** VNKR TECH HOLDING JSC — Enterprise Monorepo  
+> **Phạm vi:** Your Organisation Full Name JSC — Enterprise Monorepo  
 > **Phiên bản tài liệu:** 1.0.0  
 > **Cập nhật lần cuối:** 2025  
-> **Áp dụng cho:** Tất cả engineer, DevOps, package maintainer trong hệ sinh thái `@${BRAND_NPM_SCOPE}`
+> **Áp dụng cho:** Tất cả engineer, DevOps, package maintainer trong hệ sinh thái `@your-npm-org`
 
 ---
 
@@ -24,10 +24,10 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        VNKR TECH HOLDING — Git & npm Infrastructure         │
+│                        Your Organisation Full Name — Git & npm Infrastructure         │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-  GitHub Repository (github.com/vnkrvietnam/vnkr-tech-holding)
+  GitHub Repository (github.com/your-github-org/YOUR_INFRA-tech-holding)
   │
   ├── branch: main ──────────────────────────────────────────────────────────
   │     │                                                                    │
@@ -37,12 +37,12 @@
   │     ├── changeset-release.yml ──► "Version Packages" PR (auto-opens)    │
   │     │       │  (on PR merge)                                             │
   │     │       └──► Publish to GitHub Packages Registry                    │
-  │     │                  npm.pkg.github.com/@${BRAND_NPM_SCOPE}/*                 │
+  │     │                  npm.pkg.github.com/@your-npm-org/*                 │
   │     │                                                                    │
   │     └── npm-publish.yml ────────────────────────────────────────────────┤
   │             │  (on git tag v*)                                           │
   │             └──► Publish to npmjs.com Registry                          │
-  │                       registry.npmjs.org/@${BRAND_NPM_SCOPE}/*                 │
+  │                       registry.npmjs.org/@your-npm-org/*                 │
   │                                                                          │
   ├── branch: develop ─── feature/* ─── fix/* ─── release/*                │
   │                                                                          │
@@ -68,7 +68,7 @@
         └──► ui-kit ──► apps/* (React/Next.js)                │
 
   Registry Routing:
-    @${BRAND_NPM_SCOPE}/* ──► https://npm.pkg.github.com   (internal/restricted)
+    @your-npm-org/* ──► https://npm.pkg.github.com   (internal/restricted)
     everything else ──► https://registry.npmjs.org  (public default)
 ```
 
@@ -77,7 +77,7 @@
 ## 2. Cấu trúc Thư mục Monorepo Tiêu chuẩn Global
 
 ```
-vnkr-tech-holding/                     ← git root / pnpm workspace root
+YOUR_INFRA-tech-holding/                     ← git root / pnpm workspace root
 │
 ├── package.json                        ← Root workspace manager (KHÔNG publish)
 ├── pnpm-workspace.yaml                 ← Khai báo workspace globs
@@ -115,7 +115,7 @@ vnkr-tech-holding/                     ← git root / pnpm workspace root
 │   ├── pay-portal/                     ← pay-portal     (PORT 3002)
 │   ├── swap-dex/                       ← swap-dex       (PORT 3004)
 │   ├── dao-portal/                     ← dao-portal     (PORT 3005)
-│   ├── explorer-vnkrscan/              ← explorer-vnkrscan (PORT 3003)
+│   ├── explorer-YOUR_INFRAscan/              ← explorer-YOUR_INFRAscan (PORT 3003)
 │   ├── holding-admin-portal/           ← holding-admin-portal (PORT 3006)
 │   ├── merchant-portal/                ← merchant-portal (PORT 3011)
 │   ├── sandbox-dashboard/              ← sandbox-dashboard (PORT 3012)
@@ -167,7 +167,7 @@ vnkr-tech-holding/                     ← git root / pnpm workspace root
 
 | Thành phần | Quy tắc | Ví dụ |
 |------------|---------|-------|
-| `scope` | Luôn là `@${BRAND_NPM_SCOPE}` — lowercase, không dấu | `@${BRAND_NPM_SCOPE}` |
+| `scope` | Luôn là `@your-npm-org` — lowercase, không dấu | `@your-npm-org` |
 | `category` | kebab-case, mô tả chức năng chính | `core-sdk`, `swift-adapter` |
 | `subcategory` | Tùy chọn, làm rõ hơn category | `merchant-sdk`, `ui-kit` |
 | `variant` | Chỉ dùng khi có nhiều biến thể cùng loại | `sdk-swift`, `sdk-internal` |
@@ -196,16 +196,16 @@ swift-adapter          ← chỉ rõ là adapter (wrapper) của SWIFT
 merchant-sdk           ← chỉ rõ đối tượng dùng là merchant
 
 ❌ SAI
-@${BRAND_NPM_SCOPE}/Types                  ← không được PascalCase
-@${BRAND_NPM_SCOPE}/SWIFT_ADAPTER          ← không được SCREAMING_CASE
-@${BRAND_NPM_SCOPE}/vnkr-types             ← không lặp lại tên org trong tên gói
-@${BRAND_NPM_SCOPE}/pkg                    ← quá chung, không mô tả
-@${BRAND_NPM_SCOPE}/myUtils                ← không camelCase
+@your-npm-org/Types                  ← không được PascalCase
+@your-npm-org/SWIFT_ADAPTER          ← không được SCREAMING_CASE
+@your-npm-org/your_infra-types             ← không lặp lại tên org trong tên gói
+@your-npm-org/pkg                    ← quá chung, không mô tả
+@your-npm-org/myUtils                ← không camelCase
 ```
 
 ### 3.4 Quy tắc đặt tên service (KHÔNG publish)
 
-Services trong `services/*` dùng tên `@${BRAND_NPM_SCOPE}/<service-name>` nhưng có `"private": true` — **không bao giờ publish lên bất kỳ registry nào**.
+Services trong `services/*` dùng tên `@your-npm-org/<service-name>` nhưng có `"private": true` — **không bao giờ publish lên bất kỳ registry nào**.
 
 ```
 api-gateway            ← <tên-service>
@@ -223,10 +223,10 @@ File `package.json` ở root **không publish** và đóng vai trò điều ph�
 
 ```json
 {
-  "name": "vnkr-tech-holding-monorepo",
+  "name": "your_infra-tech-holding-monorepo",
   "version": "1.0.0",
   "private": true,                          // ← BẮT BUỘC: ngăn publish root
-  "description": "VNKR TECH HOLDING JSC — Enterprise Monorepo",
+  "description": "Your Organisation Full Name JSC — Enterprise Monorepo",
 
   // Workspace globs — pnpm đọc từ pnpm-workspace.yaml, npm/yarn đọc ở đây
   "workspaces": [
@@ -325,7 +325,7 @@ Mỗi gói trong `packages/*` tuân theo cấu trúc sau:
 
 ```json
 {
-  "name": "@${BRAND_NPM_SCOPE}/<package-name>",
+  "name": "@your-npm-org/<package-name>",
   "version": "1.0.0",                     // SemVer: MAJOR.MINOR.PATCH
 
   // Phân phối dual-format: CommonJS (Node) + ESM (bundler/browser)
@@ -388,7 +388,7 @@ Mỗi gói trong `packages/*` tuân theo cấu trúc sau:
 
   "repository": {
     "type": "git",
-    "url":  "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/your-github-org/your_infra-packages.git"
   }
 }
 ```
@@ -397,7 +397,7 @@ Mỗi gói trong `packages/*` tuân theo cấu trúc sau:
 
 | Trường | Yêu cầu | Ghi chú |
 |--------|---------|---------|
-| `name` | `@${BRAND_NPM_SCOPE}/<tên>` | Phải có scope |
+| `name` | `@your-npm-org/<tên>` | Phải có scope |
 | `version` | SemVer chính xác | Không `0.0.0` hay `latest` |
 | `main` | `./dist/index.js` | CJS cho Node compatibility |
 | `module` | `./dist/index.mjs` | ESM cho bundler |
@@ -413,7 +413,7 @@ Mỗi gói trong `packages/*` tuân theo cấu trúc sau:
 
 ```json
 {
-  "name": "@${BRAND_NPM_SCOPE}/<service-name>",
+  "name": "@your-npm-org/<service-name>",
   "version": "1.0.0",
   "private": true,                        // ← BẮT BUỘC cho services
   "description": "...",
@@ -433,12 +433,12 @@ Mỗi gói trong `packages/*` tuân theo cấu trúc sau:
 ### 5.1 File `.npmrc` tại root
 
 ```ini
-# ─── VNKR TECH HOLDING — npm Registry Configuration ──────────────────────────
+# ─── Your Organisation Full Name — npm Registry Configuration ──────────────────────────
 # File: /.npmrc (workspace root)
 # Commit: YES (không chứa token thật)
 
-# Scope @${BRAND_NPM_SCOPE} → GitHub Packages (private registry)
-@${BRAND_NPM_SCOPE}:registry=https://npm.pkg.github.com
+# Scope @your-npm-org → GitHub Packages (private registry)
+@your-npm-org:registry=https://npm.pkg.github.com
 
 # Auth token cho GitHub Packages
 # Giá trị thật được inject qua:
@@ -458,7 +458,7 @@ Mỗi developer cần cấu hình tại máy cá nhân (không commit):
 
 ```ini
 # ~/.npmrc — Local developer machine (KHÔNG commit)
-@${BRAND_NPM_SCOPE}:registry=https://npm.pkg.github.com
+@your-npm-org:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=ghp_<PERSONAL_ACCESS_TOKEN>
 ```
 
@@ -470,7 +470,7 @@ Token cần scopes: `read:packages` (để cài), `write:packages` (để publis
 Khi chạy: pnpm install project-types
 
 pnpm đọc .npmrc:
-  @${BRAND_NPM_SCOPE}:registry=https://npm.pkg.github.com
+  @your-npm-org:registry=https://npm.pkg.github.com
             ↓
   Gửi request tới: https://npm.pkg.github.com/project-types
   Header: Authorization: Bearer <NPM_TOKEN>
@@ -491,7 +491,7 @@ pnpm dùng default registry:
     node-version: '20'
     cache: pnpm
     registry-url: 'https://npm.pkg.github.com'  # ← GitHub Packages
-    scope: '@${BRAND_NPM_SCOPE}'                         # ← scope mapping
+    scope: '@your-npm-org'                         # ← scope mapping
 
 - run: pnpm install --frozen-lockfile
   env:
@@ -564,7 +564,7 @@ mock-mgw-daemon        ← prefix "mock-" cho môi trường dev
 SWIFT_LAU_KEY=
 JWT_SECRET=
 DB_PASS_FIAT=
-VNKR_INTERNAL_WEBHOOK_SECRET=
+YOUR_INFRA_INTERNAL_WEBHOOK_SECRET=
 
 # ❌ SAI
 swift_lau_key=          # lowercase
@@ -575,12 +575,12 @@ SECRET=                 # quá chung, không biết của service nào
 **Tên Docker image:**
 
 ```
-ghcr.io/vnkrvietnam/<service-name>:<version>
+ghcr.io/AXVNvietnam/<service-name>:<version>
 
 Ví dụ:
-  ghcr.io/vnkrvietnam/api-gateway:1.0.0
-  ghcr.io/vnkrvietnam/swift-gateway:1.0.0
-  ghcr.io/vnkrvietnam/fiat-connector-api:1.0.0
+  ghcr.io/AXVNvietnam/api-gateway:1.0.0
+  ghcr.io/AXVNvietnam/swift-gateway:1.0.0
+  ghcr.io/AXVNvietnam/fiat-connector-api:1.0.0
 ```
 
 ### 6.4 Supply Chain Security (Bảo mật Chuỗi Cung ứng)
@@ -606,7 +606,7 @@ Ví dụ:
    ─ Critical deps (SWIFT, crypto): pin exact version không có ^
 
 5. REGISTRY ISOLATION
-   ─ @${BRAND_NPM_SCOPE}/* → GitHub Packages (private, cần auth)
+   ─ @your-npm-org/* → GitHub Packages (private, cần auth)
    ─ Không dùng npm.pkg.github.com cho packages public
    ─ Không publish internal packages lên npmjs.com
 ```
@@ -700,7 +700,7 @@ Job: release
     2. pnpm/action-setup@v4 (v9)
     3. actions/setup-node@v4
          registry-url: npm.pkg.github.com
-         scope: @${BRAND_NPM_SCOPE}
+         scope: @your-npm-org
     4. pnpm install --frozen-lockfile
     5. pnpm turbo run build --filter="./packages/*"
     6. pnpm turbo run test  --filter="./packages/*"
@@ -812,7 +812,7 @@ pnpm turbo run build --graph
 
 ### Checklist trước khi tạo Package mới
 
-- [ ] Tên gói đúng format: `@${BRAND_NPM_SCOPE}/<kebab-case>`
+- [ ] Tên gói đúng format: `@your-npm-org/<kebab-case>`
 - [ ] `package.json` có đủ: `name`, `version`, `main`, `module`, `types`, `exports`, `files`, `publishConfig`
 - [ ] `"files": ["dist"]` — không include `src/`
 - [ ] `publishConfig.registry` trỏ đúng registry
@@ -825,4 +825,4 @@ pnpm turbo run build --graph
 
 ---
 
-*Tài liệu này được duy trì bởi VNKR TECH HOLDING Engineering Team. Mọi thay đổi về quy chuẩn cần được review và approve bởi Tech Lead trước khi áp dụng.*
+*Tài liệu này được duy trì bởi Your Organisation Full Name Engineering Team. Mọi thay đổi về quy chuẩn cần được review và approve bởi Tech Lead trước khi áp dụng.*

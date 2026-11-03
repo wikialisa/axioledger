@@ -2,7 +2,7 @@
   "name": "digital-twin-engine",
   "version": "0.1.0",
   "private": true,
-  "description": "[lab.${BRAND_DOMAIN}] Digital Twin Simulation Engine & AI Lab — VNKR Digital Twin & AI Labs",
+  "description": "[lab.your-project.vn] Digital Twin Simulation Engine & AI Lab — YOUR_TOKEN Digital Twin & AI Labs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

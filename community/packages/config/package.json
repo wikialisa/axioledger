@@ -1,7 +1,7 @@
 {
   "name": "project-config",
   "version": "1.0.1",
-  "description": "Environment constants, Program IDs, Seed PDAs, RPC Endpoints for VNKR ecosystem",
+  "description": "Environment constants, Program IDs, Seed PDAs, RPC Endpoints for YOUR_TOKEN ecosystem",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -37,6 +37,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/YOUR_TOKENvietnam/YOUR_TOKEN-packages.git"
   }
 }

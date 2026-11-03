@@ -14,8 +14,8 @@ kycAdminRouter.get("/pending", (req, res) => {
   const limit = Number(req.query.limit) || 20;
   // TODO: fetch from DB where kyc_status = 'PENDING'
   paginated(res, [
-    { userId: "u002", fullName: "Trần Thị B",  phone: "0912345678", documentType: "CCCD",     submittedAt: "2024-06-20T09:00:00Z", frontImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u002-front.jpg", selfieImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u002-selfie.jpg" },
-    { userId: "u005", fullName: "Phạm Quốc D", phone: "0934567890", documentType: "PASSPORT", submittedAt: "2024-06-22T14:30:00Z", frontImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u005-front.jpg", selfieImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u005-selfie.jpg" },
+    { userId: "u002", fullName: "Trần Thị B",  phone: "0912345678", documentType: "CCCD",     submittedAt: "2024-06-20T09:00:00Z", frontImageUrl: "https://cdn.your-project.vn/kyc/u002-front.jpg", selfieImageUrl: "https://cdn.your-project.vn/kyc/u002-selfie.jpg" },
+    { userId: "u005", fullName: "Phạm Quốc D", phone: "0934567890", documentType: "PASSPORT", submittedAt: "2024-06-22T14:30:00Z", frontImageUrl: "https://cdn.your-project.vn/kyc/u005-front.jpg", selfieImageUrl: "https://cdn.your-project.vn/kyc/u005-selfie.jpg" },
   ], 2, page, limit);
 });
 

@@ -5,7 +5,7 @@ import "../kernel/Module.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 // ─── vote-module.v1.sol — VOTE ────────────────────────────────────────────────
-// Quản lý điểm biểu quyết và quản trị DAO thông qua gVNKR.
+// Quản lý điểm biểu quyết và quản trị DAO thông qua gAXVN.
 // Ghi nhận snapshots quyền biểu quyết theo từng block để chống flash-loan.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -31,13 +31,13 @@ struct Proposal {
 contract VOTEv1 is Module {
     // ─── State ────────────────────────────────────────────────────────────
 
-    IERC20 public gvnkr;
+    IERC20 public gAXVN;
 
     uint256 public proposalCount;
     mapping(uint256 => Proposal) public proposals;
     mapping(uint256 => mapping(address => bool)) public hasVoted;
 
-    /// @notice Minimum gVNKR to create a proposal (1,000 gVNKR)
+    /// @notice Minimum gAXVN to create a proposal (1,000 gAXVN)
     uint256 public proposalThreshold = 1_000 * 1e18;
 
     /// @notice Voting period in blocks (~3 days at 12s/block)
@@ -51,8 +51,8 @@ contract VOTEv1 is Module {
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
-    constructor(Kernel kernel_, address gvnkr_) Module(kernel_) {
-        gvnkr = IERC20(gvnkr_);
+    constructor(Kernel kernel_, address gAXVN_) Module(kernel_) {
+        gAXVN = IERC20(gAXVN_);
     }
 
     // ─── Module interface ─────────────────────────────────────────────────
@@ -69,8 +69,8 @@ contract VOTEv1 is Module {
         returns (uint256 id)
     {
         require(
-            gvnkr.balanceOf(proposer_) >= proposalThreshold,
-            "VOTE: insufficient gVNKR"
+            gAXVN.balanceOf(proposer_) >= proposalThreshold,
+            "VOTE: insufficient gAXVN"
         );
         id = ++proposalCount;
         proposals[id] = Proposal({
@@ -98,7 +98,7 @@ contract VOTEv1 is Module {
         if (block.number > p.endBlock)     revert VOTE_ProposalNotActive(proposalId_);
         if (hasVoted[proposalId_][voter_]) revert VOTE_AlreadyVoted(voter_, proposalId_);
 
-        uint256 weight = gvnkr.balanceOf(voter_);
+        uint256 weight = gAXVN.balanceOf(voter_);
         if (weight == 0) revert VOTE_InsufficientVotingPower(voter_);
 
         hasVoted[proposalId_][voter_] = true;

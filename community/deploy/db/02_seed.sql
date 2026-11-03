@@ -1,5 +1,5 @@
 -- =============================================================================
--- VNKR — Seed Data (Dev / Staging)
+-- YOUR_INFRA — Seed Data (Dev / Staging)
 -- =============================================================================
 -- Chạy sau 01_schema.sql
 -- Dữ liệu mẫu để dev và test local. KHÔNG chạy trên production.
@@ -12,8 +12,8 @@ INSERT INTO identity.users (
 ) VALUES
 (
     '00000000-0000-0000-0000-000000000001',
-    'admin@${BRAND_DOMAIN}', '+84901234567',
-    'VNKR Admin', '1990-01-01', 'VN',
+    'admin@your-project.vn', '+84901234567',
+    'YOUR_INFRA Admin', '1990-01-01', 'VN',
     'AdminSoLWaLLet111111111111111111111111111',
     '0xAdm1n000000000000000000000000000000001'
 ),
@@ -82,7 +82,7 @@ INSERT INTO payments.merchants (
     '00000000-0000-0000-0000-000000000004',
     'Demo Merchant JSC', 'ECOMMERCE',
     'https://demo-merchant.vn',
-    'https://demo-merchant.vn/callback/vnkr',
+    'https://demo-merchant.vn/callback/YOUR_INFRA',
     'PRO', TRUE, TRUE
 )
 ON CONFLICT (user_id) DO NOTHING;
@@ -96,7 +96,7 @@ INSERT INTO payments.p2p_orders (
 (
     'ORD-DEMO-001', 'SELL', 'OPEN',
     'AXVNmint111111111111111111111111111111111',
-    500000000000,   -- 500 AXVN (9 decimals)
+    500000000000,   -- 500 YOUR_TOKEN (9 decimals)
     8400000, 'VND',
     '0x1111111111111111111111111111111111111111',
     NULL,
@@ -134,21 +134,21 @@ INSERT INTO payments.merchant_orders (
     'PAY-DEMO-001',
     '10000000-0000-0000-0000-000000000001',
     320000, 'VND', 'Đơn hàng #1234',
-    'PAID', 'https://pay.${BRAND_DOMAIN}/PAY-DEMO-001',
+    'PAID', 'https://pay.your-project.vn/PAY-DEMO-001',
     now() + INTERVAL '28 minutes', now() - INTERVAL '1 minute'
 ),
 (
     'PAY-DEMO-002',
     '10000000-0000-0000-0000-000000000001',
     85000, 'VND', 'Đặt đồ ăn',
-    'PENDING', 'https://pay.${BRAND_DOMAIN}/PAY-DEMO-002',
+    'PENDING', 'https://pay.your-project.vn/PAY-DEMO-002',
     now() + INTERVAL '25 minutes', NULL
 ),
 (
     'PAY-DEMO-003',
     '10000000-0000-0000-0000-000000000001',
     1500000, 'VND', 'Mua sắm online',
-    'EXPIRED', 'https://pay.${BRAND_DOMAIN}/PAY-DEMO-003',
+    'EXPIRED', 'https://pay.your-project.vn/PAY-DEMO-003',
     now() - INTERVAL '2 hours', NULL
 )
 ON CONFLICT (order_id) DO NOTHING;
@@ -179,15 +179,15 @@ SELECT
 FROM generate_series(1, 30) AS i
 ON CONFLICT (date) DO NOTHING;
 
--- ── Sandbox participant (VNKR itself in Tier 2) ───────────────────────────────
+-- ── Sandbox participant (YOUR_INFRA itself in Tier 2) ───────────────────────────────
 INSERT INTO sandbox.participants (
     id, company_name, sandbox_id, contact_email,
     current_tier, status, tvl_current_vnd, tvl_cap_vnd
 ) VALUES (
     '20000000-0000-0000-0000-000000000001',
-    '${BRAND_ORG_FINTECH} Services JSC',
-    'SBX-VNKR01',
-    'sandbox@${BRAND_DOMAIN}',
+    'Your FinTech Division Name Services JSC',
+    'SBX-AXVN01',
+    'sandbox@your-project.vn',
     2, 'ACTIVE',
     200000000000,   -- 200B VND
     10000000000000  -- 10T VND cap Tier 2
@@ -284,7 +284,7 @@ ON CONFLICT DO NOTHING;
 -- ── Summary ───────────────────────────────────────────────────────────────────
 DO $$
 BEGIN
-    RAISE NOTICE '=== VNKR Database Seed Complete ===';
+    RAISE NOTICE '=== YOUR_INFRA Database Seed Complete ===';
     RAISE NOTICE 'Users:               %', (SELECT count(*) FROM identity.users);
     RAISE NOTICE 'KYC Profiles:        %', (SELECT count(*) FROM identity.kyc_profiles);
     RAISE NOTICE 'P2P Orders:          %', (SELECT count(*) FROM payments.p2p_orders);

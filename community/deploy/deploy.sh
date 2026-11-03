@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  VNKR TECH HOLDING — Full-Stack Deploy Script
+#  Your Organisation Full Name — Full-Stack Deploy Script
 #  /var/www/deploy/deploy.sh
 #
 #  Chức năng:
@@ -123,8 +123,8 @@ $DOCKER_COMPOSE_CMD \
   up -d --no-deps --remove-orphans \
   postgres redis
 
-wait_healthy "vnkr-postgres" 90
-wait_healthy "vnkr-redis"    30
+wait_healthy "YOUR_INFRA-postgres" 90
+wait_healthy "YOUR_INFRA-redis"    30
 
 ok "Redis (port 6379) + PostgreSQL (port 5432) đã sẵn sàng."
 
@@ -147,7 +147,7 @@ fi
 section "BƯỚC 2 — DB Schema + Seed + Views + Roles"
 
 POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-YOUR_POSTGRES_PASSWORD}"
-PSQL_CMD="docker exec -i vnkr-postgres psql -U postgres -d vnkr"
+PSQL_CMD="docker exec -i YOUR_INFRA-postgres psql -U postgres -d YOUR_INFRA"
 
 run_sql_file() {
   local label="$1"
@@ -157,8 +157,8 @@ run_sql_file() {
     return
   fi
   log "Áp dụng ${label}: $(basename "$file")..."
-  docker exec -i vnkr-postgres \
-    psql -U postgres -d vnkr \
+  docker exec -i YOUR_INFRA-postgres \
+    psql -U postgres -d YOUR_INFRA \
     -v ON_ERROR_STOP=0 \
     --quiet \
     < "$file" && ok "${label} OK." || warn "${label} có một số lỗi (xem log ở trên)."
@@ -312,23 +312,23 @@ ok "Backend Docker services đã được khởi động."
 section "✅ Deploy hoàn tất"
 
 echo ""
-echo -e "${BOLD}  ${BRAND_ORG_FULL} — Deployment Summary${NC}"
+echo -e "${BOLD}  Your Organisation Full Name — Deployment Summary${NC}"
 echo "  ──────────────────────────────────────────────────"
-echo -e "  ${GREEN}●${NC} PostgreSQL  → localhost:5432 (vnkr-postgres)"
-echo -e "  ${GREEN}●${NC} PgBouncer   → localhost:5433 (vnkr-pgbouncer)"
-echo -e "  ${GREEN}●${NC} Redis       → localhost:6379 (vnkr-redis)"
+echo -e "  ${GREEN}●${NC} PostgreSQL  → localhost:5432 (YOUR_INFRA-postgres)"
+echo -e "  ${GREEN}●${NC} PgBouncer   → localhost:5433 (YOUR_INFRA-pgbouncer)"
+echo -e "  ${GREEN}●${NC} Redis       → localhost:6379 (YOUR_INFRA-redis)"
 echo ""
 echo -e "  ${CYAN}Apps (PM2 via Nginx reverse proxy):${NC}"
-echo "    app-web              → app.${BRAND_DOMAIN}       (port 3010)"
-echo "    id-fiat-gateway      → id.${BRAND_DOMAIN}        (port 3001)"
-echo "    pay-portal           → pay.${BRAND_DOMAIN}       (port 3002)"
-echo "    explorer-vnkrscan    → scan.${BRAND_DOMAIN}      (port 3003)"
-echo "    swap-dex             → swap.${BRAND_DOMAIN}      (port 3004)"
-echo "    dao-portal           → dao.${BRAND_DOMAIN}       (port 3005)"
-echo "    holding-admin-portal → holding.${BRAND_DOMAIN}   (port 3006)"
-echo "    kyc-portal           → kyc.${BRAND_DOMAIN}       (port 3013)"
-echo "    merchant-portal      → merchant.${BRAND_DOMAIN}  (port 3011)"
-echo "    sandbox-dashboard    → sandbox.${BRAND_DOMAIN}   (port 3012)"
+echo "    app-web              → app.your-project.vn       (port 3010)"
+echo "    id-fiat-gateway      → id.your-project.vn        (port 3001)"
+echo "    pay-portal           → pay.your-project.vn       (port 3002)"
+echo "    explorer-YOUR_INFRAscan    → scan.your-project.vn      (port 3003)"
+echo "    swap-dex             → swap.your-project.vn      (port 3004)"
+echo "    dao-portal           → dao.your-project.vn       (port 3005)"
+echo "    holding-admin-portal → holding.your-project.vn   (port 3006)"
+echo "    kyc-portal           → kyc.your-project.vn       (port 3013)"
+echo "    merchant-portal      → merchant.your-project.vn  (port 3011)"
+echo "    sandbox-dashboard    → sandbox.your-project.vn   (port 3012)"
 echo ""
 echo -e "  ${CYAN}Backend Services (Docker):${NC}"
 echo "    fiat-connector-api   → port 4001"

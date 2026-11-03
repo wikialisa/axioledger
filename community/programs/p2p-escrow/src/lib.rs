@@ -5,7 +5,7 @@ declare_id!(env!("PROGRAM_ID_P2P_ESCROW", "11111111111111111111111111111111"));
 
 /// ─── Program ────────────────────────────────────────────────────────────────
 #[program]
-pub mod vnkr_p2p_escrow {
+pub mod AXVN_p2p_escrow {
     use super::*;
 
     /// Seller locks tokens into the Vault PDA and creates an order.

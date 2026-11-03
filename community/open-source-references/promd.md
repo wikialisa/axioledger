@@ -11,7 +11,7 @@ Dựa trên cấu trúc cây thư mục `/var/www/open-source-references/apps/` 
 | `digital-twin-engine` | Engine mô phỏng / Mô hình hóa dữ liệu | • [Threeml / Three.js Ecosystem](https://github.com/mrdoob/three.js/)<br>
 
 <br>• [IOWorlds](https://www.google.com/search?q=https://github.com/iankit/digital-twin) |
-| `explorer-vnkrscan` | Trình khám phá khối (Block Explorer) | • [Blockscout](https://github.com/blockscout/blockscout) *(Chuẩn nhất cho EVM)*<br>
+| `explorer-YOUR_INFRAscan` | Trình khám phá khối (Block Explorer) | • [Blockscout](https://github.com/blockscout/blockscout) *(Chuẩn nhất cho EVM)*<br>
 
 <br>• [Otterscan](https://www.google.com/search?q=https://github.com/wmitsuda/otterscan) |
 | `holding-admin-portal` | Trang quản trị hệ thống / Admin | • [Refine](https://github.com/refinedev/refine) *(React/Next.js Admin)*<br>
@@ -45,7 +45,7 @@ Nếu bạn muốn quét hoặc clone các repo tham khảo này trực tiếp v
 mkdir -p /var/www/open-source-references
 cd /var/www/open-source-references
 
-# 1. Block Explorer (Tương tự explorer-vnkrscan)
+# 1. Block Explorer (Tương tự explorer-YOUR_INFRAscan)
 git clone https://github.com/blockscout/blockscout.git
 
 # 2. DEX Interface (Tương tự swap-dex)
@@ -59,4 +59,4 @@ git clone https://github.com/rainbow-me/rainbow.git
 
 ```
 
-Bạn đang cần tìm cụ thể mã nguồn mở cho **dịch vụ nào nhất trong số 11 app ở trên** (ví dụ: muốn dựng lại `swap-dex` hay `explorer-vnkrscan`) để mình hỗ trợ trích xuất cấu hình `package.json` và thiết lập Dockerfile tương ứng?
+Bạn đang cần tìm cụ thể mã nguồn mở cho **dịch vụ nào nhất trong số 11 app ở trên** (ví dụ: muốn dựng lại `swap-dex` hay `explorer-YOUR_INFRAscan`) để mình hỗ trợ trích xuất cấu hình `package.json` và thiết lập Dockerfile tương ứng?

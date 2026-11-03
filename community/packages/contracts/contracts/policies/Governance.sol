@@ -3,13 +3,13 @@ pragma solidity ^0.8.24;
 
 import "../kernel/Module.sol";
 import "../modules/ROLES/ROLES.v1.sol";
-import "../tokens/sVNKRToken.sol";
-import "../tokens/gVNKRToken.sol";
+import "../tokens/sYOUR_TOKENToken.sol";
+import "../tokens/gYOUR_TOKENToken.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-// ─── Governance.sol — Wrap sVNKR → gVNKR (Index Multiplier) ─────────────────
-// Wrap sVNKR thành gVNKR có chỉ số nhân (Index) để biểu quyết DAO,
+// ─── Governance.sol — Wrap sAXVN → gAXVN (Index Multiplier) ─────────────────
+// Wrap sAXVN thành gAXVN có chỉ số nhân (Index) để biểu quyết DAO,
 // giao dịch Cross-Chain và thế chấp tín chấp tại các L2/Sidechain.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -22,24 +22,24 @@ contract Governance is Policy {
     // ─── Modules ──────────────────────────────────────────────────────────
 
     ROLESv1    public ROLES;
-    SVNKRToken public sVNKR;
-    GVNKRToken public gVNKR;
+    SYOUR_TOKENToken public sAXVN;
+    GYOUR_TOKENToken public gAXVN;
 
-    // ─── Index (gVNKR index multiplier — tăng theo mỗi Epoch rebase) ────
-    /// @notice Index = tổng tích lũy rebase — 1 gVNKR = index × sVNKR (18 dec)
+    // ─── Index (gAXVN index multiplier — tăng theo mỗi Epoch rebase) ────
+    /// @notice Index = tổng tích lũy rebase — 1 gAXVN = index × sAXVN (18 dec)
     uint256 public index = 1e18;
 
     // ─── Events ───────────────────────────────────────────────────────────
 
-    event Wrapped(address indexed user, uint256 svnkrIn, uint256 gvnkrOut);
-    event Unwrapped(address indexed user, uint256 gvnkrIn, uint256 svnkrOut);
+    event Wrapped(address indexed user, uint256 sAXVNIn, uint256 gAXVNOut);
+    event Unwrapped(address indexed user, uint256 gAXVNIn, uint256 sAXVNOut);
     event IndexUpdated(uint256 prevIndex, uint256 newIndex);
 
     // ─── Constructor ──────────────────────────────────────────────────────
 
-    constructor(Kernel kernel_, address svnkr_, address gvnkr_) Policy(kernel_) {
-        sVNKR = SVNKRToken(svnkr_);
-        gVNKR = GVNKRToken(gvnkr_);
+    constructor(Kernel kernel_, address sAXVN_, address gAXVN_) Policy(kernel_) {
+        sAXVN = SYOUR_TOKENToken(sAXVN_);
+        gAXVN = GYOUR_TOKENToken(gAXVN_);
     }
 
     // ─── Policy interface ─────────────────────────────────────────────────
@@ -56,25 +56,25 @@ contract Governance is Policy {
 
     // ─── Wrap / Unwrap ────────────────────────────────────────────────────
 
-    /// @notice Wrap sVNKR → gVNKR theo index hiện tại
-    /// gvnkrOut = svnkrIn × 1e18 / index
-    function wrap(uint256 svnkrAmount_) external returns (uint256 gvnkrOut) {
-        if (svnkrAmount_ == 0) revert Governance_ZeroAmount();
+    /// @notice Wrap sAXVN → gAXVN theo index hiện tại
+    /// gAXVNOut = sAXVNIn × 1e18 / index
+    function wrap(uint256 sAXVNAmount_) external returns (uint256 gAXVNOut) {
+        if (sAXVNAmount_ == 0) revert Governance_ZeroAmount();
         if (index == 0) revert Governance_InvalidIndex();
-        gvnkrOut = (svnkrAmount_ * 1e18) / index;
-        sVNKR.burn(msg.sender, svnkrAmount_);
-        gVNKR.mint(msg.sender, gvnkrOut);
-        emit Wrapped(msg.sender, svnkrAmount_, gvnkrOut);
+        gAXVNOut = (sAXVNAmount_ * 1e18) / index;
+        sAXVN.burn(msg.sender, sAXVNAmount_);
+        gAXVN.mint(msg.sender, gAXVNOut);
+        emit Wrapped(msg.sender, sAXVNAmount_, gAXVNOut);
     }
 
-    /// @notice Unwrap gVNKR → sVNKR theo index hiện tại
-    /// svnkrOut = gvnkrIn × index / 1e18
-    function unwrap(uint256 gvnkrAmount_) external returns (uint256 svnkrOut) {
-        if (gvnkrAmount_ == 0) revert Governance_ZeroAmount();
-        svnkrOut = (gvnkrAmount_ * index) / 1e18;
-        gVNKR.burn(msg.sender, gvnkrAmount_);
-        sVNKR.mint(msg.sender, svnkrOut);
-        emit Unwrapped(msg.sender, gvnkrAmount_, svnkrOut);
+    /// @notice Unwrap gAXVN → sAXVN theo index hiện tại
+    /// sAXVNOut = gAXVNIn × index / 1e18
+    function unwrap(uint256 gAXVNAmount_) external returns (uint256 sAXVNOut) {
+        if (gAXVNAmount_ == 0) revert Governance_ZeroAmount();
+        sAXVNOut = (gAXVNAmount_ * index) / 1e18;
+        gAXVN.burn(msg.sender, gAXVNAmount_);
+        sAXVN.mint(msg.sender, sAXVNOut);
+        emit Unwrapped(msg.sender, gAXVNAmount_, sAXVNOut);
     }
 
     /// @notice Cập nhật index sau mỗi Epoch rebase (gọi bởi StakingPolicy)
@@ -87,13 +87,13 @@ contract Governance is Policy {
 
     // ─── View helpers ─────────────────────────────────────────────────────
 
-    /// @notice Quy đổi sVNKR → gVNKR theo index
-    function toGVNKR(uint256 svnkrAmount_) external view returns (uint256) {
-        return (svnkrAmount_ * 1e18) / index;
+    /// @notice Quy đổi sAXVN → gAXVN theo index
+    function toGAXVN(uint256 sAXVNAmount_) external view returns (uint256) {
+        return (sAXVNAmount_ * 1e18) / index;
     }
 
-    /// @notice Quy đổi gVNKR → sVNKR theo index
-    function toSVNKR(uint256 gvnkrAmount_) external view returns (uint256) {
-        return (gvnkrAmount_ * index) / 1e18;
+    /// @notice Quy đổi gAXVN → sAXVN theo index
+    function toSAXVN(uint256 gAXVNAmount_) external view returns (uint256) {
+        return (gAXVNAmount_ * index) / 1e18;
     }
 }

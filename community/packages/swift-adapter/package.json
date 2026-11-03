@@ -1,7 +1,7 @@
 {
   "name": "swift-adapter",
   "version": "1.0.1",
-  "description": "SWIFT SDK wrapper — MT103/MT202 message builder, ISO 20022 parser, LAU signing for VNKR institutional banking",
+  "description": "SWIFT SDK wrapper — MT103/MT202 message builder, ISO 20022 parser, LAU signing for YOUR_TOKEN institutional banking",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -48,6 +48,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vnkrvietnam/vnkr-packages.git"
+    "url": "https://github.com/YOUR_TOKENvietnam/YOUR_TOKEN-packages.git"
   }
 }

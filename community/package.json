@@ -1,8 +1,8 @@
 {
-  "name": "vnkr-tech-holding-monorepo",
+  "name": "your_infra-tech-holding-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "VNKR TECH HOLDING JSC — Enterprise Monorepo (pnpm + Turborepo + Anchor/Solana/EVM)",
+  "description": "Your Organisation Full Name JSC — Enterprise Monorepo (pnpm + Turborepo + Anchor/Solana/EVM)",
   "workspaces": [
     "apps/*",
     "packages/*",
@@ -63,7 +63,7 @@
       "@sqds/sdk": "2.0.4"
     }
   },
-  "vnkr:workspace": {
+  "YOUR_TOKEN:workspace": {
     "packages": {
       "project-types": {
         "path": "packages/types",
@@ -77,7 +77,7 @@
       "project-config": {
         "path": "packages/config",
         "version": "1.0.0",
-        "description": "Environment constants, Program IDs, Seed PDAs, RPC Endpoints for VNKR ecosystem",
+        "description": "Environment constants, Program IDs, Seed PDAs, RPC Endpoints for YOUR_TOKEN ecosystem",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -86,7 +86,7 @@
       "project-contracts": {
         "path": "packages/contracts",
         "version": "1.0.0",
-        "description": "Bophades Modular Smart Contracts — VNKR Reserve Currency, Governance, Treasury, VASP & Compliance (NQ-05/NĐ-284)",
+        "description": "Bophades Modular Smart Contracts — YOUR_TOKEN Reserve Currency, Governance, Treasury, VASP & Compliance (NQ-05/NĐ-284)",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -100,7 +100,7 @@
       "core-sdk": {
         "path": "packages/core-sdk",
         "version": "1.0.0",
-        "description": "Solana/EVM Web3 Wrapper & Anchor IDL Integrator — shared across all VNKR apps",
+        "description": "Solana/EVM Web3 Wrapper & Anchor IDL Integrator — shared across all YOUR_TOKEN apps",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -114,7 +114,7 @@
       "project-db": {
         "path": "packages/db",
         "version": "1.0.0",
-        "description": "Shared PostgreSQL connection pool + typed query helpers for VNKR services",
+        "description": "Shared PostgreSQL connection pool + typed query helpers for YOUR_TOKEN services",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -126,7 +126,7 @@
       "merchant-sdk": {
         "path": "packages/merchant-sdk",
         "version": "1.0.0",
-        "description": "JS/TS SDK for merchant partners integrating VNKR payment gateway (dev-api.${BRAND_DOMAIN})",
+        "description": "JS/TS SDK for merchant partners integrating YOUR_TOKEN payment gateway (dev-api.your-project.vn)",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -153,7 +153,7 @@
       "swift-adapter": {
         "path": "packages/swift-adapter",
         "version": "1.0.0",
-        "description": "SWIFT SDK wrapper — MT103/MT202 message builder, ISO 20022 parser, LAU signing for VNKR institutional banking",
+        "description": "SWIFT SDK wrapper — MT103/MT202 message builder, ISO 20022 parser, LAU signing for YOUR_TOKEN institutional banking",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -181,7 +181,7 @@
       "ui-kit": {
         "path": "packages/ui-kit",
         "version": "1.1.0",
-        "description": "VNKR exclusive design system component library",
+        "description": "YOUR_TOKEN exclusive design system component library",
         "publishConfig": {
           "access": "restricted",
           "registry": "https://npm.pkg.github.com"
@@ -215,7 +215,7 @@
       "fiat-connector-api": {
         "path": "services/fiat-connector-api",
         "port": 4001,
-        "description": "[dev-api.${BRAND_DOMAIN}] Fiat Bank Matching Service & Webhook — ${BRAND_ORG_FINTECH} Services JSC",
+        "description": "[dev-api.your-project.vn] Fiat Bank Matching Service & Webhook — Your FinTech Division Name Services JSC",
         "dependencies": {
           "fastify": "^4.28.0",
           "axios": "^1.7.0",
@@ -226,7 +226,7 @@
       "otc-liquidity-engine": {
         "path": "services/otc-liquidity-engine",
         "port": 4002,
-        "description": "[otc.${BRAND_DOMAIN}] Institutional OTC Liquidity Engine & VARA Compliance — VNKR Labs MENA/FZE",
+        "description": "[otc.your-project.vn] Institutional OTC Liquidity Engine & VARA Compliance — YOUR_TOKEN Labs MENA/FZE",
         "dependencies": {
           "fastify": "^4.28.0",
           "axios": "^1.7.0",
@@ -239,7 +239,7 @@
       "indexer-subgraph": {
         "path": "services/indexer-subgraph",
         "port": 4003,
-        "description": "[treasury-subgraph-api.${BRAND_DOMAIN}] Subgraph / Helius Indexer Service — VNKR Blockchain Network Ltd.",
+        "description": "[treasury-subgraph-api.your-project.vn] Subgraph / Helius Indexer Service — YOUR_TOKEN Blockchain Network Ltd.",
         "dependencies": {
           "@graphprotocol/graph-ts": "^0.35.0",
           "@graphprotocol/graph-cli": "^0.80.0",
@@ -252,7 +252,7 @@
       "swift-gateway": {
         "path": "services/swift-gateway",
         "port": 4004,
-        "description": "[otc.${BRAND_DOMAIN}] SWIFT Messaging Gateway Service — interbank MT103/MT202/pacs.008 relay via SWIFT Microgateway 2.0.17",
+        "description": "[otc.your-project.vn] SWIFT Messaging Gateway Service — interbank MT103/MT202/pacs.008 relay via SWIFT Microgateway 2.0.17",
         "dependencies": {
           "fastify": "^4.28.0",
           "axios": "^1.7.0",
@@ -263,7 +263,7 @@
       "swift-chain-bridge": {
         "path": "services/swift-chain-bridge",
         "port": 4005,
-        "description": "[otc.${BRAND_DOMAIN}] SWIFT ↔ Blockchain Bi-Directional Relayer — Oracle Engine kết nối swift-gateway với VNKR App-Chain EVM & Solana",
+        "description": "[otc.your-project.vn] SWIFT ↔ Blockchain Bi-Directional Relayer — Oracle Engine kết nối swift-gateway với YOUR_TOKEN App-Chain EVM & Solana",
         "dependencies": {
           "fastify": "^4.28.0",
           "axios": "^1.7.0",
@@ -282,7 +282,7 @@
       },
       "dune-alert-bots": {
         "path": "services/dune-alert-bots",
-        "description": "Telegram/Discord Alert Bots & Dune Analytics DApp data — VNKR Digital Twin & AI Labs",
+        "description": "Telegram/Discord Alert Bots & Dune Analytics DApp data — YOUR_TOKEN Digital Twin & AI Labs",
         "dependencies": {
           "node-telegram-bot-api": "^0.66.0",
           "@discordjs/rest": "^2.3.0",
@@ -295,56 +295,56 @@
       "id-fiat-gateway": {
         "path": "apps/id-fiat-gateway",
         "port": 3001,
-        "url": "id.${BRAND_DOMAIN}"
+        "url": "id.your-project.vn"
       },
       "pay-portal": {
         "path": "apps/pay-portal",
         "port": 3002,
-        "url": "pay.${BRAND_DOMAIN}"
+        "url": "pay.your-project.vn"
       },
-      "explorer-vnkrscan": {
-        "path": "apps/explorer-vnkrscan",
+      "explorer-YOUR_INFRAscan": {
+        "path": "apps/explorer-YOUR_INFRAscan",
         "port": 3003,
-        "url": "scan.${BRAND_DOMAIN}"
+        "url": "scan.your-project.vn"
       },
       "swap-dex": {
         "path": "apps/swap-dex",
         "port": 3004,
-        "url": "swap.${BRAND_DOMAIN}"
+        "url": "swap.your-project.vn"
       },
       "dao-portal": {
         "path": "apps/dao-portal",
         "port": 3005,
-        "url": "dao.${BRAND_DOMAIN}"
+        "url": "dao.your-project.vn"
       },
       "holding-admin-portal": {
         "path": "apps/holding-admin-portal",
         "port": 3006,
-        "url": "holding.${BRAND_DOMAIN}"
+        "url": "holding.your-project.vn"
       },
       "app-web": {
         "path": "apps/app-web",
         "port": 3010,
-        "url": "app.${BRAND_DOMAIN}"
+        "url": "app.your-project.vn"
       },
       "merchant-portal": {
         "path": "apps/merchant-portal",
         "port": 3011,
-        "url": "merchant.${BRAND_DOMAIN}"
+        "url": "merchant.your-project.vn"
       },
       "sandbox-dashboard": {
         "path": "apps/sandbox-dashboard",
         "port": 3012,
-        "url": "sandbox.${BRAND_DOMAIN}"
+        "url": "sandbox.your-project.vn"
       },
       "kyc-portal": {
         "path": "apps/kyc-portal",
         "port": 3013,
-        "url": "kyc.${BRAND_DOMAIN}"
+        "url": "kyc.your-project.vn"
       },
       "digital-twin-engine": {
         "path": "apps/digital-twin-engine",
-        "url": "lab.${BRAND_DOMAIN}"
+        "url": "lab.your-project.vn"
       }
     }
   }

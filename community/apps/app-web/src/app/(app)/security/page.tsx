@@ -12,35 +12,35 @@ import {
 } from "ui-kit";
 
 interface DeviceEntry {
-  id:       string;
-  name:     string;
-  os:       string;
+  id: string;
+  name: string;
+  os: string;
   location: string;
   lastSeen: string;
-  current:  boolean;
+  current: boolean;
 }
 
 const DEVICES: DeviceEntry[] = [
-  { id: "d1", name: "iPhone 15 Pro",       os: "iOS 17.4",        location: "TP.HCM, VN",   lastSeen: "Đang hoạt động", current: true  },
-  { id: "d2", name: "MacBook Air M2",      os: "macOS 14.5",      location: "TP.HCM, VN",   lastSeen: "2 giờ trước",    current: false },
-  { id: "d3", name: "Samsung Galaxy S24",  os: "Android 14",      location: "Hà Nội, VN",   lastSeen: "3 ngày trước",   current: false },
+  { id: "d1", name: "iPhone 15 Pro", os: "iOS 17.4", location: "TP.HCM, VN", lastSeen: "Đang hoạt động", current: true },
+  { id: "d2", name: "MacBook Air M2", os: "macOS 14.5", location: "TP.HCM, VN", lastSeen: "2 giờ trước", current: false },
+  { id: "d3", name: "Samsung Galaxy S24", os: "Android 14", location: "Hà Nội, VN", lastSeen: "3 ngày trước", current: false },
 ];
 
-const TOTP_SECRET  = "JBSWY3DPEHPK3PXP";
-const TOTP_QR      = `otpauth://totp/VNKR:nguyen.van.a%40${BRAND_DOMAIN}?secret=${TOTP_SECRET}&issuer=VNKR`;
+const TOTP_SECRET = "JBSWY3DPEHPK3PXP";
+const TOTP_QR = `otpauth://totp/YOUR_TOKEN:nguyen.van.a%40your-project.vn?secret=${TOTP_SECRET}&issuer=YOUR_TOKEN`;
 
 export default function SecurityPage() {
-  const [biometric,    setBiometric]    = useState(true);
-  const [txnBio,       setTxnBio]       = useState(true);
-  const [loginNotif,   setLoginNotif]   = useState(true);
-  const [twoFA,        setTwoFA]        = useState(false);
-  const [devices,      setDevices]      = useState<DeviceEntry[]>(DEVICES);
-  const [revokeModal,  setRevokeModal]  = useState<string | null>(null);
-  const [totpModal,    setTotpModal]    = useState(false);
-  const [totpStep,     setTotpStep]     = useState<"scan" | "verify" | "done">("scan");
-  const [totpCode,     setTotpCode]     = useState("");
-  const [showSecret,   setShowSecret]   = useState(false);
-  const [loading,      setLoading]      = useState(false);
+  const [biometric, setBiometric] = useState(true);
+  const [txnBio, setTxnBio] = useState(true);
+  const [loginNotif, setLoginNotif] = useState(true);
+  const [twoFA, setTwoFA] = useState(false);
+  const [devices, setDevices] = useState<DeviceEntry[]>(DEVICES);
+  const [revokeModal, setRevokeModal] = useState<string | null>(null);
+  const [totpModal, setTotpModal] = useState(false);
+  const [totpStep, setTotpStep] = useState<"scan" | "verify" | "done">("scan");
+  const [totpCode, setTotpCode] = useState("");
+  const [showSecret, setShowSecret] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const secScore = [biometric, txnBio, loginNotif, twoFA].filter(Boolean).length;
 
@@ -73,7 +73,7 @@ export default function SecurityPage() {
 
       {/* Security score */}
       <div style={{
-        margin:     "8px 16px 16px",
+        margin: "8px 16px 16px",
         background: "#000",
         borderRadius: 20, padding: "18px 20px",
       }}>
@@ -87,10 +87,10 @@ export default function SecurityPage() {
         </div>
         <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
           {[
-            { label: "Vân tay/FaceID",  ok: biometric   },
-            { label: "PIN xác nhận",    ok: txnBio       },
-            { label: "Cảnh báo login",  ok: loginNotif   },
-            { label: "2FA Auth",        ok: twoFA        },
+            { label: "Vân tay/FaceID", ok: biometric },
+            { label: "PIN xác nhận", ok: txnBio },
+            { label: "Cảnh báo login", ok: loginNotif },
+            { label: "2FA Auth", ok: twoFA },
           ].map(i => (
             <div key={i.label} style={{ display: "flex", alignItems: "center", gap: 4, background: "rgba(255,255,255,0.07)", borderRadius: 6, padding: "3px 8px" }}>
               {i.ok
@@ -250,7 +250,7 @@ export default function SecurityPage() {
                   ))}
                 </div>
               </div>
-              <Text variant="caption" color="#A0AEC0">VNKR: nguyen.van.a@${BRAND_DOMAIN}</Text>
+              <Text variant="caption" color="#A0AEC0">YOUR_TOKEN: nguyen.van.a@your-project.vn</Text>
             </div>
             <div style={{ background: "#F5F6FA", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

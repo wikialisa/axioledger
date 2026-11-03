@@ -4,7 +4,7 @@ import { readFile, writeFile } from 'fs/promises';
 /** AES-256-CBC IV length (bytes). */
 const IV_LENGTH = 16;
 /** Key derivation salt — static per-package; override via subclassing if needed. */
-const SALT = Buffer.from('vnkrvietnam-swift-sdk-salt-2024!');
+const SALT = Buffer.from('AXVNvietnam-swift-sdk-salt-2024!');
 
 /**
  * Encrypts and decrypts files for secure JAR / credential storage using

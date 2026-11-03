@@ -18,18 +18,18 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const TICKET_CATEGORIES = ["Giao dịch", "Bảo mật", "Tài khoản", "Kỹ thuật", "Khác"];
 
 interface Message {
-  id:      string;
-  role:    "user" | "bot";
-  text:    string;
-  time:    string;
+  id: string;
+  role: "user" | "bot";
+  text: string;
+  time: string;
 }
 
 interface Ticket {
-  id:       string;
-  subject:  string;
+  id: string;
+  subject: string;
   category: string;
-  status:   "open" | "in-progress" | "resolved";
-  created:  string;
+  status: "open" | "in-progress" | "resolved";
+  created: string;
 }
 
 const QUICK_REPLIES = [
@@ -56,23 +56,23 @@ function nowTime() {
 }
 
 export default function SupportPage() {
-  const [tab,          setTab]          = useState<"chat"|"ticket">("chat");
-  const [messages,     setMessages]     = useState<Message[]>([
-    { id: "1", role: "bot", text: "Xin chào! Tôi là trợ lý AI của VNKR. Tôi có thể giúp gì cho bạn hôm nay?", time: "09:00" },
+  const [tab, setTab] = useState<"chat" | "ticket">("chat");
+  const [messages, setMessages] = useState<Message[]>([
+    { id: "1", role: "bot", text: "Xin chào! Tôi là trợ lý AI của YOUR_TOKEN. Tôi có thể giúp gì cho bạn hôm nay?", time: "09:00" },
   ]);
-  const [input,        setInput]        = useState("");
-  const [botTyping,    setBotTyping]    = useState(false);
+  const [input, setInput] = useState("");
+  const [botTyping, setBotTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Ticket form
-  const [ticketSubject,  setTicketSubject]  = useState("");
-  const [ticketDesc,     setTicketDesc]     = useState("");
+  const [ticketSubject, setTicketSubject] = useState("");
+  const [ticketDesc, setTicketDesc] = useState("");
   const [ticketCategory, setTicketCategory] = useState(TICKET_CATEGORIES[0]);
-  const [ticketFiles,    setTicketFiles]    = useState<File[]>([]);
-  const [fileError,      setFileError]      = useState("");
-  const [tickets,        setTickets]        = useState<Ticket[]>([]);
-  const [ticketSuccess,  setTicketSuccess]  = useState<string | null>(null);
-  const [submitting,     setSubmitting]     = useState(false);
+  const [ticketFiles, setTicketFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState("");
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [ticketSuccess, setTicketSuccess] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -114,10 +114,10 @@ export default function SupportPage() {
     const id = generateTicketId();
     setTickets(prev => [...prev, {
       id,
-      subject:  ticketSubject,
+      subject: ticketSubject,
       category: ticketCategory,
-      status:   "open",
-      created:  new Date().toLocaleDateString("vi-VN"),
+      status: "open",
+      created: new Date().toLocaleDateString("vi-VN"),
     }]);
     setTicketSuccess(id);
     setTicketSubject(""); setTicketDesc(""); setTicketFiles([]);

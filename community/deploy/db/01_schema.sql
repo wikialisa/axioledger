@@ -1,5 +1,5 @@
 -- =============================================================================
--- VNKR TECH HOLDING — Master Database Schema
+-- Your Organisation Full Name — Master Database Schema
 -- PostgreSQL 16
 -- =============================================================================
 -- Schemas:
@@ -58,7 +58,7 @@ CREATE INDEX idx_users_email      ON identity.users (email);
 CREATE INDEX idx_users_evm_wallet ON identity.users USING gin (evm_wallet gin_trgm_ops);
 CREATE INDEX idx_users_sol_wallet ON identity.users USING gin (solana_wallet gin_trgm_ops);
 
--- KYC profiles — maps 1:1 to @vnkr/types KYCProfile
+-- KYC profiles — maps 1:1 to @YOUR_NPM_SCOPE_UPPER/types KYCProfile
 CREATE TABLE identity.kyc_profiles (
     id                  UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id             UUID        NOT NULL REFERENCES identity.users(id) ON DELETE CASCADE,
@@ -127,7 +127,7 @@ CREATE INDEX idx_sessions_user ON identity.sessions (user_id, is_valid);
 -- SCHEMA: payments
 -- =============================================================================
 
--- P2P Escrow Orders — maps to @vnkr/types P2POrder
+-- P2P Escrow Orders — maps to @YOUR_NPM_SCOPE_UPPER/types P2POrder
 CREATE TABLE payments.p2p_orders (
     order_id            TEXT        PRIMARY KEY,   -- "ORD-{nanoid}"
     side                TEXT        NOT NULL CHECK (side IN ('BUY','SELL')),
@@ -166,7 +166,7 @@ CREATE INDEX idx_p2p_buyer          ON payments.p2p_orders (buyer_wallet);
 CREATE INDEX idx_p2p_created        ON payments.p2p_orders (created_at DESC);
 CREATE INDEX idx_p2p_token          ON payments.p2p_orders (token_mint, status);
 
--- Fiat Receipts — maps to @vnkr/types FiatReceipt
+-- Fiat Receipts — maps to @YOUR_NPM_SCOPE_UPPER/types FiatReceipt
 CREATE TABLE payments.fiat_receipts (
     receipt_id          TEXT        PRIMARY KEY,   -- bank-provided
     order_id            TEXT        NOT NULL REFERENCES payments.p2p_orders(order_id),
@@ -210,7 +210,7 @@ CREATE TABLE payments.merchants (
 
 CREATE UNIQUE INDEX idx_merchant_user ON payments.merchants (user_id);
 
--- Merchant payment orders — maps to @vnkr/types MerchantOrderResponse
+-- Merchant payment orders — maps to @YOUR_NPM_SCOPE_UPPER/types MerchantOrderResponse
 CREATE TABLE payments.merchant_orders (
     order_id            TEXT        PRIMARY KEY,   -- "PAY-{nanoid}"
     merchant_id         UUID        NOT NULL REFERENCES payments.merchants(id),
@@ -273,7 +273,7 @@ CREATE INDEX idx_cashback_created ON payments.cashback_ledger (created_at DESC);
 -- SCHEMA: treasury
 -- =============================================================================
 
--- Reserve snapshots — maps to @vnkr/types ReserveSnapshot
+-- Reserve snapshots — maps to @YOUR_NPM_SCOPE_UPPER/types ReserveSnapshot
 CREATE TABLE treasury.reserve_snapshots (
     id                       BIGSERIAL   PRIMARY KEY,
     block_number             BIGINT,
@@ -289,7 +289,7 @@ CREATE TABLE treasury.reserve_snapshots (
 
 CREATE INDEX idx_reserve_ts ON treasury.reserve_snapshots (snapshot_ts DESC);
 
--- Swap events — maps to @vnkr/types SubgraphSwapEvent
+-- Swap events — maps to @YOUR_NPM_SCOPE_UPPER/types SubgraphSwapEvent
 CREATE TABLE treasury.swap_events (
     id                  BIGSERIAL   PRIMARY KEY,
     tx_hash             TEXT        NOT NULL UNIQUE,
@@ -533,7 +533,7 @@ CREATE TABLE swift.bridge_relay_log (
     fx_rate_vnd         NUMERIC(18,6),                -- 1 USD = X VND
     fx_source           TEXT,                          -- 'SBV','VCB','MANUAL'
     fee_bps             INT         DEFAULT 10,
-    fee_vnkr            NUMERIC(36,0),
+    fee_AXVN            NUMERIC(36,0),
     -- Status
     status              TEXT        NOT NULL DEFAULT 'PENDING'
                                     CHECK (status IN ('PENDING','SUBMITTED','CONFIRMED','FAILED','REVERTED')),

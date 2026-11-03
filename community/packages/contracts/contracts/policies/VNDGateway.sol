@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ─── VNDGateway.sol — VietQR / Fiat On-Ramp eKYC Policy ─────────────────────
 // Cổng nạp/rút VNĐ tích hợp eKYC & NĐ-284.
-// Xác thực căn cước chính chủ trước khi quy đổi VNĐ ↔ VNKR.
+// Xác thực căn cước chính chủ trước khi quy đổi VNĐ ↔ YOUR_TOKEN.
 // Chặn tài khoản rác/mạo danh và nguồn tiền đáng ngờ.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -28,8 +28,8 @@ struct VNDOrder {
     bytes32  orderId;
     address  user;
     uint256  vndAmount;     // 18 dec
-    uint256  vnkrAmount;    // 18 dec
-    uint8    direction;     // 0 = nạp VNĐ→VNKR, 1 = rút VNKR→VNĐ
+    uint256  AXVNAmount;    // 18 dec
+    uint8    direction;     // 0 = nạp VNĐ→YOUR_TOKEN, 1 = rút YOUR_TOKEN→VNĐ
     bool     settled;
     uint256  createdAt;
 }
@@ -63,8 +63,8 @@ contract VNDGateway is Policy {
 
     event KYCVerified(address indexed user, KYCTier tier);
     event KYCRevoked(address indexed user);
-    event DepositCreated(bytes32 indexed orderId, address indexed user, uint256 vndAmount, uint256 vnkrAmount);
-    event WithdrawCreated(bytes32 indexed orderId, address indexed user, uint256 vnkrAmount, uint256 vndAmount);
+    event DepositCreated(bytes32 indexed orderId, address indexed user, uint256 vndAmount, uint256 AXVNAmount);
+    event WithdrawCreated(bytes32 indexed orderId, address indexed user, uint256 AXVNAmount, uint256 vndAmount);
     event OrderSettled(bytes32 indexed orderId);
 
     // ─── Constructor ──────────────────────────────────────────────────────
@@ -89,8 +89,8 @@ contract VNDGateway is Policy {
         reqs    = new Permissions[](4);
         reqs[0] = Permissions({ keycode: "TRSRY", funcSelector: TRSRYv2.deposit.selector });
         reqs[1] = Permissions({ keycode: "TRSRY", funcSelector: TRSRYv2.withdraw.selector });
-        reqs[2] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintVnkr.selector });
-        reqs[3] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.burnVnkr.selector });
+        reqs[2] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.mintAXVN.selector });
+        reqs[3] = Permissions({ keycode: "MINTR", funcSelector: MINTRv1.burnAXVN.selector });
     }
 
     // ─── KYC management ───────────────────────────────────────────────────
@@ -107,7 +107,7 @@ contract VNDGateway is Policy {
         emit KYCRevoked(user_);
     }
 
-    // ─── Deposit: VNĐ → VNKR ─────────────────────────────────────────────
+    // ─── Deposit: VNĐ → YOUR_TOKEN ─────────────────────────────────────────────
 
     function deposit(bytes32 orderId_, uint256 vndAmount_) external {
         if (paused) revert VNDGateway_Paused();
@@ -116,54 +116,54 @@ contract VNDGateway is Policy {
         _requireNotBlacklisted(msg.sender);
         _checkDailyLimit(msg.sender, vndAmount_);
 
-        // Lấy tỷ giá VNKR/VND từ Kho bạc
+        // Lấy tỷ giá YOUR_TOKEN/VND từ Kho bạc
         uint256 priceVnd  = TRSRY.tokenPriceVnd(vndToken);
-        uint256 vnkrAmount = priceVnd > 0 ? (vndAmount_ * 1e18) / priceVnd : vndAmount_;
+        uint256 AXVNAmount = priceVnd > 0 ? (vndAmount_ * 1e18) / priceVnd : vndAmount_;
 
         TRSRY.deposit(vndToken, msg.sender, vndAmount_);
-        MINTR.mintVnkr(msg.sender, vnkrAmount);
+        MINTR.mintAXVN(msg.sender, AXVNAmount);
 
         orders[orderId_] = VNDOrder({
             orderId:    orderId_,
             user:       msg.sender,
             vndAmount:  vndAmount_,
-            vnkrAmount: vnkrAmount,
+            AXVNAmount: AXVNAmount,
             direction:  0,
             settled:    true,
             createdAt:  block.timestamp
         });
 
-        emit DepositCreated(orderId_, msg.sender, vndAmount_, vnkrAmount);
+        emit DepositCreated(orderId_, msg.sender, vndAmount_, AXVNAmount);
         emit OrderSettled(orderId_);
     }
 
-    // ─── Withdraw: VNKR → VNĐ ────────────────────────────────────────────
+    // ─── Withdraw: YOUR_TOKEN → VNĐ ────────────────────────────────────────────
 
-    function withdraw(bytes32 orderId_, uint256 vnkrAmount_) external {
+    function withdraw(bytes32 orderId_, uint256 AXVNAmount_) external {
         if (paused) revert VNDGateway_Paused();
-        if (vnkrAmount_ == 0) revert VNDGateway_ZeroAmount();
+        if (AXVNAmount_ == 0) revert VNDGateway_ZeroAmount();
         _requireKYC(msg.sender);
         _requireNotBlacklisted(msg.sender);
 
         uint256 priceVnd = TRSRY.tokenPriceVnd(vndToken);
-        uint256 vndOut   = priceVnd > 0 ? (vnkrAmount_ * priceVnd) / 1e18 : vnkrAmount_;
+        uint256 vndOut   = priceVnd > 0 ? (AXVNAmount_ * priceVnd) / 1e18 : AXVNAmount_;
 
         _checkDailyLimit(msg.sender, vndOut);
 
-        MINTR.burnVnkr(msg.sender, vnkrAmount_);
+        MINTR.burnAXVN(msg.sender, AXVNAmount_);
         TRSRY.withdraw(vndToken, msg.sender, vndOut);
 
         orders[orderId_] = VNDOrder({
             orderId:    orderId_,
             user:       msg.sender,
             vndAmount:  vndOut,
-            vnkrAmount: vnkrAmount_,
+            AXVNAmount: AXVNAmount_,
             direction:  1,
             settled:    true,
             createdAt:  block.timestamp
         });
 
-        emit WithdrawCreated(orderId_, msg.sender, vnkrAmount_, vndOut);
+        emit WithdrawCreated(orderId_, msg.sender, AXVNAmount_, vndOut);
         emit OrderSettled(orderId_);
     }
 

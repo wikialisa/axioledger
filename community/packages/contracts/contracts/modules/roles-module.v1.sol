@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import "../kernel/Module.sol";
 
 // ─── roles-module.v1.sol — ROLES ─────────────────────────────────────────────
-// Role-Based Access Control module for VnkrvietnamDAO.
+// Role-Based Access Control module for AXVNvietnamDAO.
 // Phân quyền hệ thống: Admin, Policy, Emergency, Auditor.
 // ─────────────────────────────────────────────────────────────────────────────
 

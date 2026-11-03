@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title:       "VNKR Sandbox Dashboard",
+  title: "YOUR_TOKEN Sandbox Dashboard",
   description: "SupTech Supervisory Platform — National Sandbox Framework",
   icons: { icon: "/favicon.ico" },
 };

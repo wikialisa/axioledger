@@ -2,7 +2,7 @@
   "name": "holding-admin-portal",
   "version": "0.1.0",
   "private": true,
-  "description": "[holding.${BRAND_DOMAIN}] Internal Admin Portal — IP Asset Management & Whitelist Governance (VNKR Holding)",
+  "description": "[holding.your-project.vn] Internal Admin Portal — IP Asset Management & Whitelist Governance (YOUR_TOKEN Holding)",
   "scripts": {
     "dev": "next dev -p 3006",
     "build": "next build",

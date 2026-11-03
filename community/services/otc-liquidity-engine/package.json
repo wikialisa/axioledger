@@ -2,7 +2,7 @@
   "name": "otc-liquidity-engine",
   "version": "0.1.0",
   "private": true,
-  "description": "[otc.${BRAND_DOMAIN}] Institutional OTC Liquidity Engine & VARA Compliance — VNKR Labs MENA/FZE",
+  "description": "[otc.your-project.vn] Institutional OTC Liquidity Engine & VARA Compliance — YOUR_TOKEN Labs MENA/FZE",
   "scripts": {
     "dev": "ts-node src/index.ts",
     "build": "tsc",

@@ -22,7 +22,7 @@ userRouter.get("/profile", (req, res) => {
     userId: req.user!.sub,
     fullName: "Nguyễn Văn A",
     phone: "0901234567",
-    email: "nguyen.van.a@${BRAND_DOMAIN}",
+    email: "nguyen.van.a@your-project.vn",
     avatar: null,
     kycStatus: "VERIFIED",
     kycTier: 2,

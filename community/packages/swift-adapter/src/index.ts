@@ -1,5 +1,5 @@
 // ─── swift-adapter ──────────────────────────────────────────────
-// SWIFT SDK wrapper for VNKR Institutional Banking
+// SWIFT SDK wrapper for YOUR_TOKEN Institutional Banking
 // Covers: MT103, MT202, MT940 (ISO 15022)
 //         pacs.008, pacs.009, pacs.002, camt.053, camt.056, pain.001 (ISO 20022 MX)
 //         GPI Tracker v5 types · LAU signing · RMA
@@ -31,7 +31,7 @@ export { RMARegistry } from "./security/rma.js";
 export type { RMARecord } from "./security/rma.js";
 
 // ─── Event Bus client (Redis Streams producer) ────────────────────────────────
-export { VNKRSwiftClient } from "./client.js";
+export { AXVNSwiftClient } from "./client.js";
 
 // ─── Java bridge — vendor JAR utilities ──────────────────────────────────────
 export { SwiftJavaBridge } from "./core/java-bridge.js";

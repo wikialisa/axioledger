@@ -6,15 +6,15 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// ─── gvnkr-token.sol — gVNKR ─────────────────────────────────────────────────
-// Governance VNKR (ERC-20 Non-rebase).
+// ─── gAXVN-token.sol — gAXVN ─────────────────────────────────────────────────
+// Governance YOUR_TOKEN (ERC-20 Non-rebase).
 // Cổ phần biểu quyết on-chain — tích hợp ERC20Votes (OZ) để snapshot voting power.
 // Dùng cho giao dịch Cross-Chain (LayerZero / CCIP) và ký quỹ CoolerLoans.
 // ─────────────────────────────────────────────────────────────────────────────
 
-error GVNKR_NotAuthorized(address caller);
+error GAXVN_NotAuthorized(address caller);
 
-contract GVNKRToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
+contract GYOUR_TOKENToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
     // ─── State ────────────────────────────────────────────────────────────
 
     address public stakingPolicy;
@@ -26,8 +26,8 @@ contract GVNKRToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
     // ─── Constructor ──────────────────────────────────────────────────────
 
     constructor(address admin_)
-        ERC20("Governance VNKR", "gVNKR")
-        ERC20Permit("gVNKR")
+        ERC20("Governance YOUR_TOKEN", "gAXVN")
+        ERC20Permit("gAXVN")
         Ownable(admin_)
     {}
 
@@ -39,18 +39,18 @@ contract GVNKRToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
     }
 
     modifier onlyStaking() {
-        if (msg.sender != stakingPolicy) revert GVNKR_NotAuthorized(msg.sender);
+        if (msg.sender != stakingPolicy) revert GAXVN_NotAuthorized(msg.sender);
         _;
     }
 
     // ─── Mint / Burn ──────────────────────────────────────────────────────
 
-    /// @notice Mint gVNKR when user wraps sVNKR → gVNKR
+    /// @notice Mint gAXVN when user wraps sAXVN → gAXVN
     function mint(address to_, uint256 amount_) external onlyStaking {
         _mint(to_, amount_);
     }
 
-    /// @notice Burn gVNKR when user unwraps gVNKR → sVNKR
+    /// @notice Burn gAXVN when user unwraps gAXVN → sAXVN
     function burn(address from_, uint256 amount_) external onlyStaking {
         _burn(from_, amount_);
     }

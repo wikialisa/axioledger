@@ -20,9 +20,9 @@ import {
 
 // ─── Past events ─────────────────────────────────────────────────────────────
 const PAST_EVENTS = [
-  { id: "e1", actor: "Regulator A",  reason: "Volume spike >400% — suspicious pattern",  ts: "2025-06-10 14:32", duration: "22 phút" },
-  { id: "e2", actor: "Regulator B",  reason: "Blacklist address interaction detected",    ts: "2025-05-28 09:15", duration: "8 phút"  },
-  { id: "e3", actor: "System Auto",  reason: "Failed tx rate exceeded 5% threshold",      ts: "2025-05-12 03:44", duration: "4 phút"  },
+  { id: "e1", actor: "Regulator A", reason: "Volume spike >400% — suspicious pattern", ts: "2025-06-10 14:32", duration: "22 phút" },
+  { id: "e2", actor: "Regulator B", reason: "Blacklist address interaction detected", ts: "2025-05-28 09:15", duration: "8 phút" },
+  { id: "e3", actor: "System Auto", reason: "Failed tx rate exceeded 5% threshold", ts: "2025-05-12 03:44", duration: "4 phút" },
 ];
 
 // ─── Elapsed timer ────────────────────────────────────────────────────────────
@@ -46,10 +46,10 @@ function ElapsedTimer({ since }: { since: Date }) {
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function CircuitBreakerPage() {
-  const [paused,      setPaused]      = useState(false);
+  const [paused, setPaused] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [reason,      setReason]      = useState("");
-  const [loading,     setLoading]     = useState(false);
+  const [reason, setReason] = useState("");
+  const [loading, setLoading] = useState(false);
   const [pausedSince, setPausedSince] = useState<Date | null>(null);
 
   const handleToggleAttempt = () => {
@@ -83,14 +83,14 @@ export default function CircuitBreakerPage() {
 
       {/* ── Status banner ───────────────────────────────────────────────── */}
       <div style={{
-        background:   paused ? "#2D0A0F" : "#0D2318",
-        border:       `1px solid ${paused ? "#FF3D71" : "#00D68F"}`,
+        background: paused ? "#2D0A0F" : "#0D2318",
+        border: `1px solid ${paused ? "#FF3D71" : "#00D68F"}`,
         borderRadius: 14,
-        padding:      "16px 20px",
+        padding: "16px 20px",
         marginBottom: 24,
-        display:      "flex",
-        alignItems:   "center",
-        gap:          14,
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
       }}>
         <div style={{ color: paused ? "#FF3D71" : "#00D68F", flexShrink: 0 }}>
           {paused ? <AlertTriangle size={28} /> : <ShieldCheck size={28} />}
@@ -114,10 +114,10 @@ export default function CircuitBreakerPage() {
 
       {/* ── Main toggle card ─────────────────────────────────────────────── */}
       <div style={{
-        background:   "#161B22",
-        border:       `2px solid ${paused ? "#FF3D71" : "#30363D"}`,
+        background: "#161B22",
+        border: `2px solid ${paused ? "#FF3D71" : "#30363D"}`,
         borderRadius: 16,
-        padding:      "24px",
+        padding: "24px",
         marginBottom: 24,
       }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
@@ -140,24 +140,24 @@ export default function CircuitBreakerPage() {
 
         {/* Smart contract reference */}
         <div style={{
-          marginTop:    16,
-          padding:      "10px 14px",
-          background:   "#0D0F14",
+          marginTop: 16,
+          padding: "10px 14px",
+          background: "#0D0F14",
           borderRadius: 8,
-          display:      "flex",
-          alignItems:   "center",
-          gap:          10,
-          flexWrap:     "wrap",
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          flexWrap: "wrap",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <Clock size={14} color="#8B949E" />
             <Text variant="caption" color="#8B949E">Smart Contract:</Text>
           </div>
           <code style={{ fontSize: 12, color: "#BEFF6C", fontFamily: "monospace", letterSpacing: "0.03em" }}>
-            VNKRWeb3SandboxModule · {CONTRACT_ADDR}
+            AXVNWeb3SandboxModule · {CONTRACT_ADDR}
           </code>
           <Button variant="ghost" color="info" size="sm"
-            onClick={() => window.open(`https://scan.${BRAND_DOMAIN}/address/${CONTRACT_ADDR}`, "_blank")}>
+            onClick={() => window.open(`https://scan.your-project.vn/address/${CONTRACT_ADDR}`, "_blank")}>
             View on Explorer →
           </Button>
         </div>
@@ -216,9 +216,9 @@ export default function CircuitBreakerPage() {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{
-            padding:      "12px 14px",
-            background:   "#FFF1F2",
-            border:       "1px solid #FF3D71",
+            padding: "12px 14px",
+            background: "#FFF1F2",
+            border: "1px solid #FF3D71",
             borderRadius: 8,
           }}>
             <Text variant="caption" color="#9F1239">

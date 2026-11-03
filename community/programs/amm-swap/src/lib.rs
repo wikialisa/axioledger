@@ -5,7 +5,7 @@ declare_id!(env!("PROGRAM_ID_AMM_SWAP", "11111111111111111111111111111111"));
 
 /// Constant-product AMM (x * y = k) with configurable fee tier.
 #[program]
-pub mod vnkr_amm_swap {
+pub mod AXVN_amm_swap {
     use super::*;
 
     /// Initialize a new liquidity pool.

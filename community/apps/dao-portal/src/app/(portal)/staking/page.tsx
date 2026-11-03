@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-2">Staking</h1>
-      <p className="text-muted-foreground">VNKR staking and rewards.</p>
+      <p className="text-muted-foreground">YOUR_TOKEN staking and rewards.</p>
     </main>
   );
 }

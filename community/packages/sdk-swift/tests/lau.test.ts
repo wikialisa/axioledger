@@ -5,7 +5,7 @@ import { LAUSigner } from "../src/security/lau-signer.js";
 
 describe("LAUSigner", () => {
   const LAU_KEY_HEX = "0123456789ABCDEF0123456789ABCDEF";
-  const LAU_KEY_ASCII = "VNKR_SWIFT_LAU_SECRET_KEY_2026!!";
+  const LAU_KEY_ASCII = "YOUR_INFRA_SWIFT_LAU_SECRET_KEY!!";
 
   it("throws when key is too short", () => {
     expect(() => new LAUSigner("SHORT")).toThrow("LAU key must be at least 32");

@@ -9,7 +9,7 @@ describe("LAUSigner", () => {
   // 32-char hex key (16 bytes)
   const LAU_KEY_HEX = "0123456789ABCDEF0123456789ABCDEF";
   // ASCII key dài >= 32 chars
-  const LAU_KEY_ASCII = "VNKR_SWIFT_LAU_SECRET_KEY_2026!!";
+  const LAU_KEY_ASCII = "YOUR_INFRA_SWIFT_LAU_SECRET_KEY!!";
 
   it("ném lỗi khi key quá ngắn", () => {
     expect(() => new LAUSigner("SHORT")).toThrow("LAU key must be at least 32");
@@ -89,21 +89,21 @@ describe("RMARegistry", () => {
   const records: RMARecord[] = [
     {
       grantor: "BNPAFRPPXXX",
-      grantee: "VNKRVNVNXXX",
+      grantee: "AXVNVNVNXXX",
       categories: ["1", "2"],
       expiresAt: "2030-12-31T23:59:59Z",
       active: true,
     },
     {
       grantor: "CHASUS33XXX",
-      grantee: "VNKRVNVNXXX",
+      grantee: "AXVNVNVNXXX",
       categories: ["2"],
       expiresAt: "2025-01-01T00:00:00Z", // expired
       active: true,
     },
     {
       grantor: "DEUTDEFFXXX",
-      grantee: "VNKRVNVNXXX",
+      grantee: "AXVNVNVNXXX",
       categories: ["1"],
       expiresAt: "2030-12-31T23:59:59Z",
       active: false, // inactive
@@ -113,31 +113,31 @@ describe("RMARegistry", () => {
   const registry = new RMARegistry(records);
 
   it("trả true khi có RMA hợp lệ category 1 với BNPAFRPP", () => {
-    expect(registry.isAuthorised("VNKRVNVNXXX", "BNPAFRPPXXX", "1")).toBe(true);
+    expect(registry.isAuthorised("AXVNVNVNXXX", "BNPAFRPPXXX", "1")).toBe(true);
   });
 
   it("trả true khi có RMA hợp lệ category 2 với BNPAFRPP", () => {
-    expect(registry.isAuthorised("VNKRVNVNXXX", "BNPAFRPPXXX", "2")).toBe(true);
+    expect(registry.isAuthorised("AXVNVNVNXXX", "BNPAFRPPXXX", "2")).toBe(true);
   });
 
   it("trả false khi RMA hết hạn (CHASUS33)", () => {
-    expect(registry.isAuthorised("VNKRVNVNXXX", "CHASUS33XXX", "2")).toBe(false);
+    expect(registry.isAuthorised("AXVNVNVNXXX", "CHASUS33XXX", "2")).toBe(false);
   });
 
   it("trả false khi RMA không active (DEUTDEFF)", () => {
-    expect(registry.isAuthorised("VNKRVNVNXXX", "DEUTDEFFXXX", "1")).toBe(false);
+    expect(registry.isAuthorised("AXVNVNVNXXX", "DEUTDEFFXXX", "1")).toBe(false);
   });
 
   it("trả false khi category không được phép", () => {
-    expect(registry.isAuthorised("VNKRVNVNXXX", "BNPAFRPPXXX", "9")).toBe(false);
+    expect(registry.isAuthorised("AXVNVNVNXXX", "BNPAFRPPXXX", "9")).toBe(false);
   });
 
   it("trả false khi cặp BIC không có trong registry", () => {
-    expect(registry.isAuthorised("VNKRVNVNXXX", "UNKNOWNBICX", "1")).toBe(false);
+    expect(registry.isAuthorised("AXVNVNVNXXX", "UNKNOWNBICX", "1")).toBe(false);
   });
 
   it("registry rỗng luôn trả false", () => {
     const empty = new RMARegistry([]);
-    expect(empty.isAuthorised("VNKRVNVNXXX", "BNPAFRPPXXX", "1")).toBe(false);
+    expect(empty.isAuthorised("AXVNVNVNXXX", "BNPAFRPPXXX", "1")).toBe(false);
   });
 });

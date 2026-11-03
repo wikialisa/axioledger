@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VNKR Holding Admin",
-  description: "IP Asset Management & Whitelist Governance — VNKR TECH HOLDING JSC",
+  title: "YOUR_TOKEN Holding Admin",
+  description: "IP Asset Management & Whitelist Governance — Your Organisation Full Name JSC",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

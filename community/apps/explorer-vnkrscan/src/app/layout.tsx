@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VNKR Scan",
-  description: "App-Chain Block Explorer & Proof of Reserve — VNKR Blockchain Network Ltd.",
+  title: "YOUR_TOKEN Scan",
+  description: "App-Chain Block Explorer & Proof of Reserve — YOUR_TOKEN Blockchain Network Ltd.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

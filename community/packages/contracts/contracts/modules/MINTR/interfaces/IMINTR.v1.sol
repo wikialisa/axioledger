@@ -12,8 +12,8 @@ interface IMINTR {
     event CircuitBreakerReset();
     event BackingRatioUpdated(uint256 minBackingBps);
 
-    function mintVnkr(address to, uint256 amount) external;
-    function burnVnkr(address from, uint256 amount) external;
+    function mintAXVN(address to, uint256 amount) external;
+    function burnAXVN(address from, uint256 amount) external;
     function triggerCircuitBreaker(string calldata reason) external;
     function resetCircuitBreaker() external;
 

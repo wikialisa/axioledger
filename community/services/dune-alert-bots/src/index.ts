@@ -1,10 +1,10 @@
 import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
 
-const TELEGRAM_TOKEN   = process.env.TELEGRAM_BOT_TOKEN ?? "";
-const ALERT_CHAT_ID    = process.env.TELEGRAM_ALERT_CHAT_ID ?? "";
-const DUNE_API_KEY     = process.env.DUNE_API_KEY ?? "";
-// Query IDs from https://dune.com/vnkr
+const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";
+const ALERT_CHAT_ID = process.env.TELEGRAM_ALERT_CHAT_ID ?? "";
+const DUNE_API_KEY = process.env.DUNE_API_KEY ?? "";
+// Query IDs from https://dune.com/YOUR_TOKEN
 const DUNE_RESERVE_QUERY = process.env.DUNE_RESERVE_QUERY_ID ?? "1234567";
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: false });
@@ -26,7 +26,7 @@ async function sendReserveAlert(): Promise<void> {
 
     const latest = rows[0] as { total_reserve_usd: number; backing_ratio: number };
     const msg = [
-      "📊 *VNKR Reserve Alert*",
+      "📊 *YOUR_TOKEN Reserve Alert*",
       `Total Reserve: $${latest.total_reserve_usd?.toLocaleString() ?? "N/A"}`,
       `Backing Ratio: ${((latest.backing_ratio ?? 0) * 100).toFixed(2)}%`,
       `_Updated: ${new Date().toUTCString()}_`,

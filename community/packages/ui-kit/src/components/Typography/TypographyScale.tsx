@@ -1,15 +1,15 @@
 /**
  * TypographyScale — visual reference component
- * Renders every variant of the VNKR type scale side by side (for docs / Storybook).
+ * Renders every variant of the YOUR_TOKEN type scale side by side (for docs / Storybook).
  */
 import React from "react";
 import { Text } from "./Text";
 
 const HEADLINES = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
-const WEIGHTS   = ["semibold", "medium", "regular"] as const;
+const WEIGHTS = ["semibold", "medium", "regular"] as const;
 const SUBTITLES = ["subtitle1", "subtitle2"] as const;
-const BODIES    = ["body1", "body2", "caption", "overline"] as const;
-const BUTTONS   = ["btnGiant", "btnLarge", "btnMedium", "btnSmall"] as const;
+const BODIES = ["body1", "body2", "caption", "overline"] as const;
+const BUTTONS = ["btnGiant", "btnLarge", "btnMedium", "btnSmall"] as const;
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

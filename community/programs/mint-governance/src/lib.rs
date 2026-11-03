@@ -4,9 +4,9 @@ use anchor_spl::token::{self, Mint, Token, TokenAccount, MintTo, Burn};
 declare_id!(env!("PROGRAM_ID_MINT_GOVERNANCE", "11111111111111111111111111111111"));
 
 /// ─── Program ────────────────────────────────────────────────────────────────
-/// Manages AXVN Mint/Burn lifecycle tied to IP Escrow Deeds and Whitelist.
+/// Manages YOUR_TOKEN Mint/Burn lifecycle tied to IP Escrow Deeds and Whitelist.
 #[program]
-pub mod vnkr_mint_governance {
+pub mod AXVN_mint_governance {
     use super::*;
 
     /// Initialize the Governance config (called once by the Holding admin).
@@ -20,7 +20,7 @@ pub mod vnkr_mint_governance {
         Ok(())
     }
 
-    /// Whitelist a wallet to be eligible for receiving minted AXVN.
+    /// Whitelist a wallet to be eligible for receiving minted YOUR_TOKEN.
     pub fn add_to_whitelist(ctx: Context<ManageWhitelist>, wallet: Pubkey) -> Result<()> {
         let entry = &mut ctx.accounts.whitelist_entry;
         entry.wallet  = wallet;
@@ -37,7 +37,7 @@ pub mod vnkr_mint_governance {
         Ok(())
     }
 
-    /// Mint AXVN to a whitelisted recipient (backed by IP Escrow Deed proof).
+    /// Mint YOUR_TOKEN to a whitelisted recipient (backed by IP Escrow Deed proof).
     pub fn mint_axvn(ctx: Context<MintAXVN>, amount: u64, deed_ref: [u8; 32]) -> Result<()> {
         let cfg = &mut ctx.accounts.governance_config;
         require!(
@@ -65,7 +65,7 @@ pub mod vnkr_mint_governance {
         Ok(())
     }
 
-    /// Burn AXVN from a holder (governance-approved redemption).
+    /// Burn YOUR_TOKEN from a holder (governance-approved redemption).
     pub fn burn_axvn(ctx: Context<BurnAXVN>, amount: u64) -> Result<()> {
         let cfg = &mut ctx.accounts.governance_config;
         cfg.current_supply = cfg.current_supply.saturating_sub(amount);

@@ -1,6 +1,6 @@
 {{/*
 ───────────────────────────────────────────────────────────────────────────────
-  VNKR Services — Generic Service (ClusterIP) template
+  YOUR_INFRA Services — Generic Service (ClusterIP) template
   Creates a ClusterIP Service for each service that has a port.
 ───────────────────────────────────────────────────────────────────────────────
 */}}
@@ -13,7 +13,7 @@ metadata:
   name: {{ $svc.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "vnkr-services.labels" $ | nindent 4 }}
+    {{- include "YOUR_INFRA-services.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $svc.name }}
 spec:
   type: ClusterIP

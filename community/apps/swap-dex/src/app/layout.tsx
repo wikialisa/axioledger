@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VNKR Swap",
-  description: "AMM DEX & Cross-chain Liquidity Router — VNKR Global Ventures Pte. Ltd.",
+  title: "YOUR_TOKEN Swap",
+  description: "AMM DEX & Cross-chain Liquidity Router — YOUR_TOKEN Global Ventures Pte. Ltd.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
