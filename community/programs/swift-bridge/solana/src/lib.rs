@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("SWFTb1111111111111111111111111111111111111111");
+declare_id!(env!("PROGRAM_ID_SWIFT_BRIDGE", "11111111111111111111111111111111"));
 
 // ─── VNKR Swift Bridge — Solana Anchor Program ────────────────────────────────
 //

@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("ESCRw1111111111111111111111111111111111111111");
+declare_id!(env!("PROGRAM_ID_P2P_ESCROW", "11111111111111111111111111111111"));
 
 /// ─── Program ────────────────────────────────────────────────────────────────
 #[program]

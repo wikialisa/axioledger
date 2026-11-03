@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, MintTo, Burn};
 
-declare_id!("MINTg1111111111111111111111111111111111111111");
+declare_id!(env!("PROGRAM_ID_MINT_GOVERNANCE", "11111111111111111111111111111111"));
 
 /// ─── Program ────────────────────────────────────────────────────────────────
 /// Manages AXVN Mint/Burn lifecycle tied to IP Escrow Deeds and Whitelist.

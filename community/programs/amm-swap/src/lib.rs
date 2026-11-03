@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("AMMSw1111111111111111111111111111111111111111");
+declare_id!(env!("PROGRAM_ID_AMM_SWAP", "11111111111111111111111111111111"));
 
 /// Constant-product AMM (x * y = k) with configurable fee tier.
 #[program]

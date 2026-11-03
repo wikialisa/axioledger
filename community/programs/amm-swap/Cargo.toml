@@ -1,12 +1,11 @@
 [package]
-name = "vnkr-swift-bridge"
+name = "amm-swap"
 version = "0.1.0"
 edition = "2021"
-description = "VNKR SWIFT ↔ Solana Anchor Bridge Program — Mint/Burn AXVN on inbound/outbound SWIFT settlement"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "vnkr_swift_bridge"
+name = "amm_swap"
 
 [features]
 no-entrypoint = []

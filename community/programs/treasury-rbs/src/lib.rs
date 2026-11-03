@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Token, TokenAccount};
 
-declare_id!("TRBSr1111111111111111111111111111111111111111");
+declare_id!(env!("PROGRAM_ID_TREASURY_RBS", "11111111111111111111111111111111"));
 
 /// Range Bound Stability (RBS) Treasury — Cayman Foundation DAO governance.
 /// Manages reserve assets and enforces a price stability corridor.

@@ -1,11 +1,12 @@
 [package]
-name = "vnkr-p2p-escrow"
+name = "swift-bridge"
 version = "0.1.0"
 edition = "2021"
+description = "VNKR SWIFT ↔ Solana Anchor Bridge Program — Mint/Burn AXVN on inbound/outbound SWIFT settlement"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "vnkr_p2p_escrow"
+name = "swift_bridge"
 
 [features]
 no-entrypoint = []
