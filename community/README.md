@@ -43,15 +43,23 @@ Truy cập:
 
 ---
 
-## Kiến trúc 4 tầng
+## Kiến trúc 7 tầng
 
 Xem chi tiết: [`ARCHITECTURE.md`](./ARCHITECTURE.md)
 
+**Tầng Ứng dụng:**
 ```
 Tầng 4 — apps/          Giao diện người dùng (Next.js PWA)
 Tầng 3 — services/      Backend microservices (Node.js · Docker)
 Tầng 2 — packages/      Thư viện & SDK dùng chung (TypeScript · MIT)
 Tầng 1 — programs/      Smart contracts (Solana Anchor · EVM Solidity)
+```
+
+**Tầng Kỹ thuật (mới):**
+```
+Tầng C — ctf/           5 CTF challenges · Bảo mật từ audit thực tế
+Tầng B — verify/        CLI xác thực artifact vs on-chain bytecode
+Tầng A — runtime/       VM sandbox · EVM bytecode execution · Trace
 ```
 
 ---
@@ -70,7 +78,7 @@ pnpm --filter sandbox-dashboard dev   # http://localhost:3007
 
 ### 🏛️ Chính phủ & Tổ chức công
 - **KYC Portal** tích hợp eKYC/eCitizen: `apps/kyc-portal/`
-- **Block Explorer** & Proof of Reserve công khai: `apps/explorer-vnkrscan/`
+- **Block Explorer** & Proof of Reserve công khai: `apps/explorer-AXVNscan/`
 - **Quản trị DAO on-chain**: `apps/dao-portal/` + `programs/treasury-rbs/`
 - **SWIFT institutional banking**: `packages/swift-adapter/` + `services/swift-gateway/`
 - **On-premise deployment**: `deploy/docker/` hoặc `deploy/kubernetes/`
@@ -131,6 +139,9 @@ monorepo/
 ├── packages/          # 11 thư viện TypeScript (SDK, UI, types)
 ├── programs/          # 5 smart contracts (Solana Anchor + EVM Solidity)
 ├── services/          # 9 microservices Node.js (API, SWIFT, Indexer)
+├── runtime/           # VM sandbox · bytecode execution (Rust · MIT)
+├── verify/            # On-chain verification CLI (Rust · MIT)
+├── ctf/               # 5 Security challenges từ audit thực tế (Rust · MIT)
 ├── deploy/            # Docker · Kubernetes · Nginx · Terraform
 └── scripts/           # Automation: brand, program-ids, SWIFT setup
 ```
@@ -160,6 +171,7 @@ monorepo/
 | `apps/*` | **AGPL-3.0** | Mã nguồn mở, phải chia sẻ sửa đổi |
 | `programs/*, packages/swift-adapter, packages/sdk-swift` | **BSL-1.1** | Source-available, cần giấy phép thương mại cho production fork |
 | `services/*` | **AGPL-3.0** | Microservices open source |
+| `runtime/`, `verify/`, `ctf/` | **MIT** | Tự do hoàn toàn — giáo dục, nghiên cứu, production |
 
 ---
 

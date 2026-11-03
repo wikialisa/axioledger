@@ -1,16 +1,19 @@
 # Open Financial Infrastructure — Architecture
 
-> **Dành cho:** Trường học · Chính phủ · Doanh nghiệp · Nhà phát triển toàn cầu  
-> **Giấy phép:** MIT (packages/ui-kit, packages/types, packages/config, packages/core-sdk)  
-> AGPL-3.0 (apps/*)  
-> BSL-1.1 (programs/*, packages/swift-adapter, packages/sdk-swift)  
+> **Dành cho:** Trường học · Chính phủ · Doanh nghiệp · Nhà phát triển toàn cầu
+> **Giấy phép:** MIT (packages/ui-kit, packages/types, packages/config, packages/core-sdk)
+> AGPL-3.0 (apps/*)
+> BSL-1.1 (programs/*, packages/swift-adapter, packages/sdk-swift)
+> MIT (runtime/, verify/, ctf/)
 > **Cấu hình danh tính:** `brand.config.json` + `programs/program-ids.config.json`
 
 ---
 
 ## Tầm nhìn thiết kế
 
-Hệ thống được chia thành **4 tầng độc lập**, mỗi tầng có thể triển khai riêng lẻ hoặc kết hợp:
+Hệ thống được chia thành **7 tầng độc lập**, mỗi tầng có thể triển khai riêng lẻ hoặc kết hợp.
+
+### Tầng Ứng dụng (Application Stack)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -21,10 +24,30 @@ Hệ thống được chia thành **4 tầng độc lập**, mỗi tầng có th
 │  Node.js · REST/WS · Microservices · Docker-ready                  │
 ├─────────────────────────────────────────────────────────────────────┤
 │  TẦNG 2 — THƯ VIỆN DÙNG CHUNG   (packages/)                        │
-│  TypeScript SDK · Design System · Shared Types                     │
+│  TypeScript SDK · Design System · SWIFT ISO 20022                  │
 ├─────────────────────────────────────────────────────────────────────┤
 │  TẦNG 1 — HỢP ĐỒNG THÔNG MINH   (programs/)                        │
 │  Solana Anchor · EVM Solidity · Biến số Programme ID               │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Tầng Kỹ thuật (Technical Infrastructure)
+
+Ba tầng kỹ thuật bổ sung phục vụ phát triển, kiểm toán và giáo dục:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  TẦNG KỸ THUẬT C — CTF FRAMEWORK     (ctf/)                        │
+│  5 Security Challenges · Lỗi logic thực tế từ audit DeFi           │
+│  Reentrancy · Oracle Manipulation · Access Control · Replay        │
+├─────────────────────────────────────────────────────────────────────┤
+│  TẦNG KỸ THUẬT B — VERIFICATION CLI  (verify/)                     │
+│  Build hash artifact · So sánh với on-chain bytecode               │
+│  SHA-256 · BLAKE3 · EVM eth_getCode · Solana getAccountInfo        │
+├─────────────────────────────────────────────────────────────────────┤
+│  TẦNG KỸ THUẬT A — VM & RUNTIME      (runtime/)                    │
+│  Bytecode execution sandbox · EVM-compatible opcodes               │
+│  Trace mode · Gas simulation · Storage simulation                  │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -235,7 +258,7 @@ monorepo/
 │   │       ├── bonds/            │  Phát hành trái phiếu token hóa
 │   │       └── rbs-monitor/      │  Giám sát Range Bound Stability
 │   │
-│   ├── explorer-vnkrscan/        ← Block explorer · Proof of Reserve công khai
+│   ├── explorer-AXVNscan/        ← Block explorer · Proof of Reserve công khai
 │   │   └── src/app/(explorer)/
 │   │       ├── blocks/           │  Danh sách block · TPS real-time
 │   │       ├── txs/              │  Giao dịch · filter by type/address
@@ -344,3 +367,61 @@ npx hardhat deploy --network testnet       # EVM
 | `apps/app-web` | `BRAND_DOMAIN` | Main PWA |
 | Tất cả domains | `BRAND_DOMAIN` | Thay thế bằng domain của tổ chức |
 | Tên tổ chức | `BRAND_ORG_FULL` | Tên đầy đủ của tổ chức fork |
+
+---
+
+## Tầng Kỹ thuật — Hướng dẫn sử dụng
+
+### Tầng A: VM Runtime (`runtime/`)
+
+```bash
+# Build CLI
+cargo build -p axio-runtime --release
+
+# Chạy bytecode
+./target/release/axio-run --bytecode 600a600b0100 --trace
+
+# Kết quả:
+# 📦 Parsed 4 instructions
+# ✅ Execution succeeded
+#    gas_used   : 9
+#    stack_top  : 0x000000000000000000000000000000000000000000000000000000000000001e
+```
+
+### Tầng B: Verification CLI (`verify/`)
+
+```bash
+# Build CLI
+cargo build -p axio-verify --release
+
+# So sánh artifact local với deployed on-chain
+export AXIO_RPC_URL="https://mainnet.infura.io/v3/<KEY>"
+./target/release/axio-verify \
+  --artifact packages/contracts/build/SwiftBridge.bin \
+  --artifact-type evm-bytecode \
+  --address 0xContractAddress \
+  --algo sha256
+
+# JSON output cho CI/CD
+./target/release/axio-verify ... --json | jq .
+```
+
+### Tầng C: CTF Challenges (`ctf/`)
+
+```bash
+# Liệt kê tất cả challenges
+./ctf/scripts/run-ctf.sh list
+
+# Build + test tất cả
+./ctf/scripts/run-ctf.sh
+
+# Chạy một challenge cụ thể
+./ctf/scripts/run-ctf.sh reentrancy
+
+# Quy trình học:
+# 1. Đọc challenges/<name>/src/lib.rs — tìm *_vulnerable
+# 2. Trace execution bằng axio-run
+# 3. Viết exploit test
+# 4. Đọc *_fixed — hiểu pattern đúng
+# 5. Verify deployment bằng axio-verify
+```

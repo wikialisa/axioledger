@@ -1,0 +1,13 @@
+[package]
+name        = "ctf-access-control-bypass"
+version     = "0.1.0"
+edition     = "2021"
+description = "CTF Challenge 03 — Access Control Bypass (missing signer check)"
+license     = "MIT"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+anchor-lang    = { workspace = true }
+solana-program = { workspace = true }

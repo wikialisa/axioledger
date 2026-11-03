@@ -1,0 +1,13 @@
+[package]
+name        = "ctf-reentrancy"
+version     = "0.1.0"
+edition     = "2021"
+description = "CTF Challenge 01 — Reentrancy Attack (inspired by real audit findings)"
+license     = "MIT"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+anchor-lang    = { workspace = true }
+solana-program = { workspace = true }

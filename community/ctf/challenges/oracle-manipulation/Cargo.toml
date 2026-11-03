@@ -1,0 +1,13 @@
+[package]
+name        = "ctf-oracle-manipulation"
+version     = "0.1.0"
+edition     = "2021"
+description = "CTF Challenge 02 — Oracle Price Manipulation"
+license     = "MIT"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+anchor-lang    = { workspace = true }
+solana-program = { workspace = true }

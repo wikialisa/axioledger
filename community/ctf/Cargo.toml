@@ -1,0 +1,24 @@
+# CTF Framework — Security Challenge Harness
+#
+# Mỗi challenge tái hiện một lỗ hổng logic thực tế từ các cuộc audit
+# DeFi, SWIFT-bridge, escrow, và governance. Mục tiêu: học từ lỗi thật.
+
+[workspace]
+members = [
+    "challenges/reentrancy",
+    "challenges/oracle-manipulation",
+    "challenges/access-control-bypass",
+    "challenges/flash-loan-attack",
+    "challenges/signature-replay",
+]
+resolver = "2"
+
+[workspace.dependencies]
+anchor-lang    = { version = "0.30.1", features = ["init-if-needed"] }
+solana-program = "~1.18"
+sha2           = "0.10"
+hex            = "0.4"
+
+[profile.release]
+overflow-checks = true
+lto             = "thin"
