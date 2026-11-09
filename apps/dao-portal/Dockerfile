@@ -1,5 +1,5 @@
 # ── Stage 1: Prune ────────────────────────────────────────────────────────────
-FROM node:20-alpine AS pruner
+FROM node:26-alpine AS pruner
 RUN apk add --no-cache libc6-compat
 RUN npm install -g turbo@latest
 WORKDIR /app
@@ -8,7 +8,7 @@ ARG APP_NAME=dao-portal
 RUN turbo prune --scope=${APP_NAME} --docker
 
 # ── Stage 2: Install & Build ──────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm
 WORKDIR /app
@@ -25,7 +25,7 @@ ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN pnpm turbo run build --filter=${APP_NAME}...
 
 # ── Stage 3: Runner ───────────────────────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:26-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
