@@ -1,6 +1,6 @@
 # ─── Dockerfile: swift-chain-bridge ──────────────────────────────────────────
 # Bi-Directional SWIFT ↔ Blockchain Relayer (Port 4005)
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 
 RUN npm install -g pnpm
@@ -21,7 +21,7 @@ RUN pnpm --filter @AXVN/config         build
 RUN pnpm --filter @AXVN/swift-adapter  build
 RUN pnpm --filter @AXVN/swift-chain-bridge build
 
-FROM node:20-alpine AS runner
+FROM node:26-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
