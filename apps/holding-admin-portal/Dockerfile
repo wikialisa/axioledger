@@ -20,6 +20,8 @@ RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 COPY turbo.json turbo.json
 ARG APP_NAME=holding-admin-portal
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN pnpm turbo run build --filter=${APP_NAME}...
 
 # ── Stage 3: Runner ───────────────────────────────────────────────────────────

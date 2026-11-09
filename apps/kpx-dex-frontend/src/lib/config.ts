@@ -10,13 +10,15 @@ import { http, createConfig } from 'wagmi';
 import { hardhat, sepolia, mainnet } from 'viem/chains';
 import { injected, metaMask } from 'wagmi/connectors';
 
+const isMainnet = process.env.NEXT_PUBLIC_NETWORK === 'mainnet';
+
 export const wagmiConfig = createConfig({
-  chains:     [hardhat, sepolia, mainnet],
+  chains:     isMainnet ? [mainnet] : [hardhat, sepolia, mainnet],
   connectors: [injected(), metaMask()],
   transports: {
-    [hardhat.id]:  http(process.env.NEXT_PUBLIC_RPC_URL ?? 'http://127.0.0.1:8545'),
-    [sepolia.id]:  http(),
-    [mainnet.id]:  http(),
+    [hardhat.id]: http(process.env.NEXT_PUBLIC_RPC_URL ?? 'http://127.0.0.1:8545'),
+    [sepolia.id]: http(),
+    [mainnet.id]: http(isMainnet ? process.env.NEXT_PUBLIC_RPC_URL : undefined),
   },
 });
 

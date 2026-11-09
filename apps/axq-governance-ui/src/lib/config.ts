@@ -1,20 +1,21 @@
 /**
  * Wagmi + viem chain config for the AXQ Governance UI.
  *
- * Replace the placeholder contract addresses with the real deployed
- * addresses once AXQGovernance is on Sepolia / mainnet.
+ * Contract addresses are supplied at build time for the configured network.
  */
 
 import { http, createConfig } from 'wagmi';
 import { sepolia, mainnet } from 'viem/chains';
 import { injected, metaMask } from 'wagmi/connectors';
 
+const isMainnet = process.env.NEXT_PUBLIC_NETWORK === 'mainnet';
+
 export const wagmiConfig = createConfig({
-  chains:     [sepolia, mainnet],
+  chains:     isMainnet ? [mainnet] : [sepolia, mainnet],
   connectors: [injected(), metaMask()],
   transports: {
     [sepolia.id]:  http(),
-    [mainnet.id]:  http(),
+    [mainnet.id]:  http(isMainnet ? process.env.NEXT_PUBLIC_RPC_URL : undefined),
   },
 });
 

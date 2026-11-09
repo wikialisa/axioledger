@@ -1,6 +1,6 @@
 # docker-compose.apps.yml — AXIOLEDGER Frontend Applications
 #
-# Quản lý riêng 15 Next.js apps. Chạy cùng với docker-compose.yml (backend stack):
+# Quản lý riêng 15 application containers. Chạy cùng với docker-compose.yml (backend stack):
 #
 #   docker compose \
 #     -f tooling/deploy/docker/docker-compose.yml \
@@ -24,17 +24,33 @@
 #   3013 — kyc-portal
 #   3014 — digital-twin-engine (worker — no HTTP port)
 
-version: "3.9"
-
 x-app-build: &app-build
-  context: ../..
+  context: ../../..
   args:
     NODE_ENV: production
+    NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+
+x-wallet-build-args: &wallet-build-args
+  NODE_ENV: production
+  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+  NEXT_PUBLIC_NETWORK: ${NEXT_PUBLIC_NETWORK:-}
+  NEXT_PUBLIC_CHAIN_ID: ${NEXT_PUBLIC_CHAIN_ID:-}
+  NEXT_PUBLIC_RPC_URL: ${NEXT_PUBLIC_RPC_URL:-}
+  NEXT_PUBLIC_AXQ_TOKEN: ${NEXT_PUBLIC_AXQ_TOKEN:-}
+  NEXT_PUBLIC_ANS_REGISTRY: ${NEXT_PUBLIC_ANS_REGISTRY:-}
+  NEXT_PUBLIC_AXQ_GOVERNANCE: ${NEXT_PUBLIC_AXQ_GOVERNANCE:-}
+  NEXT_PUBLIC_VRQ_VALIDATOR: ${NEXT_PUBLIC_VRQ_VALIDATOR:-}
+
+x-kpx-build-args: &kpx-build-args
+  <<: *wallet-build-args
+  NEXT_PUBLIC_KPX_ROUTER: ${NEXT_PUBLIC_KPX_ROUTER:-}
+  NEXT_PUBLIC_KPX_VRQ_VERIFIER: ${NEXT_PUBLIC_KPX_VRQ_VERIFIER:-}
+  NEXT_PUBLIC_KPX_DARK_POOL: ${NEXT_PUBLIC_KPX_DARK_POOL:-}
 
 x-app-defaults: &app-defaults
   restart: unless-stopped
   env_file:
-    - ../../.env
+    - ../../../.env
   networks:
     - AXVN-network
 
@@ -46,7 +62,9 @@ services:
       <<: *app-build
       dockerfile: apps/website/Dockerfile
       args:
-        APP_NAME: axioledger-website
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+        NEXT_PUBLIC_BASE_PATH: ${NEXT_PUBLIC_BASE_PATH:-}
     image: axvn/website:${TAG:-latest}
     container_name: AXVN-website
     <<: *app-defaults
@@ -67,6 +85,8 @@ services:
       <<: *app-build
       dockerfile: apps/id-fiat-gateway/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: id-fiat-gateway
     image: axvn/id-fiat-gateway:${TAG:-latest}
     container_name: AXVN-id-fiat-gateway
@@ -88,6 +108,8 @@ services:
       <<: *app-build
       dockerfile: apps/pay-portal/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: pay-portal
     image: axvn/pay-portal:${TAG:-latest}
     container_name: AXVN-pay-portal
@@ -109,6 +131,8 @@ services:
       <<: *app-build
       dockerfile: apps/explorer-vnkrscan/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: explorer-vnkrscan
     image: axvn/explorer-vnkrscan:${TAG:-latest}
     container_name: AXVN-explorer-vnkrscan
@@ -131,6 +155,8 @@ services:
       <<: *app-build
       dockerfile: apps/swap-dex/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: swap-dex
     image: axvn/swap-dex:${TAG:-latest}
     container_name: AXVN-swap-dex
@@ -152,6 +178,8 @@ services:
       <<: *app-build
       dockerfile: apps/dao-portal/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: dao-portal
     image: axvn/dao-portal:${TAG:-latest}
     container_name: AXVN-dao-portal
@@ -173,6 +201,8 @@ services:
       <<: *app-build
       dockerfile: apps/holding-admin-portal/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: holding-admin-portal
     image: axvn/holding-admin-portal:${TAG:-latest}
     container_name: AXVN-holding-admin-portal
@@ -194,6 +224,7 @@ services:
       <<: *app-build
       dockerfile: apps/axiopass-wallet/Dockerfile
       args:
+        <<: *wallet-build-args
         APP_NAME: axiopass-wallet
     image: axvn/axiopass-wallet:${TAG:-latest}
     container_name: AXVN-axiopass-wallet
@@ -203,6 +234,13 @@ services:
     environment:
       PORT: 3007
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+      NEXT_PUBLIC_NETWORK: ${NEXT_PUBLIC_NETWORK:-}
+      NEXT_PUBLIC_CHAIN_ID: ${NEXT_PUBLIC_CHAIN_ID:-}
+      NEXT_PUBLIC_RPC_URL: ${NEXT_PUBLIC_RPC_URL:-}
+      NEXT_PUBLIC_AXQ_TOKEN: ${NEXT_PUBLIC_AXQ_TOKEN:-}
+      NEXT_PUBLIC_ANS_REGISTRY: ${NEXT_PUBLIC_ANS_REGISTRY:-}
+      NEXT_PUBLIC_AXQ_GOVERNANCE: ${NEXT_PUBLIC_AXQ_GOVERNANCE:-}
+      NEXT_PUBLIC_VRQ_VALIDATOR: ${NEXT_PUBLIC_VRQ_VALIDATOR:-}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3007/api/health"]
       interval: 30s
@@ -215,6 +253,7 @@ services:
       <<: *app-build
       dockerfile: apps/axq-governance-ui/Dockerfile
       args:
+        <<: *wallet-build-args
         APP_NAME: axq-governance-ui
     image: axvn/axq-governance-ui:${TAG:-latest}
     container_name: AXVN-axq-governance-ui
@@ -224,6 +263,13 @@ services:
     environment:
       PORT: 3008
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+      NEXT_PUBLIC_NETWORK: ${NEXT_PUBLIC_NETWORK:-}
+      NEXT_PUBLIC_CHAIN_ID: ${NEXT_PUBLIC_CHAIN_ID:-}
+      NEXT_PUBLIC_RPC_URL: ${NEXT_PUBLIC_RPC_URL:-}
+      NEXT_PUBLIC_AXQ_TOKEN: ${NEXT_PUBLIC_AXQ_TOKEN:-}
+      NEXT_PUBLIC_ANS_REGISTRY: ${NEXT_PUBLIC_ANS_REGISTRY:-}
+      NEXT_PUBLIC_AXQ_GOVERNANCE: ${NEXT_PUBLIC_AXQ_GOVERNANCE:-}
+      NEXT_PUBLIC_VRQ_VALIDATOR: ${NEXT_PUBLIC_VRQ_VALIDATOR:-}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3008/api/health"]
       interval: 30s
@@ -236,6 +282,7 @@ services:
       <<: *app-build
       dockerfile: apps/kpx-dex-frontend/Dockerfile
       args:
+        <<: *kpx-build-args
         APP_NAME: kpx-dex-frontend
     image: axvn/kpx-dex-frontend:${TAG:-latest}
     container_name: AXVN-kpx-dex-frontend
@@ -245,6 +292,16 @@ services:
     environment:
       PORT: 3009
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
+      NEXT_PUBLIC_NETWORK: ${NEXT_PUBLIC_NETWORK:-}
+      NEXT_PUBLIC_CHAIN_ID: ${NEXT_PUBLIC_CHAIN_ID:-}
+      NEXT_PUBLIC_RPC_URL: ${NEXT_PUBLIC_RPC_URL:-}
+      NEXT_PUBLIC_AXQ_TOKEN: ${NEXT_PUBLIC_AXQ_TOKEN:-}
+      NEXT_PUBLIC_ANS_REGISTRY: ${NEXT_PUBLIC_ANS_REGISTRY:-}
+      NEXT_PUBLIC_AXQ_GOVERNANCE: ${NEXT_PUBLIC_AXQ_GOVERNANCE:-}
+      NEXT_PUBLIC_VRQ_VALIDATOR: ${NEXT_PUBLIC_VRQ_VALIDATOR:-}
+      NEXT_PUBLIC_KPX_ROUTER: ${NEXT_PUBLIC_KPX_ROUTER:-}
+      NEXT_PUBLIC_KPX_VRQ_VERIFIER: ${NEXT_PUBLIC_KPX_VRQ_VERIFIER:-}
+      NEXT_PUBLIC_KPX_DARK_POOL: ${NEXT_PUBLIC_KPX_DARK_POOL:-}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3009/api/health"]
       interval: 30s
@@ -257,6 +314,8 @@ services:
       <<: *app-build
       dockerfile: apps/app-web/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: app-web
     image: axvn/app-web:${TAG:-latest}
     container_name: AXVN-app-web
@@ -278,6 +337,8 @@ services:
       <<: *app-build
       dockerfile: apps/merchant-portal/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: merchant-portal
     image: axvn/merchant-portal:${TAG:-latest}
     container_name: AXVN-merchant-portal
@@ -299,6 +360,8 @@ services:
       <<: *app-build
       dockerfile: apps/sandbox-dashboard/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: sandbox-dashboard
     image: axvn/sandbox-dashboard:${TAG:-latest}
     container_name: AXVN-sandbox-dashboard
@@ -320,6 +383,8 @@ services:
       <<: *app-build
       dockerfile: apps/kyc-portal/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: kyc-portal
     image: axvn/kyc-portal:${TAG:-latest}
     container_name: AXVN-kyc-portal
@@ -341,6 +406,8 @@ services:
       <<: *app-build
       dockerfile: apps/digital-twin-engine/Dockerfile
       args:
+        NODE_ENV: production
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://dev-api.${BRAND_DOMAIN:-localhost}}
         APP_NAME: digital-twin-engine
     image: axvn/digital-twin-engine:${TAG:-latest}
     container_name: AXVN-digital-twin-engine

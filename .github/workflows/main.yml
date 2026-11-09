@@ -1,19 +1,195 @@
-- name: Setup Go environment
-  uses: actions/setup-go@v7.0.0
-  with:
-    # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
-    go-version: # optional
-    # Path to the go.mod, go.work, .go-version, or .tool-versions file.
-    go-version-file: # optional
-    # Set this option to true if you want the action to always check for the latest available version that satisfies the version spec
-    check-latest: # optional
-    # Used to pull Go distributions from go-versions. Since there's a default, this is typically not supplied by the user. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
-    token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
-    # Used to specify whether caching is needed. Set to true, if you'd like to enable caching.
-    cache: # optional, default is true
-    # Used to specify the path to a dependency file (e.g., go.mod, go.sum)
-    cache-dependency-path: # optional
-    # Target architecture for Go to use. Examples: x86, x64. Will use system architecture by default.
-    architecture: # optional
-    # Custom base URL for downloading Go distributions. Use this to download Go from a mirror or custom source. Defaults to "https://go.dev/dl". Can also be set via the GO_DOWNLOAD_BASE_URL environment variable. The input takes precedence over the environment variable.
-    go-download-base-url: # optional
+name: Deploy all apps to production
+
+# Configure these on the GitHub "production" environment before dispatch:
+# Secrets: VPS_SSH_HOST, VPS_SSH_USER, VPS_SSH_PRIVATE_KEY, VPS_SSH_KNOWN_HOSTS
+# Variables: VPS_DEPLOY_PATH, NEXT_PUBLIC_API_URL, NEXT_PUBLIC_NETWORK=mainnet,
+# NEXT_PUBLIC_CHAIN_ID=1, NEXT_PUBLIC_RPC_URL, contract addresses, optional
+# NEXT_PUBLIC_BASE_PATH. Keep private runtime credentials in the VPS .env file.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: Type DEPLOY ALL APPS to deploy every app to production
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: axioledger-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: inputs.confirm == 'DEPLOY ALL APPS' && (github.ref_name == 'main' || github.ref_name == 'master')
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 60
+    env:
+      VPS_SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+      VPS_SSH_USER: ${{ secrets.VPS_SSH_USER }}
+      VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+      VPS_SSH_KNOWN_HOSTS: ${{ secrets.VPS_SSH_KNOWN_HOSTS }}
+      VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
+      VPS_DEPLOY_PATH: ${{ vars.VPS_DEPLOY_PATH }}
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_NETWORK: ${{ vars.NEXT_PUBLIC_NETWORK }}
+      NEXT_PUBLIC_CHAIN_ID: ${{ vars.NEXT_PUBLIC_CHAIN_ID }}
+      NEXT_PUBLIC_RPC_URL: ${{ vars.NEXT_PUBLIC_RPC_URL }}
+      NEXT_PUBLIC_AXQ_TOKEN: ${{ vars.NEXT_PUBLIC_AXQ_TOKEN }}
+      NEXT_PUBLIC_ANS_REGISTRY: ${{ vars.NEXT_PUBLIC_ANS_REGISTRY }}
+      NEXT_PUBLIC_AXQ_GOVERNANCE: ${{ vars.NEXT_PUBLIC_AXQ_GOVERNANCE }}
+      NEXT_PUBLIC_VRQ_VALIDATOR: ${{ vars.NEXT_PUBLIC_VRQ_VALIDATOR }}
+      NEXT_PUBLIC_KPX_ROUTER: ${{ vars.NEXT_PUBLIC_KPX_ROUTER }}
+      NEXT_PUBLIC_KPX_VRQ_VERIFIER: ${{ vars.NEXT_PUBLIC_KPX_VRQ_VERIFIER }}
+      NEXT_PUBLIC_KPX_DARK_POOL: ${{ vars.NEXT_PUBLIC_KPX_DARK_POOL }}
+      NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH }}
+    steps:
+      - name: Validate production configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required=(
+            VPS_SSH_HOST
+            VPS_SSH_USER
+            VPS_SSH_PRIVATE_KEY
+            VPS_SSH_KNOWN_HOSTS
+            VPS_DEPLOY_PATH
+            NEXT_PUBLIC_API_URL
+            NEXT_PUBLIC_NETWORK
+            NEXT_PUBLIC_CHAIN_ID
+            NEXT_PUBLIC_RPC_URL
+            NEXT_PUBLIC_AXQ_TOKEN
+            NEXT_PUBLIC_ANS_REGISTRY
+            NEXT_PUBLIC_AXQ_GOVERNANCE
+            NEXT_PUBLIC_VRQ_VALIDATOR
+            NEXT_PUBLIC_KPX_ROUTER
+            NEXT_PUBLIC_KPX_VRQ_VERIFIER
+            NEXT_PUBLIC_KPX_DARK_POOL
+          )
+          for name in "${required[@]}"; do
+            if [[ -z "${!name}" ]]; then
+              echo "::error::Missing required production secret or variable: $name"
+              exit 1
+            fi
+          done
+
+          if [[ ! "$VPS_DEPLOY_PATH" =~ ^/[A-Za-z0-9._/-]+$ ]]; then
+            echo "::error::VPS_DEPLOY_PATH must be an absolute path without spaces or shell characters."
+            exit 1
+          fi
+          if [[ ! "$VPS_SSH_PORT" =~ ^[0-9]+$ ]] || (( VPS_SSH_PORT < 1 || VPS_SSH_PORT > 65535 )); then
+            echo "::error::VPS_SSH_PORT must be between 1 and 65535."
+            exit 1
+          fi
+          if [[ "$NEXT_PUBLIC_API_URL" != https://* || "$NEXT_PUBLIC_RPC_URL" != https://* ]]; then
+            echo "::error::Production API and RPC URLs must use HTTPS."
+            exit 1
+          fi
+          if [[ "$NEXT_PUBLIC_NETWORK" != mainnet || "$NEXT_PUBLIC_CHAIN_ID" != 1 ]]; then
+            echo "::error::Production must target Ethereum Mainnet (NEXT_PUBLIC_NETWORK=mainnet, NEXT_PUBLIC_CHAIN_ID=1)."
+            exit 1
+          fi
+          for name in \
+            NEXT_PUBLIC_AXQ_TOKEN NEXT_PUBLIC_ANS_REGISTRY \
+            NEXT_PUBLIC_AXQ_GOVERNANCE NEXT_PUBLIC_VRQ_VALIDATOR \
+            NEXT_PUBLIC_KPX_ROUTER NEXT_PUBLIC_KPX_VRQ_VERIFIER \
+            NEXT_PUBLIC_KPX_DARK_POOL; do
+            if [[ ! "${!name}" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
+              echo "::error::$name must be a 20-byte Ethereum address."
+              exit 1
+            fi
+          done
+          for name in \
+            NEXT_PUBLIC_API_URL NEXT_PUBLIC_NETWORK NEXT_PUBLIC_CHAIN_ID \
+            NEXT_PUBLIC_RPC_URL NEXT_PUBLIC_AXQ_TOKEN NEXT_PUBLIC_ANS_REGISTRY \
+            NEXT_PUBLIC_AXQ_GOVERNANCE NEXT_PUBLIC_VRQ_VALIDATOR \
+            NEXT_PUBLIC_KPX_ROUTER NEXT_PUBLIC_KPX_VRQ_VERIFIER \
+            NEXT_PUBLIC_KPX_DARK_POOL NEXT_PUBLIC_BASE_PATH; do
+            if [[ "${!name}" == *$'\n'* || "${!name}" == *$'\r'* ]]; then
+              echo "::error::$name must not contain line breaks."
+              exit 1
+            fi
+          done
+
+      - name: Prepare SSH and build configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" > "$HOME/.ssh/axioledger_deploy"
+          chmod 600 "$HOME/.ssh/axioledger_deploy"
+          printf '%s\n' "$VPS_SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          {
+            printf 'NEXT_PUBLIC_API_URL=%s\n' "$NEXT_PUBLIC_API_URL"
+            printf 'NEXT_PUBLIC_NETWORK=%s\n' "$NEXT_PUBLIC_NETWORK"
+            printf 'NEXT_PUBLIC_CHAIN_ID=%s\n' "$NEXT_PUBLIC_CHAIN_ID"
+            printf 'NEXT_PUBLIC_RPC_URL=%s\n' "$NEXT_PUBLIC_RPC_URL"
+            printf 'NEXT_PUBLIC_AXQ_TOKEN=%s\n' "$NEXT_PUBLIC_AXQ_TOKEN"
+            printf 'NEXT_PUBLIC_ANS_REGISTRY=%s\n' "$NEXT_PUBLIC_ANS_REGISTRY"
+            printf 'NEXT_PUBLIC_AXQ_GOVERNANCE=%s\n' "$NEXT_PUBLIC_AXQ_GOVERNANCE"
+            printf 'NEXT_PUBLIC_VRQ_VALIDATOR=%s\n' "$NEXT_PUBLIC_VRQ_VALIDATOR"
+            printf 'NEXT_PUBLIC_KPX_ROUTER=%s\n' "$NEXT_PUBLIC_KPX_ROUTER"
+            printf 'NEXT_PUBLIC_KPX_VRQ_VERIFIER=%s\n' "$NEXT_PUBLIC_KPX_VRQ_VERIFIER"
+            printf 'NEXT_PUBLIC_KPX_DARK_POOL=%s\n' "$NEXT_PUBLIC_KPX_DARK_POOL"
+            printf 'NEXT_PUBLIC_BASE_PATH=%s\n' "$NEXT_PUBLIC_BASE_PATH"
+          } > "$RUNNER_TEMP/production-build.env"
+          chmod 600 "$RUNNER_TEMP/production-build.env"
+
+      - name: Deploy all application containers
+        shell: bash
+        run: |
+          set -euo pipefail
+          ssh_options=(
+            -i "$HOME/.ssh/axioledger_deploy"
+            -o BatchMode=yes
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts"
+          )
+          remote="${VPS_SSH_USER}@${VPS_SSH_HOST}"
+          remote_env="/tmp/axioledger-build-${GITHUB_RUN_ID}.env"
+
+          scp "${ssh_options[@]}" -P "$VPS_SSH_PORT" "$RUNNER_TEMP/production-build.env" \
+            "$remote:$remote_env"
+
+          remote_args=$(printf '%q ' \
+            "$GITHUB_SHA" "$GITHUB_REF_NAME" "$VPS_DEPLOY_PATH" "$remote_env")
+          ssh "${ssh_options[@]}" -p "$VPS_SSH_PORT" "$remote" "bash -s -- $remote_args" <<'REMOTE'
+          set -euo pipefail
+          commit="$1"
+          branch="$2"
+          deploy_path="$3"
+          build_env="$4"
+          trap 'rm -f "$build_env"' EXIT
+
+          cd "$deploy_path"
+          if [[ "$(git rev-parse --show-toplevel)" != "$deploy_path" ]]; then
+            echo "VPS_DEPLOY_PATH must point to the repository root." >&2
+            exit 1
+          fi
+          test -f .env || {
+            echo "Production runtime .env is missing from $deploy_path" >&2
+            exit 1
+          }
+          if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+            echo "Deployment checkout has tracked local changes; refusing to overwrite them." >&2
+            exit 1
+          fi
+          git fetch --no-tags origin "$branch"
+          git checkout --detach "$commit"
+
+          compose_file="tooling/deploy/docker/docker-compose.apps.yml"
+          docker network inspect AXVN-network >/dev/null
+          docker compose --env-file "$build_env" -f "$compose_file" config --quiet
+          docker compose --env-file "$build_env" -f "$compose_file" \
+            up -d --no-deps --build --wait --wait-timeout 180 \
+            website id-fiat-gateway pay-portal explorer-vnkrscan swap-dex \
+            dao-portal holding-admin-portal axiopass-wallet axq-governance-ui \
+            kpx-dex-frontend app-web merchant-portal sandbox-dashboard \
+            kyc-portal digital-twin-engine
+          REMOTE

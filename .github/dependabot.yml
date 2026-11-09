@@ -1,0 +1,87 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories:
+      - /
+      - /apps/kpx-dex-frontend
+      - /infra/core/sdk
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: cargo
+    directories:
+      - /programs/VNKR-amm-swap
+      - /programs/VNKR-mint-governance
+      - /programs/VNKR-p2p-escrow
+      - /programs/VNKR-swift-bridge/solana
+      - /programs/VNKR-treasury-rbs
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: maven
+    directories:
+      - /infra/core/banking/swift-gateway
+      - /packages/swift-bridge
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: terraform
+    directory: /tooling/deploy/terraform
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: docker
+    directories:
+      - /apps/app-web
+      - /apps/axiopass-wallet
+      - /apps/axq-governance-ui
+      - /apps/dao-portal
+      - /apps/digital-twin-engine
+      - /apps/explorer-vnkrscan
+      - /apps/holding-admin-portal
+      - /apps/id-fiat-gateway
+      - /apps/kpx-dex-frontend
+      - /apps/kyc-portal
+      - /apps/merchant-portal
+      - /apps/pay-portal
+      - /apps/sandbox-dashboard
+      - /apps/swap-dex
+      - /apps/website
+      - /packages/swift-adapter
+      - /services/dune-alert-bots
+      - /services/fiat-connector-api
+      - /services/indexer-subgraph
+      - /services/mock-mgw
+      - /services/otc-liquidity-engine
+      - /tooling/deploy/docker
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: UTC
+    open-pull-requests-limit: 5

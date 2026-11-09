@@ -1,0 +1,23 @@
+{
+  "log_dir": "/workspaces/axioledger/.vscode/pika-diagnostics-logs",
+  "auto_record": false,
+  "addr2line": "",
+  "boards": [
+    {
+      "name": "head",
+      "com": "",
+      "baud": 115200,
+      "elf": "",
+      "color": "#dcdcaa",
+      "record_enabled": false
+    },
+    {
+      "name": "back",
+      "com": "",
+      "baud": 115200,
+      "elf": "",
+      "color": "#4ec9b0",
+      "record_enabled": false
+    }
+  ]
+}

@@ -6,16 +6,18 @@ import { http, createConfig } from 'wagmi';
 import { sepolia, mainnet } from 'wagmi/chains';
 import { injected } from 'wagmi/connectors';
 
+const isMainnet = process.env.NEXT_PUBLIC_NETWORK === 'mainnet';
+
 export const wagmiConfig = createConfig({
-  chains:     [sepolia, mainnet],
+  chains:     isMainnet ? [mainnet] : [sepolia, mainnet],
   connectors: [injected()],
   transports: {
     [sepolia.id]: http(),
-    [mainnet.id]: http(),
+    [mainnet.id]: http(isMainnet ? process.env.NEXT_PUBLIC_RPC_URL : undefined),
   },
 });
 
-/** Deployed VRQPasskeyValidator address (Sepolia). */
+/** Deployed VRQPasskeyValidator address for the configured network. */
 export const CONTRACT_ADDRESSES = {
   vrqValidator: (process.env.NEXT_PUBLIC_VRQ_VALIDATOR ?? '') as `0x${string}`,
   axqToken:     (process.env.NEXT_PUBLIC_AXQ_TOKEN     ?? '') as `0x${string}`,
