@@ -1,4 +1,4 @@
-FROM node:20-alpine AS pruner
+FROM node:26-alpine AS pruner
 RUN apk add --no-cache libc6-compat
 RUN npm install -g turbo@latest
 WORKDIR /app
@@ -6,7 +6,7 @@ COPY . .
 ARG APP_NAME=axq-governance-ui
 RUN turbo prune --scope=${APP_NAME} --docker
 
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm
 WORKDIR /app
@@ -34,7 +34,7 @@ ENV NEXT_PUBLIC_AXQ_GOVERNANCE=${NEXT_PUBLIC_AXQ_GOVERNANCE}
 ENV NEXT_PUBLIC_VRQ_VALIDATOR=${NEXT_PUBLIC_VRQ_VALIDATOR}
 RUN pnpm turbo run build --filter=${APP_NAME}...
 
-FROM node:20-alpine AS runner
+FROM node:26-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
