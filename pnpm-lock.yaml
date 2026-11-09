@@ -99,8 +99,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -297,8 +297,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -494,8 +494,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -615,8 +615,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -745,8 +745,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       tronweb:
         specifier: ^6.0.0
         version: 6.5.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
@@ -921,8 +921,8 @@ importers:
         specifier: ^0.7.4
         version: 0.7.6
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -1048,8 +1048,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -1181,8 +1181,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       tronweb:
         specifier: ^6.0.0
         version: 6.5.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
@@ -1305,8 +1305,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -1426,8 +1426,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sdk-swift
       tailwind-merge:
-        specifier: ^2.4.0
-        version: 2.6.1
+        specifier: ^3.7.0
+        version: 3.7.0
       ui-kit:
         specifier: workspace:*
         version: link:../../packages/ui-kit
@@ -12222,8 +12222,8 @@ packages:
     resolution: {integrity: sha512-f05boz6UD5S70AJiUxqKOnDuE45mBIVagX490oQmcW38+Lq/H1s7CjIpFgJjR/kpV87L4lw/AN+14D2PktQJsQ==}
     engines: {node: '>=10.0.0'}
 
-  tailwind-merge@2.6.1:
-    resolution: {integrity: sha512-Oo6tHdpZsGpkKG88HJ8RR1rg/RdnEkQEfMoEk2x1XRI3F1AxeU+ijRXpiVUF4UbLfcxxRGw6TbUINKYdWVsQTQ==}
+  tailwind-merge@3.7.0:
+    resolution: {integrity: sha512-XPPUyAc+cvspz3lHTcR/QgPfW2A0lv/xQNIjX3HGhLR+Nq2lHaLq5MtTesHn8GUr3W3DguT2KT5x3NVgRtYwmA==}
 
   tailwindcss@3.4.19:
     resolution: {integrity: sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==}
@@ -15338,7 +15338,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
       '@types/debug': 4.1.13
-      debug: 4.3.4
+      debug: 4.4.3(supports-color@8.1.1)
       pony-cause: 2.1.11
       semver: 7.8.6
       uuid: 9.0.1
@@ -31092,7 +31092,7 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  tailwind-merge@2.6.1: {}
+  tailwind-merge@3.7.0: {}
 
   tailwindcss@3.4.19:
     dependencies:
