@@ -8,7 +8,7 @@
 #   docker build -f packages/swift-adapter/Dockerfile -t AXVN/swift-adapter .
 # ─────────────────────────────────────────────────────────────────────────────
 
-FROM node:20-alpine AS base
+FROM node:26-alpine AS base
 
 # Install OpenJDK 17 JRE + bash (required by SWIFT vendor install scripts)
 RUN apk add --no-cache openjdk17-jre bash
