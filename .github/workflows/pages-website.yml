@@ -84,7 +84,7 @@ jobs:
           # overridden by repository variables (Settings → Variables).
 
       - name: "📤 Upload Pages artifact"
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           # next build with output:export writes to ./out by default
           path: apps/website/out
