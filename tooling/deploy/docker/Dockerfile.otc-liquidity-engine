@@ -1,5 +1,5 @@
 # ─── Dockerfile: otc-liquidity-engine ────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 
 RUN npm install -g pnpm
@@ -13,7 +13,7 @@ COPY services/otc-liquidity-engine ./services/otc-liquidity-engine
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @AXVN/otc-liquidity-engine build
 
-FROM node:20-alpine AS runner
+FROM node:26-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
