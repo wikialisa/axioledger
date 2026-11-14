@@ -1,0 +1,125 @@
+name: "💊 Health Monitor"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Runs every 15 minutes. Checks all 17 services + HTTPS endpoints.
+# Creates a GitHub Issue if any service is down.
+# ─────────────────────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 minutes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health-check:
+    name: "💊 Health Check"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "🏥 Check all endpoints"
+        id: check
+        run: |
+          FAIL=0
+          REPORT=""
+
+          check_url() {
+            local name="$1" url="$2"
+            local code
+            code=$(curl -sk --max-time 8 -o /dev/null -w "%{http_code}" "$url" 2>/dev/null)
+            if [[ "$code" =~ ^(200|301|302|307|308)$ ]]; then
+              REPORT+="| ✅ | $name | $url | HTTP $code |\n"
+            else
+              REPORT+="| ❌ | **$name** | $url | HTTP $code |\n"
+              FAIL=1
+            fi
+          }
+
+          check_url "vnkr.vn (website)"        "https://vnkr.vn/"
+          check_url "app.vnkr.vn"               "https://app.vnkr.vn/"
+          check_url "wallet.vnkr.vn"            "https://wallet.vnkr.vn/"
+          check_url "exchange.vnkr.vn"          "https://exchange.vnkr.vn/"
+          check_url "scan.vnkr.vn"              "https://scan.vnkr.vn/"
+          check_url "crypto.vnkr.vn"            "https://crypto.vnkr.vn/"
+          check_url "forum.vnkr.vn"             "https://forum.vnkr.vn/"
+          check_url "admin.vnkr.vn"             "https://admin.vnkr.vn/"
+          check_url "rpc.vnkr.vn/health"        "https://rpc.vnkr.vn/health"
+          check_url "kyc.vnkr.vn"               "https://kyc.vnkr.vn/"
+          check_url "merchant.vnkr.vn"          "https://merchant.vnkr.vn/"
+          check_url "pay.vnkr.vn"               "https://pay.vnkr.vn/"
+          check_url "sandbox.vnkr.vn"           "https://sandbox.vnkr.vn/"
+          check_url "gov.vnkr.vn"               "https://gov.vnkr.vn/"
+          check_url "pass.vnkr.vn"              "https://pass.vnkr.vn/"
+          check_url "holding.vnkr.vn"           "https://holding.vnkr.vn/"
+          check_url "dao.vnkr.vn"               "https://dao.vnkr.vn/"
+
+          # Check SSL cert expiry
+          DAYS=$(echo | openssl s_client -connect vnkr.vn:443 -servername vnkr.vn 2>/dev/null \
+            | openssl x509 -noout -enddate 2>/dev/null \
+            | sed 's/notAfter=//')
+          if [ -n "$DAYS" ]; then
+            EXPIRY=$(date -d "$DAYS" +%s 2>/dev/null || date -j -f "%b %d %T %Y %Z" "$DAYS" +%s 2>/dev/null)
+            NOW=$(date +%s)
+            REMAINING=$(( (EXPIRY - NOW) / 86400 ))
+            if [ "$REMAINING" -lt 14 ]; then
+              REPORT+="| ⚠️ | SSL cert expires in ${REMAINING} days | vnkr.vn | WARN |\n"
+              FAIL=1
+            else
+              REPORT+="| ✅ | SSL cert | vnkr.vn | Expires in ${REMAINING} days |\n"
+            fi
+          fi
+
+          # Write to summary
+          {
+            echo "## 💊 Health Monitor — $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo ""
+            echo "| Status | Service | URL | Response |"
+            echo "|--------|---------|-----|----------|"
+            printf "%b" "$REPORT"
+          } >> $GITHUB_STEP_SUMMARY
+
+          echo "FAIL=$FAIL" >> $GITHUB_OUTPUT
+          printf "%b" "$REPORT" > /tmp/health_report.txt
+
+      - name: "🚨 Create Issue if services down"
+        if: steps.check.outputs.FAIL == '1'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('/tmp/health_report.txt', 'utf8');
+
+            // Check for existing open alert issue
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'health-alert',
+            });
+
+            const title = `🚨 Health Alert — ${new Date().toISOString().slice(0,16)} UTC`;
+            const body = `## 🚨 Service Health Alert\n\nOne or more services are down or degraded.\n\n| Status | Service | URL | Response |\n|--------|---------|-----|----------|\n${report}\n\n**Server:** \`209.97.187.235\`  \n**Workflow:** [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+
+            if (issues.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['health-alert', 'production'],
+              });
+              core.warning('Health alert issue created');
+            } else {
+              // Add comment to existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues[0].number,
+                body: `### 🔄 Follow-up Alert — ${new Date().toISOString().slice(0,16)} UTC\n\n| Status | Service | URL | Response |\n|--------|---------|-----|----------|\n${report}`,
+              });
+              core.warning('Added comment to existing health alert issue');
+            }

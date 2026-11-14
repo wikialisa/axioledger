@@ -1,0 +1,126 @@
+name: "🔁 Rollback Production"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Emergency rollback: checkout a previous commit and restart pm2.
+# Run from GitHub Actions → workflow_dispatch.
+#
+# GitHub Secrets required:
+#   VPS_SSH_PRIVATE_KEY   — Ed25519 private key
+#   VPS_SSH_KNOWN_HOSTS   — ssh-keyscan -H 209.97.187.235
+# ─────────────────────────────────────────────────────────────────────────────
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: "Git commit SHA to roll back to (short or full)"
+        required: true
+        type: string
+      rebuild:
+        description: "Re-run turbo build after checkout"
+        type: boolean
+        default: true
+      confirm:
+        description: "Type ROLLBACK to confirm"
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  rollback:
+    name: "🔁 Rollback → ${{ github.event.inputs.commit_sha }}"
+    if: github.event.inputs.confirm == 'ROLLBACK'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: "https://vnkr.vn"
+
+    env:
+      VPS_HOST:        ${{ vars.VPS_HOST        || '209.97.187.235' }}
+      VPS_USER:        ${{ vars.VPS_USER        || 'root' }}
+      VPS_DEPLOY_PATH: ${{ vars.VPS_DEPLOY_PATH || '/root/axioledger' }}
+
+    steps:
+      - name: "🔑 Setup SSH"
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+          if [ -n "${{ secrets.VPS_SSH_KNOWN_HOSTS }}" ]; then
+            printf '%s\n' "${{ secrets.VPS_SSH_KNOWN_HOSTS }}" > "$HOME/.ssh/known_hosts"
+          else
+            ssh-keyscan -H "$VPS_HOST" >> "$HOME/.ssh/known_hosts" 2>/dev/null
+          fi
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: "🔁 Execute rollback"
+        run: |
+          ssh -i "$HOME/.ssh/deploy_key" \
+            -o StrictHostKeyChecking=yes \
+            -o BatchMode=yes \
+            "${VPS_USER}@${VPS_HOST}" "bash -s" << REMOTE
+          set -euo pipefail
+
+          DEPLOY_PATH="${{ env.VPS_DEPLOY_PATH }}"
+          TARGET="${{ github.event.inputs.commit_sha }}"
+          REBUILD="${{ github.event.inputs.rebuild }}"
+
+          echo "════════════════════════════════"
+          echo "  AxioLedger ROLLBACK"
+          echo "  Target : \$TARGET"
+          echo "  Rebuild: \$REBUILD"
+          echo "════════════════════════════════"
+
+          cd "\$DEPLOY_PATH"
+
+          # Verify commit exists
+          git fetch --no-tags origin
+          git cat-file -t "\$TARGET" >/dev/null 2>&1 || {
+            echo "::error::Commit \$TARGET not found in repo"
+            exit 1
+          }
+
+          CURRENT=\$(git rev-parse HEAD)
+          echo "Current : \$CURRENT"
+          echo "Rolling back to : \$TARGET"
+
+          git checkout --detach "\$TARGET"
+          echo "✓ Checked out \$TARGET"
+
+          pnpm install --no-frozen-lockfile --prefer-offline 2>&1 | tail -3
+
+          if [ "\$REBUILD" = "true" ]; then
+            echo "🏗  Rebuilding ..."
+            pnpm turbo build 2>&1 | tail -20
+            # Sync static website
+            [ -d "apps/website/out" ] && \
+              rsync -a --delete apps/website/out/ /var/www/axioledger/website/
+            echo "✓ Rebuild done"
+          fi
+
+          pm2 reload ecosystem.config.js --update-env
+          nginx -t && nginx -s reload
+          pm2 save --force
+
+          echo ""
+          echo "✅ Rollback complete → \$TARGET"
+          echo "🌐 https://vnkr.vn"
+          REMOTE
+
+      - name: "📋 Summary"
+        if: always()
+        run: |
+          echo "## 🔁 Rollback" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Target commit | \`${{ github.event.inputs.commit_sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Rebuild | ${{ github.event.inputs.rebuild }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Triggered by | **${{ github.actor }}** |" >> $GITHUB_STEP_SUMMARY
+          echo "| URL | https://vnkr.vn |" >> $GITHUB_STEP_SUMMARY
