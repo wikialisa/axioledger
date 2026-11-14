@@ -15,12 +15,12 @@ interface AuditEntry {
 }
 
 const MOCK_AUDIT: AuditEntry[] = [
-  { id: "log_001", actor: "admin@${BRAND_DOMAIN}",     action: "KYC_APPROVE",        target: "usr_a1b2c3d4", result: "SUCCESS", ip: "192.168.1.10", timestamp: "2024-12-01T08:30:00Z" },
-  { id: "log_002", actor: "admin@${BRAND_DOMAIN}",     action: "KYC_REJECT",         target: "usr_c3d4e5f6", result: "SUCCESS", ip: "192.168.1.10", timestamp: "2024-12-09T13:00:00Z" },
+  { id: "log_001", actor: "admin@axioledger.io",     action: "KYC_APPROVE",        target: "usr_a1b2c3d4", result: "SUCCESS", ip: "192.168.1.10", timestamp: "2024-12-01T08:30:00Z" },
+  { id: "log_002", actor: "admin@axioledger.io",     action: "KYC_REJECT",         target: "usr_c3d4e5f6", result: "SUCCESS", ip: "192.168.1.10", timestamp: "2024-12-09T13:00:00Z" },
   { id: "log_003", actor: "system",             action: "ZKP_MINT_ATTEST",    target: "attest_001",   result: "SUCCESS", ip: "10.0.0.1",     timestamp: "2024-12-01T08:31:00Z" },
-  { id: "log_004", actor: "ops@${BRAND_DOMAIN}",        action: "USER_SUSPEND",       target: "usr_e5f6a1b2", result: "SUCCESS", ip: "192.168.1.12", timestamp: "2024-12-05T17:00:00Z" },
+  { id: "log_004", actor: "ops@axioledger.io",        action: "USER_SUSPEND",       target: "usr_e5f6a1b2", result: "SUCCESS", ip: "192.168.1.12", timestamp: "2024-12-05T17:00:00Z" },
   { id: "log_005", actor: "system",             action: "LOGIN_ATTEMPT",      target: "unknown@anon", result: "FAILURE", ip: "94.12.55.201", timestamp: "2024-12-12T03:15:00Z" },
-  { id: "log_006", actor: "admin@${BRAND_DOMAIN}",     action: "SETTINGS_CHANGE",    target: "config.rate_limit", result: "SUCCESS", ip: "192.168.1.10", timestamp: "2024-12-11T10:00:00Z" },
+  { id: "log_006", actor: "admin@axioledger.io",     action: "SETTINGS_CHANGE",    target: "config.rate_limit", result: "SUCCESS", ip: "192.168.1.10", timestamp: "2024-12-11T10:00:00Z" },
   { id: "log_007", actor: "system",             action: "EMAIL_OTP_SENT",     target: "binh.tt@mail.com", result: "SUCCESS", ip: "10.0.0.1",     timestamp: "2024-12-10T09:14:00Z" },
 ];
 

@@ -69,7 +69,7 @@ export default function SettingsPage() {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <Text variant="subtitle1" weight="semibold" color="#FFFFFF">Nguyễn Văn A</Text>
-          <Text variant="caption" color="rgba(255,255,255,0.6)">nguyen.van.a@${BRAND_DOMAIN}</Text>
+          <Text variant="caption" color="rgba(255,255,255,0.6)">nguyen.van.a@axioledger.io</Text>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
             <Badge variant="label" color="greeny" label="KYC Cấp 2" />
           </div>
@@ -315,7 +315,7 @@ export default function SettingsPage() {
       {/* ── Version / logo ────────────────────────────────────────────────── */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "20px 0 8px" }}>
         <AXVNLogo variant="dark" size="xs" />
-        <Text variant="caption" color="#CBD5E0">v1.1.0 · app.${BRAND_DOMAIN}</Text>
+        <Text variant="caption" color="#CBD5E0">v1.1.0 · app.axioledger.io</Text>
       </div>
 
       {/* ── Logout modal ─────────────────────────────────────────────────── */}

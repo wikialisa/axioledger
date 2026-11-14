@@ -16,7 +16,7 @@ import type {
   Enable2FARequest,
   Disable2FARequest,
   VerifyPinRequest,
-} from "types";
+} from "project-types";
 
 export const authRouter = Router();
 

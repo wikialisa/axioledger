@@ -8,7 +8,7 @@ import {
   confirmP2PFiatPayment,
   withTransaction,
 } from "db";
-import type { FiatReceipt } from "types";
+import type { FiatReceipt } from "project-types";
 
 const app = Fastify({ logger: true });
 

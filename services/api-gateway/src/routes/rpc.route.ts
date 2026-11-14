@@ -21,7 +21,7 @@ import {
   type JsonRpcRequest,
   type JsonRpcResponse,
   JSON_RPC_ERRORS,
-} from "types";
+} from "project-types";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
 export const rpcRouter = Router();

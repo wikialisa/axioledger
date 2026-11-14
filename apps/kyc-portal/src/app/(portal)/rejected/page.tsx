@@ -3,7 +3,7 @@
 import React from "react";
 import { DataTable, Badge, Button, toast } from "ui-kit";
 import type { DataTableColumn } from "ui-kit";
-import type { KYCProfile } from "types";
+import type { KYCProfile } from "project-types";
 
 type RejectedRow = KYCProfile & { name: string; email: string; rejectedAt: string; reason: string };
 

@@ -6,7 +6,7 @@ import type {
   PlaceOrderRequest,
   SwapQuoteRequest,
   SwapExecuteRequest,
-} from "types";
+} from "project-types";
 
 export const exchangeRouter = Router();
 

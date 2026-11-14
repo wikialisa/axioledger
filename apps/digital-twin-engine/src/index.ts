@@ -1,8 +1,8 @@
-import { SOLANA_RPC_MAINNET } from "config";
+import { SOLANA_RPC_MAINNET } from "project-config";
 
 /**
  * AXVN Digital Twin Simulation Engine
- * [lab.${BRAND_DOMAIN}] — R&D Engine & Digital Twin Simulation (AXVN Digital Twin & AI Labs)
+ * [lab.axioledger.io] — R&D Engine & Digital Twin Simulation (AXVN Digital Twin & AI Labs)
  *
  * Uses snarkjs for ZKP proof generation, @veramo/core for DID management,
  * and @iden3/js-iden3-core for Polygon ID attestation circuits.

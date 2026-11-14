@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { ok, created, paginated, fail } from "../lib/response.js";
 import { auditLog, buildAuditContext } from "../lib/audit.js";
-import type { ClaimCommissionRequest } from "types";
+import type { ClaimCommissionRequest } from "project-types";
 
 export const referralRouter = Router();
 
@@ -15,7 +15,7 @@ referralRouter.get("/info", (req, res) => {
   // TODO: fetch from DB
   ok(res, {
     referralCode: userId.slice(0, 8).toUpperCase(),
-    referralLink: `https://app.${BRAND_DOMAIN}/register?ref=${userId.slice(0, 8).toUpperCase()}`,
+    referralLink: `https://app.axioledger.io/register?ref=${userId.slice(0, 8).toUpperCase()}`,
     tier: "SILVER",
     totalReferrals: 12,
     totalEarned: "2450000",

@@ -63,7 +63,7 @@ publicRouter.post("/upload/media", (req, res) => {
   if (!file) { ok(res, null, "No file received"); return; }
   // TODO: upload to S3/Cloudinary, return CDN URL
   ok(res, {
-    url: `https://cdn.${BRAND_DOMAIN}/media/${Date.now()}-${file.originalname}`,
+    url: `https://cdn.axioledger.io/media/${Date.now()}-${file.originalname}`,
     size: file.size,
     mimeType: file.mimetype,
   }, "File đã được tải lên thành công");

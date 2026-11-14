@@ -13,7 +13,7 @@ import {
   Modal,
 } from "ui-kit";
 import type { DataTableColumn } from "ui-kit";
-import type { MerchantOrderResponse } from "types";
+import type { MerchantOrderResponse } from "project-types";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 

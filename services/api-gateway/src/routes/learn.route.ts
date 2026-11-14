@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { ok, created, fail } from "../lib/response.js";
-import type { LessonProgressRequest } from "types";
+import type { LessonProgressRequest } from "project-types";
 
 export const learnRouter = Router();
 
@@ -40,7 +40,7 @@ learnRouter.get("/lessons/:id", authenticate, (req, res) => {
     lessonId: id,
     title: "Blockchain là gì?",
     contentType: "VIDEO",
-    videoUrl: `https://stream.${BRAND_DOMAIN}/lessons/${id}/index.m3u8`,
+    videoUrl: `https://stream.axioledger.io/lessons/${id}/index.m3u8`,
     durationMinutes: 15,
     order: 1,
   });

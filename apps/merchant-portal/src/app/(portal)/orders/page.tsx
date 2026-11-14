@@ -14,7 +14,7 @@ import {
   Plus,
 } from "ui-kit";
 import type { DataTableColumn } from "ui-kit";
-import type { MerchantOrderResponse } from "types";
+import type { MerchantOrderResponse } from "project-types";
 
 // ─── Extended order row ───────────────────────────────────────────────────────
 
@@ -32,21 +32,21 @@ interface OrderRow extends Record<string, unknown> {
 // ─── Mock data ────────────────────────────────────────────────────────────────
 
 const ORDERS: OrderRow[] = [
-  { orderId: "ORD-0081", merchant: "Cửa hàng ABC",    amount: 450000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0081", expiresAt: "2025-06-18 15:32", createdAt: "2025-06-18 14:32" },
-  { orderId: "ORD-0080", merchant: "Cửa hàng ABC",    amount: 1200000, currency: "VND", status: "PENDING", paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0080", expiresAt: "2025-06-18 15:18", createdAt: "2025-06-18 14:18" },
-  { orderId: "ORD-0079", merchant: "Shop Thời Trang",  amount: 89000,   currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0079", expiresAt: "2025-06-18 14:55", createdAt: "2025-06-18 13:55" },
-  { orderId: "ORD-0078", merchant: "Cửa hàng ABC",    amount: 320000,  currency: "VND", status: "EXPIRED", paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0078", expiresAt: "2025-06-18 14:10", createdAt: "2025-06-18 13:10" },
-  { orderId: "ORD-0077", merchant: "Dịch vụ Online",  amount: 750000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0077", expiresAt: "2025-06-18 13:44", createdAt: "2025-06-18 12:44" },
-  { orderId: "ORD-0076", merchant: "Shop Thời Trang",  amount: 2100000, currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0076", expiresAt: "2025-06-18 12:30", createdAt: "2025-06-18 11:30" },
-  { orderId: "ORD-0075", merchant: "Dịch vụ Online",  amount: 60000,   currency: "VND", status: "PENDING", paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0075", expiresAt: "2025-06-18 12:05", createdAt: "2025-06-18 11:05" },
-  { orderId: "ORD-0074", merchant: "Cửa hàng ABC",    amount: 980000,  currency: "VND", status: "EXPIRED", paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0074", expiresAt: "2025-06-18 11:22", createdAt: "2025-06-18 10:22" },
-  { orderId: "ORD-0073", merchant: "Shop Thời Trang",  amount: 340000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0073", expiresAt: "2025-06-18 10:55", createdAt: "2025-06-18 09:55" },
-  { orderId: "ORD-0072", merchant: "Dịch vụ Online",  amount: 1500000, currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0072", expiresAt: "2025-06-18 10:00", createdAt: "2025-06-18 09:00" },
-  { orderId: "ORD-0071", merchant: "Cửa hàng ABC",    amount: 220000,  currency: "VND", status: "FAILED",  paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0071", expiresAt: "2025-06-18 09:30", createdAt: "2025-06-18 08:30" },
-  { orderId: "ORD-0070", merchant: "Shop Thời Trang",  amount: 890000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0070", expiresAt: "2025-06-17 22:00", createdAt: "2025-06-17 21:00" },
-  { orderId: "ORD-0069", merchant: "Dịch vụ Online",  amount: 450000,  currency: "VND", status: "PENDING", paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0069", expiresAt: "2025-06-17 21:30", createdAt: "2025-06-17 20:30" },
-  { orderId: "ORD-0068", merchant: "Cửa hàng ABC",    amount: 600000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0068", expiresAt: "2025-06-17 20:00", createdAt: "2025-06-17 19:00" },
-  { orderId: "ORD-0067", merchant: "Shop Thời Trang",  amount: 1350000, currency: "VND", status: "EXPIRED", paymentUrl: "https://pay.${BRAND_DOMAIN}/ORD-0067", expiresAt: "2025-06-17 18:30", createdAt: "2025-06-17 17:30" },
+  { orderId: "ORD-0081", merchant: "Cửa hàng ABC",    amount: 450000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0081", expiresAt: "2025-06-18 15:32", createdAt: "2025-06-18 14:32" },
+  { orderId: "ORD-0080", merchant: "Cửa hàng ABC",    amount: 1200000, currency: "VND", status: "PENDING", paymentUrl: "https://pay.axioledger.io/ORD-0080", expiresAt: "2025-06-18 15:18", createdAt: "2025-06-18 14:18" },
+  { orderId: "ORD-0079", merchant: "Shop Thời Trang",  amount: 89000,   currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0079", expiresAt: "2025-06-18 14:55", createdAt: "2025-06-18 13:55" },
+  { orderId: "ORD-0078", merchant: "Cửa hàng ABC",    amount: 320000,  currency: "VND", status: "EXPIRED", paymentUrl: "https://pay.axioledger.io/ORD-0078", expiresAt: "2025-06-18 14:10", createdAt: "2025-06-18 13:10" },
+  { orderId: "ORD-0077", merchant: "Dịch vụ Online",  amount: 750000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0077", expiresAt: "2025-06-18 13:44", createdAt: "2025-06-18 12:44" },
+  { orderId: "ORD-0076", merchant: "Shop Thời Trang",  amount: 2100000, currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0076", expiresAt: "2025-06-18 12:30", createdAt: "2025-06-18 11:30" },
+  { orderId: "ORD-0075", merchant: "Dịch vụ Online",  amount: 60000,   currency: "VND", status: "PENDING", paymentUrl: "https://pay.axioledger.io/ORD-0075", expiresAt: "2025-06-18 12:05", createdAt: "2025-06-18 11:05" },
+  { orderId: "ORD-0074", merchant: "Cửa hàng ABC",    amount: 980000,  currency: "VND", status: "EXPIRED", paymentUrl: "https://pay.axioledger.io/ORD-0074", expiresAt: "2025-06-18 11:22", createdAt: "2025-06-18 10:22" },
+  { orderId: "ORD-0073", merchant: "Shop Thời Trang",  amount: 340000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0073", expiresAt: "2025-06-18 10:55", createdAt: "2025-06-18 09:55" },
+  { orderId: "ORD-0072", merchant: "Dịch vụ Online",  amount: 1500000, currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0072", expiresAt: "2025-06-18 10:00", createdAt: "2025-06-18 09:00" },
+  { orderId: "ORD-0071", merchant: "Cửa hàng ABC",    amount: 220000,  currency: "VND", status: "FAILED",  paymentUrl: "https://pay.axioledger.io/ORD-0071", expiresAt: "2025-06-18 09:30", createdAt: "2025-06-18 08:30" },
+  { orderId: "ORD-0070", merchant: "Shop Thời Trang",  amount: 890000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0070", expiresAt: "2025-06-17 22:00", createdAt: "2025-06-17 21:00" },
+  { orderId: "ORD-0069", merchant: "Dịch vụ Online",  amount: 450000,  currency: "VND", status: "PENDING", paymentUrl: "https://pay.axioledger.io/ORD-0069", expiresAt: "2025-06-17 21:30", createdAt: "2025-06-17 20:30" },
+  { orderId: "ORD-0068", merchant: "Cửa hàng ABC",    amount: 600000,  currency: "VND", status: "PAID",    paymentUrl: "https://pay.axioledger.io/ORD-0068", expiresAt: "2025-06-17 20:00", createdAt: "2025-06-17 19:00" },
+  { orderId: "ORD-0067", merchant: "Shop Thời Trang",  amount: 1350000, currency: "VND", status: "EXPIRED", paymentUrl: "https://pay.axioledger.io/ORD-0067", expiresAt: "2025-06-17 18:30", createdAt: "2025-06-17 17:30" },
 ];
 
 const STATUS_BADGE: Record<MerchantOrderResponse["status"], { color: "success" | "warning" | "error" | "info"; label: string }> = {
@@ -106,7 +106,7 @@ const COLUMNS: DataTableColumn<OrderRow>[] = [
       const url = v as string;
       return (
         <span style={{ fontSize: 12, color: "#0095FF", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>
-          {url.replace("https://pay.${BRAND_DOMAIN}/", "pay.${BRAND_DOMAIN}/")}
+          {url.replace("https://pay.axioledger.io/", "pay.axioledger.io/")}
         </span>
       );
     },

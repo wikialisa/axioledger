@@ -30,7 +30,7 @@ export default function PaymentsPage() {
     const amt = parseFloat(amount.replace(/[^0-9.]/g, ""));
     const desc = description.trim() || "AXVN Payment";
     const orderId = `ORD-${Date.now().toString(36).toUpperCase()}`;
-    const value = `https://pay.${BRAND_DOMAIN}/${orderId}?amount=${isNaN(amt) ? 0 : amt}&desc=${encodeURIComponent(desc)}`;
+    const value = `https://pay.axioledger.io/${orderId}?amount=${isNaN(amt) ? 0 : amt}&desc=${encodeURIComponent(desc)}`;
     setQrValue(value);
     setQrOpen(true);
   };

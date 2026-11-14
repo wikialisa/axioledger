@@ -4,7 +4,7 @@ import type {
   P2POrder,
   ReserveSnapshot,
   SubgraphSwapEvent,
-} from "types";
+} from "project-types";
 
 // ─── Pool singleton ───────────────────────────────────────────────────────────
 

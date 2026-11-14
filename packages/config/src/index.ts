@@ -9,12 +9,12 @@ export const SOLANA_RPC_MAINNET = "https://api.mainnet-beta.solana.com";
 
 /** App-Chain Genesis (EVM, Chain ID: 1337 local / 1 mainnet) */
 export const APPCHAIN_RPC_LOCAL = "http://localhost:8545";
-export const APPCHAIN_RPC_MAINNET = "https://rpc.${BRAND_DOMAIN}";
+export const APPCHAIN_RPC_MAINNET = "https://rpc.axioledger.io";
 
 export const TRON_FULL_HOST = "https://api.trongrid.io";
 export const TRON_NILE_TESTNET = "https://nile.trongrid.io";
 
-export const DEFAULT_API_ENDPOINT = "https://dev-api.${BRAND_DOMAIN}";
+export const DEFAULT_API_ENDPOINT = "https://dev-api.axioledger.io";
 
 // ─── Solana Program IDs ───────────────────────────────────────────────────────
 
@@ -44,10 +44,10 @@ export const EVM_CONTRACTS = {
 // ─── Stalwart Mail Server ─────────────────────────────────────────────────────
 
 export const MAIL_CONFIG = {
-  SMTP_HOST: process.env["SMTP_HOST"] ?? "mail.${BRAND_DOMAIN}",
+  SMTP_HOST: process.env["SMTP_HOST"] ?? "mail.axioledger.io",
   SMTP_PORT: Number(process.env["SMTP_PORT"] ?? 587),
   SMTP_SECURE: process.env["SMTP_SECURE"] === "true",
-  SMTP_USER: process.env["SMTP_USER"] ?? "no-reply@${BRAND_DOMAIN}",
+  SMTP_USER: process.env["SMTP_USER"] ?? "no-reply@axioledger.io",
   SMTP_PASS: process.env["SMTP_PASS"] ?? "",
-  EMAIL_FROM: process.env["EMAIL_FROM"] ?? "AXVN System <no-reply@${BRAND_DOMAIN}>",
+  EMAIL_FROM: process.env["EMAIL_FROM"] ?? "AXVN System <no-reply@axioledger.io>",
 } as const;

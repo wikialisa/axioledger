@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { ok, fail } from "../lib/response.js";
 import { auditLog, buildAuditContext } from "../lib/audit.js";
-import type { SwiftTransferRequest } from "types";
+import type { SwiftTransferRequest } from "project-types";
 
 export const swiftRouter = Router();
 

@@ -5,7 +5,7 @@ import { auditLog, buildAuditContext } from "../lib/audit.js";
 import type {
   StartBotRequest,
   StakingSubscribeRequest,
-} from "types";
+} from "project-types";
 
 export const extRouter = Router();
 

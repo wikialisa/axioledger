@@ -9,7 +9,7 @@ import type {
   WithdrawFiatRequest,
   P2PTransferRequest,
   SwiftTransferRequest,
-} from "types";
+} from "project-types";
 
 export const financeRouter = Router();
 

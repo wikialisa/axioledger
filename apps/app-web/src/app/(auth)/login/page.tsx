@@ -77,7 +77,7 @@ export default function LoginPage() {
 
         {!totpStep ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <Input label="Số điện thoại / Email" placeholder="0901 234 567 hoặc email@${BRAND_DOMAIN}" type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} fullWidth />
+            <Input label="Số điện thoại / Email" placeholder="0901 234 567 hoặc email@axioledger.io" type="text" value={identifier} onChange={e => setIdentifier(e.target.value)} fullWidth />
             <div style={{ position: "relative" }}>
               <Input
                 label="Mật khẩu"

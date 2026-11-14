@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate, requireCompliance, requireAdmin } from "../../middlewares/auth.middleware.js";
 import { ok, created, paginated } from "../../lib/response.js";
 import { auditLog, buildAuditContext } from "../../lib/audit.js";
-import type { NQ05ReportRequest } from "types";
+import type { NQ05ReportRequest } from "project-types";
 
 export const complianceAdminRouter = Router();
 
@@ -18,7 +18,7 @@ complianceAdminRouter.post("/nq05/report", requireCompliance, async (req, res) =
     period: `${body.startDate} — ${body.endDate}`,
     totalTransactions: 0,
     totalVolume: "0",
-    fileUrl: `https://reports.${BRAND_DOMAIN}/nq05/${reportId}.${(body.format ?? "JSON").toLowerCase()}`,
+    fileUrl: `https://reports.axioledger.io/nq05/${reportId}.${(body.format ?? "JSON").toLowerCase()}`,
     generatedAt: new Date().toISOString(),
   }, "Báo cáo NQ-05 đã được xuất");
 });

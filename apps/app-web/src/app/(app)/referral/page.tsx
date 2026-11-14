@@ -11,7 +11,7 @@ import {
 } from "ui-kit";
 
 const REFERRAL_CODE = "AXVN8A4F";
-const REFERRAL_LINK = `https://app.${BRAND_DOMAIN}/register?ref=${REFERRAL_CODE}`;
+const REFERRAL_LINK = `https://app.axioledger.io/register?ref=${REFERRAL_CODE}`;
 
 const TREE_DATA = {
   f1: [

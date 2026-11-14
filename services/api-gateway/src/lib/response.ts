@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import type { ApiResponse, PaginatedResponse, PaginationMeta } from "types";
+import type { ApiResponse, PaginatedResponse, PaginationMeta } from "project-types";
 
 // ─── Success helpers ──────────────────────────────────────────────────────────
 

@@ -4,7 +4,7 @@ export default function HomePage() {
       <div style={{ textAlign: "center" }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: "#1A1F36" }}>AXVN ID — Fiat Gateway</h1>
         <p style={{ color: "#8F9BB3" }}>P2P Escrow · Identity · On/Off Ramp</p>
-        <p style={{ fontSize: 12, color: "#8F9BB3", marginTop: 8 }}>id.${BRAND_DOMAIN} — AXVN FinTech Services JSC</p>
+        <p style={{ fontSize: 12, color: "#8F9BB3", marginTop: 8 }}>id.axioledger.io — AXVN FinTech Services JSC</p>
       </div>
     </main>
   );

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AXVN App",
     description: "Ví điện tử thế hệ mới",
-    url: "https://app.${BRAND_DOMAIN}",
+    url: "https://app.axioledger.io",
     siteName: "AXVN",
     locale: "vi_VN",
     type: "website",

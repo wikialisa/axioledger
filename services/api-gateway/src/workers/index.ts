@@ -5,7 +5,7 @@
  *  - compliance-worker: Scheduled NQ-05 & AML audit
  */
 import { Worker, Queue, type Job } from "bullmq";
-import type { CryptoDepositWebhook, VietQRWebhook } from "types";
+import type { CryptoDepositWebhook, VietQRWebhook } from "project-types";
 
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6379";
 

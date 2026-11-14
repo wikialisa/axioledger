@@ -27,7 +27,7 @@ const DEVICES: DeviceEntry[] = [
 ];
 
 const TOTP_SECRET = "JBSWY3DPEHPK3PXP";
-const TOTP_QR = `otpauth://totp/AXVN:nguyen.van.a%40${BRAND_DOMAIN}?secret=${TOTP_SECRET}&issuer=AXVN`;
+const TOTP_QR = `otpauth://totp/AXVN:nguyen.van.a%40axioledger.io?secret=${TOTP_SECRET}&issuer=AXVN`;
 
 export default function SecurityPage() {
   const [biometric, setBiometric] = useState(true);
@@ -250,7 +250,7 @@ export default function SecurityPage() {
                   ))}
                 </div>
               </div>
-              <Text variant="caption" color="#A0AEC0">AXVN: nguyen.van.a@${BRAND_DOMAIN}</Text>
+              <Text variant="caption" color="#A0AEC0">AXVN: nguyen.van.a@axioledger.io</Text>
             </div>
             <div style={{ background: "#F5F6FA", borderRadius: 10, padding: "10px 12px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

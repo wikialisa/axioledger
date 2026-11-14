@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance } from "axios";
-import type { MerchantCreateOrderRequest, MerchantOrderResponse } from "types";
-import { DEFAULT_API_ENDPOINT } from "config";
+import type { MerchantCreateOrderRequest, MerchantOrderResponse } from "project-types";
+import { DEFAULT_API_ENDPOINT } from "project-config";
 
 export class AXVNMerchantClient {
   private client: AxiosInstance;

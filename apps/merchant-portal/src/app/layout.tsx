@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AXVN Merchant Portal",
     description: "Merchant Dashboard — Quản lý thanh toán & API",
-    url: "https://merchant.${BRAND_DOMAIN}",
+    url: "https://merchant.axioledger.io",
     siteName: "AXVN Merchant",
     locale: "vi_VN",
     type: "website",

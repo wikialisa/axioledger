@@ -27,7 +27,7 @@ import type {
   WSNotification,
   WSEnvelope,
   WSSubscribeMessage,
-} from "types";
+} from "project-types";
 
 const WS_PORT        = Number(process.env.WEBSOCKET_PORT) || 5001;
 const PING_INTERVAL  = Number(process.env.WS_PING_INTERVAL_MS)  || 30_000;

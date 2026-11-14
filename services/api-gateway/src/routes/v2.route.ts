@@ -29,7 +29,7 @@ v2Router.get("/meta", (_req, res) => {
     deprecates: {
       v1: {
         sunset: "2026-12-31",
-        docsUrl: "https://docs.${BRAND_DOMAIN}/api/migration/v1-to-v2",
+        docsUrl: "https://docs.axioledger.io/api/migration/v1-to-v2",
       },
     },
   }, "AXVN API v2");

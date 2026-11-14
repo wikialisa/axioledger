@@ -87,11 +87,11 @@ app.get("/api", (_req, res) => {
   res.json({
     service: "AXVN-api-gateway",
     versions: [
-      { version: "v1", prefix: V1, status: "stable", docsUrl: "https://docs.${BRAND_DOMAIN}/api/v1" },
-      { version: "v2", prefix: V2, status: "preview", docsUrl: "https://docs.${BRAND_DOMAIN}/api/v2" },
+      { version: "v1", prefix: V1, status: "stable", docsUrl: "https://docs.axioledger.io/api/v1" },
+      { version: "v2", prefix: V2, status: "preview", docsUrl: "https://docs.axioledger.io/api/v2" },
     ],
     rpc: { url: `${V1}/rpc`, protocol: "JSON-RPC 2.0", description: "Blockchain node proxy" },
-    ws: { url: `ws://api.${BRAND_DOMAIN}:5001`, protocol: "WebSocket", description: "Real-time data streams" },
+    ws: { url: `ws://api.axioledger.io:5001`, protocol: "WebSocket", description: "Real-time data streams" },
   });
 });
 

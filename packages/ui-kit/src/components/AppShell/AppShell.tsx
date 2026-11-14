@@ -3,9 +3,9 @@
  * Universal layout wrapper for all AXVN apps
  *
  * Layouts:
- *   default  — TopNavbar + content area (${BRAND_DOMAIN}, docs, kyc)
+ *   default  — TopNavbar + content area (axioledger.io, docs, kyc)
  *   sidebar  — Sidebar + content area  (merchant, admin, sandbox, analytics)
- *   app      — content + BottomNavbar  (app.${BRAND_DOMAIN} — mobile PWA)
+ *   app      — content + BottomNavbar  (app.axioledger.io — mobile PWA)
  *   blank    — no chrome               (auth pages, fullscreen)
  *
  * Features:

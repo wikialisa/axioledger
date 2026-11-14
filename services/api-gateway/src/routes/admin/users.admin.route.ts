@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate, requireAdmin } from "../../middlewares/auth.middleware.js";
 import { ok, created, paginated, fail } from "../../lib/response.js";
 import { auditLog, buildAuditContext } from "../../lib/audit.js";
-import type { UpdateUserStatusRequest } from "types";
+import type { UpdateUserStatusRequest } from "project-types";
 
 export const usersAdminRouter = Router();
 

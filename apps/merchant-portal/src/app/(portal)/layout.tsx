@@ -32,7 +32,7 @@ const NAV_SECTIONS: SidebarSection[] = [
     items: [
       { id: "api-keys", label: "API Keys", icon: <Key size={18} />, href: "/api-keys" },
       { id: "webhooks", label: "Webhooks", icon: <Settings2 size={18} />, href: "/webhooks" },
-      { id: "docs", label: "Docs", icon: <BookOpen size={18} />, href: "https://docs.${BRAND_DOMAIN}" },
+      { id: "docs", label: "Docs", icon: <BookOpen size={18} />, href: "https://docs.axioledger.io" },
     ],
   },
   {

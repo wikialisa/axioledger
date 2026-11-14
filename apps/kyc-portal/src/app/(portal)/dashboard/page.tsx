@@ -10,7 +10,7 @@ import {
   toast,
 } from "ui-kit";
 import type { DataTableColumn } from "ui-kit";
-import type { KYCProfile, KYCStatus } from "types";
+import type { KYCProfile, KYCStatus } from "project-types";
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
 

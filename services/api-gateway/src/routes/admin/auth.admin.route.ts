@@ -2,7 +2,7 @@ import { Router } from "express";
 import { signAccessToken, signRefreshToken } from "../../lib/jwt.js";
 import { ok, fail } from "../../lib/response.js";
 import { auditLog, buildAuditContext } from "../../lib/audit.js";
-import type { LoginRequest } from "types";
+import type { LoginRequest } from "project-types";
 
 export const authAdminRouter = Router();
 

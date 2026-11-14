@@ -1,7 +1,7 @@
 /**
  * ui — Chart
  * Lightweight SVG-native chart components — zero external dependencies
- * Used by: analytics.${BRAND_DOMAIN}, sandbox.${BRAND_DOMAIN}, merchant portal
+ * Used by: analytics.axioledger.io, sandbox.axioledger.io, merchant portal
  *
  * Components:
  *   LineChart  — time-series, multi-series, area fill

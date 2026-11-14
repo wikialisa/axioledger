@@ -157,7 +157,7 @@ export default function CircuitBreakerPage() {
             AXVNWeb3SandboxModule · {CONTRACT_ADDR}
           </code>
           <Button variant="ghost" color="info" size="sm"
-            onClick={() => window.open(`https://scan.${BRAND_DOMAIN}/address/${CONTRACT_ADDR}`, "_blank")}>
+            onClick={() => window.open(`https://scan.axioledger.io/address/${CONTRACT_ADDR}`, "_blank")}>
             View on Explorer →
           </Button>
         </div>

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import crypto from "crypto";
 import { ok, fail } from "../lib/response.js";
-import type { CryptoDepositWebhook, VietQRWebhook, P2PEscrowWebhook } from "types";
+import type { CryptoDepositWebhook, VietQRWebhook, P2PEscrowWebhook } from "project-types";
 
 export const webhookRouter = Router();
 

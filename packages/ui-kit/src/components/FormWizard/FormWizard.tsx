@@ -1,7 +1,7 @@
 /**
  * ui — FormWizard
  * Multi-step form with progress indicator
- * Used by: kyc.${BRAND_DOMAIN} (eKYC onboarding), merchant registration, P2P onboarding
+ * Used by: kyc.axioledger.io (eKYC onboarding), merchant registration, P2P onboarding
  *
  * Features:
  *   - Numbered step indicator (linear progress bar + step dots)

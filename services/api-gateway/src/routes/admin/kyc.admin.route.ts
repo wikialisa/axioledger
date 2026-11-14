@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate, requireAdmin } from "../../middlewares/auth.middleware.js";
 import { ok, created, paginated, fail } from "../../lib/response.js";
 import { auditLog, buildAuditContext } from "../../lib/audit.js";
-import type { KYCReviewRequest } from "types";
+import type { KYCReviewRequest } from "project-types";
 
 export const kycAdminRouter = Router();
 
@@ -14,8 +14,8 @@ kycAdminRouter.get("/pending", (req, res) => {
   const limit = Number(req.query.limit) || 20;
   // TODO: fetch from DB where kyc_status = 'PENDING'
   paginated(res, [
-    { userId: "u002", fullName: "Trần Thị B",  phone: "0912345678", documentType: "CCCD",     submittedAt: "2024-06-20T09:00:00Z", frontImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u002-front.jpg", selfieImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u002-selfie.jpg" },
-    { userId: "u005", fullName: "Phạm Quốc D", phone: "0934567890", documentType: "PASSPORT", submittedAt: "2024-06-22T14:30:00Z", frontImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u005-front.jpg", selfieImageUrl: "https://cdn.${BRAND_DOMAIN}/kyc/u005-selfie.jpg" },
+    { userId: "u002", fullName: "Trần Thị B",  phone: "0912345678", documentType: "CCCD",     submittedAt: "2024-06-20T09:00:00Z", frontImageUrl: "https://cdn.axioledger.io/kyc/u002-front.jpg", selfieImageUrl: "https://cdn.axioledger.io/kyc/u002-selfie.jpg" },
+    { userId: "u005", fullName: "Phạm Quốc D", phone: "0934567890", documentType: "PASSPORT", submittedAt: "2024-06-22T14:30:00Z", frontImageUrl: "https://cdn.axioledger.io/kyc/u005-front.jpg", selfieImageUrl: "https://cdn.axioledger.io/kyc/u005-selfie.jpg" },
   ], 2, page, limit);
 });
 

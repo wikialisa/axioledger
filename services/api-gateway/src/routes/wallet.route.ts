@@ -5,7 +5,7 @@ import { auditLog, buildAuditContext } from "../lib/audit.js";
 import type {
   WithdrawCryptoRequest,
   WithdrawFiatRequest,
-} from "types";
+} from "project-types";
 
 export const walletRouter = Router();
 

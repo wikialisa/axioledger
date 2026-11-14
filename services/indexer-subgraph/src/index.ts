@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import { createPublicClient, http, parseAbiItem, type Log } from "viem";
-import { APPCHAIN_RPC_MAINNET, EVM_CONTRACTS } from "config";
-import type { ReserveSnapshot, SubgraphSwapEvent } from "types";
+import { APPCHAIN_RPC_MAINNET, EVM_CONTRACTS } from "project-config";
+import type { ReserveSnapshot, SubgraphSwapEvent } from "project-types";
 import {
   getPool,
   closePool,

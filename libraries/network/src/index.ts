@@ -45,7 +45,7 @@ export function createHttpClient(options: NetworkClientOptions): AxiosInstance {
   if (options.getToken) {
     instance.interceptors.request.use((cfg) => {
       const token = options.getToken!();
-      if (token) cfg.headers = { ...cfg.headers, Authorization: `Bearer ${token}` };
+      if (token) cfg.headers.set('Authorization', `Bearer ${token}`);
       return cfg;
     });
   }

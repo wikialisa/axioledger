@@ -1,7 +1,7 @@
 /**
  * ui — QRCodeModal
  * QR code generator + scanner modal
- * Used by: app.${BRAND_DOMAIN} (receive payment, share wallet address, merchant checkout)
+ * Used by: app.axioledger.io (receive payment, share wallet address, merchant checkout)
  *
  * Tabs:
  *   show  — Display QR code for a value (address, URL, payment link)
@@ -378,7 +378,7 @@ export function QRCodeModal({
               border: "1px solid #F3F4F6",
               boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
             }}>
-              <QRCodeSVG value={value || "https://${BRAND_DOMAIN}"} size={qrSize} fgColor={fgColor} bgColor={bgColor} />
+              <QRCodeSVG value={value || "https://axioledger.io"} size={qrSize} fgColor={fgColor} bgColor={bgColor} />
             </div>
 
             {/* Label */}
