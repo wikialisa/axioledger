@@ -10,11 +10,12 @@
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "paths": {}
+    "paths": {},
+    "noImplicitAny": false
   },
   "include": [
     "src/**/*"

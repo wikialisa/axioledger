@@ -5,7 +5,7 @@
   "description": "[holding.${BRAND_DOMAIN}] Internal Admin Portal — IP Asset Management & Whitelist Governance (AXVN Holding)",
   "scripts": {
     "dev": "next dev -p 3006",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "start": "next start -p 3006",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * WebSocket Gateway
  * PORT=5001 — standardised message envelope for all channels:

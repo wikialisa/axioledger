@@ -5,7 +5,7 @@
   "description": "[app.${BRAND_DOMAIN}] Main Web App — Wallet, Crypto, Card, Cashback, P2P (${BRAND_ORG_FINTECH})",
   "scripts": {
     "dev": "next dev -p 3010",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "start": "next start -p 3010",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

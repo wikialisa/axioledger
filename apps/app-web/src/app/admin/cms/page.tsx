@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 /**
  * /admin/cms — Blog & Course Management
  */
@@ -51,28 +52,28 @@ export default function AdminCMSPage() {
   };
 
   const blogColumns: DataTableColumn[] = [
-    { key: "title", label: "Tiêu đề", render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as BlogRow).title}</Text> },
-    { key: "category", label: "Danh mục", render: v => <Badge variant="label" color="info" label={(v as BlogRow).category} /> },
-    { key: "published", label: "Trạng thái", render: v => <Badge variant="label" color={(v as BlogRow).published ? "success" : "warning"} label={(v as BlogRow).published ? "Đã đăng" : "Bản nháp"} /> },
-    { key: "createdAt", label: "Ngày tạo", render: v => <Text variant="caption" color="#A0AEC0">{(v as BlogRow).createdAt}</Text> },
+    { key: "title", label: "Tiêu đề", render: (_, row) => <Text variant="body2" weight="semibold" color="#1A1F36">{(row as BlogRow).title}</Text> },
+    { key: "category", label: "Danh mục", render: (_, row) => <Badge variant="label" color="info" label={(row as BlogRow).category} /> },
+    { key: "published", label: "Trạng thái", render: (_, row) => <Badge variant="label" color={(row as BlogRow).published ? "success" : "warning"} label={(row as BlogRow).published ? "Đã đăng" : "Bản nháp"} /> },
+    { key: "createdAt", label: "Ngày tạo", render: (_, row) => <Text variant="caption" color="#A0AEC0">{(row as BlogRow).createdAt}</Text> },
     {
       key: "actions", label: "Thao tác",
-      render: v => (
+      render: (_, row) => (
         <div style={{ display: "flex", gap: 6 }}>
-          <Button variant="ghost" color="dark" size="sm" iconLeft={<Edit size={14} />} onClick={() => togglePublish((v as BlogRow).slug)}>
-            {(v as BlogRow).published ? "Ẩn" : "Đăng"}
+          <Button variant="ghost" color="dark" size="sm" iconLeft={<Edit size={14} />} onClick={() => togglePublish((row as BlogRow).slug)}>
+            {(row as BlogRow).published ? "Ẩn" : "Đăng"}
           </Button>
-          <Button variant="ghost" color="error" size="sm" iconLeft={<Trash size={14} />} onClick={() => setDeleteModal((v as BlogRow).slug)}>Xoá</Button>
+          <Button variant="ghost" color="error" size="sm" iconLeft={<Trash size={14} />} onClick={() => setDeleteModal((row as BlogRow).slug)}>Xoá</Button>
         </div>
       ),
     },
   ];
 
   const courseColumns: DataTableColumn[] = [
-    { key: "title", label: "Tên khóa học", render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as CourseRow).title}</Text> },
-    { key: "level", label: "Cấp độ", render: v => <Badge variant="label" color={(v as CourseRow).level === "BEGINNER" ? "info" : (v as CourseRow).level === "INTERMEDIATE" ? "warning" : "error"} label={(v as CourseRow).level} /> },
-    { key: "lessonCount", label: "Số bài", render: v => <Text variant="caption" color="#4A5568">{(v as CourseRow).lessonCount} bài học</Text> },
-    { key: "published", label: "Trạng thái", render: v => <Badge variant="label" color={(v as CourseRow).published ? "success" : "warning"} label={(v as CourseRow).published ? "Công khai" : "Ẩn"} /> },
+    { key: "title", label: "Tên khóa học", render: (_, row) => <Text variant="body2" weight="semibold" color="#1A1F36">{(row as CourseRow).title}</Text> },
+    { key: "level", label: "Cấp độ", render: (_, row) => <Badge variant="label" color={(row as CourseRow).level === "BEGINNER" ? "info" : (row as CourseRow).level === "INTERMEDIATE" ? "warning" : "error"} label={(row as CourseRow).level} /> },
+    { key: "lessonCount", label: "Số bài", render: (_, row) => <Text variant="caption" color="#4A5568">{(row as CourseRow).lessonCount} bài học</Text> },
+    { key: "published", label: "Trạng thái", render: (_, row) => <Badge variant="label" color={(row as CourseRow).published ? "success" : "warning"} label={(row as CourseRow).published ? "Công khai" : "Ẩn"} /> },
   ];
 
   const filteredBlogs = blogs.filter(b => b.title.toLowerCase().includes(search.toLowerCase()));

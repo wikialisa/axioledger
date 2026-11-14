@@ -5,7 +5,7 @@
   "description": "[sandbox.${BRAND_DOMAIN}] Sandbox SupTech Dashboard — Tier Monitor, Circuit Breaker, Compliance",
   "scripts": {
     "dev": "next dev -p 3012",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "start": "next start -p 3012",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

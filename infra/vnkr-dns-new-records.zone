@@ -1,0 +1,16 @@
+; AxioLedger — New DNS A records for vnkr.vn
+; Import this file in Cloudflare: DNS → Import/Export → Import DNS Records
+; All records point to 144.126.225.22, TTL=1 (auto), DNS-only (no proxy)
+
+kyc.vnkr.vn.      1  IN  A  144.126.225.22
+pay.vnkr.vn.      1  IN  A  144.126.225.22
+merchant.vnkr.vn. 1  IN  A  144.126.225.22
+id.vnkr.vn.       1  IN  A  144.126.225.22
+fiat.vnkr.vn.     1  IN  A  144.126.225.22
+otc.vnkr.vn.      1  IN  A  144.126.225.22
+indexer.vnkr.vn.  1  IN  A  144.126.225.22
+api.vnkr.vn.      1  IN  A  144.126.225.22
+gov.vnkr.vn.      1  IN  A  144.126.225.22
+sandbox.vnkr.vn.  1  IN  A  144.126.225.22
+holding.vnkr.vn.  1  IN  A  144.126.225.22
+dex.vnkr.vn.      1  IN  A  144.126.225.22

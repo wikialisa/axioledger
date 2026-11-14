@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 /**
  * /admin/kyc — eKYC Review Queue
  */
@@ -47,13 +48,13 @@ export default function AdminKYCPage() {
   };
 
   const columns: DataTableColumn[] = [
-    { key: "fullName",     label: "Họ tên",         render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as KYCRow).fullName}</Text> },
-    { key: "phone",        label: "SĐT",             render: v => <Text variant="caption" color="#4A5568">{(v as KYCRow).phone}</Text> },
-    { key: "documentType", label: "Loại giấy tờ",   render: v => <Badge variant="label" color="info" label={(v as KYCRow).documentType} /> },
-    { key: "submittedAt",  label: "Nộp lúc",         render: v => <Text variant="caption" color="#A0AEC0">{(v as KYCRow).submittedAt}</Text> },
-    { key: "status",       label: "Trạng thái",      render: v => <Badge variant="label" color={(v as KYCRow).status === "VERIFIED" ? "success" : (v as KYCRow).status === "REJECTED" ? "error" : "warning"} label={(v as KYCRow).status} /> },
-    { key: "actions",      label: "Thao tác",        render: v => (v as KYCRow).status === "PENDING" ? (
-      <Button variant="outlined" color="dark" size="sm" onClick={() => setViewModal(v as KYCRow)}>Xem hồ sơ</Button>
+    { key: "fullName",     label: "Họ tên",         render: (_, row) => <Text variant="body2" weight="semibold" color="#1A1F36">{(row as KYCRow).fullName}</Text> },
+    { key: "phone",        label: "SĐT",             render: (_, row) => <Text variant="caption" color="#4A5568">{(row as KYCRow).phone}</Text> },
+    { key: "documentType", label: "Loại giấy tờ",   render: (_, row) => <Badge variant="label" color="info" label={(row as KYCRow).documentType} /> },
+    { key: "submittedAt",  label: "Nộp lúc",         render: (_, row) => <Text variant="caption" color="#A0AEC0">{(row as KYCRow).submittedAt}</Text> },
+    { key: "status",       label: "Trạng thái",      render: (_, row) => <Badge variant="label" color={(row as KYCRow).status === "VERIFIED" ? "success" : (row as KYCRow).status === "REJECTED" ? "error" : "warning"} label={(row as KYCRow).status} /> },
+    { key: "actions",      label: "Thao tác",        render: (_, row) => (row as KYCRow).status === "PENDING" ? (
+      <Button variant="outlined" color="dark" size="sm" onClick={() => setViewModal(row as KYCRow)}>Xem hồ sơ</Button>
     ) : <Text variant="caption" color="#A0AEC0">Đã xử lý</Text> },
   ];
 

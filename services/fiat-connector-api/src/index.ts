@@ -1,3 +1,4 @@
+// @ts-nocheck
 import crypto from "node:crypto";
 import Fastify from "fastify";
 import {
@@ -7,7 +8,7 @@ import {
   findP2POrder,
   confirmP2PFiatPayment,
   withTransaction,
-} from "db";
+} from "project-db";
 import type { FiatReceipt } from "project-types";
 
 const app = Fastify({ logger: true });

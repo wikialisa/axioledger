@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 /**
  * /admin/users — User Management
  * Search, filter by status/KYC, lock/unlock/suspend accounts
@@ -54,21 +55,21 @@ export default function AdminUsersPage() {
   };
 
   const columns: DataTableColumn[] = [
-    { key: "fullName",      label: "Tên",         render: (v) => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as UserRow).fullName}</Text> },
-    { key: "phone",         label: "SĐT",         render: (v) => <Text variant="caption" color="#4A5568">{(v as UserRow).phone}</Text> },
-    { key: "kycStatus",     label: "KYC",         render: (v) => <Badge variant="label" color={KYC_COLOR[(v as UserRow).kycStatus] ?? "info"} label={(v as UserRow).kycStatus} /> },
-    { key: "accountStatus", label: "Trạng thái",  render: (v) => <Badge variant="label" color={STATUS_COLOR[(v as UserRow).accountStatus]} label={(v as UserRow).accountStatus} /> },
-    { key: "totalVolume",   label: "Volume",      render: (v) => <Text variant="caption" color="#1A1F36">{(v as UserRow).totalVolume}</Text> },
-    { key: "createdAt",     label: "Ngày tạo",    render: (v) => <Text variant="caption" color="#A0AEC0">{(v as UserRow).createdAt}</Text> },
+    { key: "fullName",      label: "Tên",         render: (_, row) => <Text variant="body2" weight="semibold" color="#1A1F36">{(row as UserRow).fullName}</Text> },
+    { key: "phone",         label: "SĐT",         render: (_, row) => <Text variant="caption" color="#4A5568">{(row as UserRow).phone}</Text> },
+    { key: "kycStatus",     label: "KYC",         render: (_, row) => <Badge variant="label" color={KYC_COLOR[(row as UserRow).kycStatus] ?? "info"} label={(row as UserRow).kycStatus} /> },
+    { key: "accountStatus", label: "Trạng thái",  render: (_, row) => <Badge variant="label" color={STATUS_COLOR[(row as UserRow).accountStatus]} label={(row as UserRow).accountStatus} /> },
+    { key: "totalVolume",   label: "Volume",      render: (_, row) => <Text variant="caption" color="#1A1F36">{(row as UserRow).totalVolume}</Text> },
+    { key: "createdAt",     label: "Ngày tạo",    render: (_, row) => <Text variant="caption" color="#A0AEC0">{(row as UserRow).createdAt}</Text> },
     {
       key: "actions", label: "Thao tác",
-      render: (v) => (
+      render: (_, row) => (
         <div style={{ display: "flex", gap: 6 }}>
-          {(v as UserRow).accountStatus === "ACTIVE"
+          {(row as UserRow).accountStatus === "ACTIVE"
             ? <Button variant="outlined" color="error"   size="sm" onClick={() => setActionModal({ user: v as UserRow, action: "LOCKED" })}>Khoá</Button>
             : <Button variant="outlined" color="success" size="sm" onClick={() => setActionModal({ user: v as UserRow, action: "ACTIVE" })}>Mở</Button>
           }
-          {(v as UserRow).accountStatus !== "SUSPENDED" && (
+          {(row as UserRow).accountStatus !== "SUSPENDED" && (
             <Button variant="outlined" color="dark" size="sm" onClick={() => setActionModal({ user: v as UserRow, action: "SUSPENDED" })}>Đình chỉ</Button>
           )}
         </div>

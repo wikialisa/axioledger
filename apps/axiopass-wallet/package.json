@@ -5,7 +5,7 @@
   "description": "Axiopass \u2014 Passkey-native smart wallet (PWA). FaceID/TouchID replaces seed phrase.",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "typecheck": "tsc --noEmit",
     "lint": "next lint || true",
     "clean": "rm -rf .next dist"

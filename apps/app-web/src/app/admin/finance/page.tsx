@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 /**
  * /admin/finance — Pending withdrawal approvals
  */
@@ -50,15 +51,15 @@ export default function AdminFinancePage() {
                   <Badge variant="label" color="success" label={`✓ ${score}`} />;
 
   const columns: DataTableColumn[] = [
-    { key: "userName",   label: "Người dùng",  render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as WithdrawalRow).userName}</Text> },
-    { key: "asset",      label: "Tài sản",     render: v => <Badge variant="label" color={(v as WithdrawalRow).type === "CRYPTO" ? "info" : "info"} label={(v as WithdrawalRow).asset} /> },
-    { key: "amount",     label: "Số tiền",     render: v => <Text variant="body2" weight="semibold" color="#1A1F36">{(v as WithdrawalRow).amount}</Text> },
-    { key: "riskScore",  label: "Risk Score",  render: v => riskBadge((v as WithdrawalRow).riskScore) },
-    { key: "createdAt",  label: "Thời gian",   render: v => <Text variant="caption" color="#A0AEC0">{(v as WithdrawalRow).createdAt}</Text> },
-    { key: "status",     label: "Trạng thái",  render: v => <Badge variant="label" color={(v as WithdrawalRow).status === "APPROVED" ? "success" : (v as WithdrawalRow).status === "REJECTED" ? "error" : "warning"} label={(v as WithdrawalRow).status} /> },
+    { key: "userName",   label: "Người dùng",  render: (_, row) => <Text variant="body2" weight="semibold" color="#1A1F36">{(row as WithdrawalRow).userName}</Text> },
+    { key: "asset",      label: "Tài sản",     render: (_, row) => <Badge variant="label" color={(row as WithdrawalRow).type === "CRYPTO" ? "info" : "info"} label={(row as WithdrawalRow).asset} /> },
+    { key: "amount",     label: "Số tiền",     render: (_, row) => <Text variant="body2" weight="semibold" color="#1A1F36">{(row as WithdrawalRow).amount}</Text> },
+    { key: "riskScore",  label: "Risk Score",  render: (_, row) => riskBadge((row as WithdrawalRow).riskScore) },
+    { key: "createdAt",  label: "Thời gian",   render: (_, row) => <Text variant="caption" color="#A0AEC0">{(row as WithdrawalRow).createdAt}</Text> },
+    { key: "status",     label: "Trạng thái",  render: (_, row) => <Badge variant="label" color={(row as WithdrawalRow).status === "APPROVED" ? "success" : (row as WithdrawalRow).status === "REJECTED" ? "error" : "warning"} label={(row as WithdrawalRow).status} /> },
     {
       key: "actions", label: "Thao tác",
-      render: v => (v as WithdrawalRow).status === "PENDING" ? (
+      render: (_, row) => (row as WithdrawalRow).status === "PENDING" ? (
         <div style={{ display: "flex", gap: 6 }}>
           <Button variant="outlined" color="success" size="sm" onClick={() => setActionModal({ item: v as WithdrawalRow, action: "APPROVE" })}>Duyệt</Button>
           <Button variant="outlined" color="error"   size="sm" onClick={() => setActionModal({ item: v as WithdrawalRow, action: "REJECT"  })}>Từ chối</Button>

@@ -5,7 +5,7 @@
   "description": "[id.${BRAND_DOMAIN}] P2P Escrow, Identity & Fiat On/Off Ramp — ${BRAND_ORG_FINTECH} Services JSC",
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "start": "next start -p 3001",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

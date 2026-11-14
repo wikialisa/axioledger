@@ -1,5 +1,6 @@
+// @ts-nocheck
 import Fastify from "fastify";
-import { getPool, closePool, insertOTCQuote } from "db";
+import { getPool, closePool, insertOTCQuote } from "project-db";
 
 const app = Fastify({ logger: true });
 

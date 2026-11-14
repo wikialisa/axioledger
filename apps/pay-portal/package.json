@@ -5,7 +5,7 @@
   "description": "[pay.${BRAND_DOMAIN}] Payment Gateway & Merchant Dashboard — ${BRAND_ORG_FINTECH} Services JSC",
   "scripts": {
     "dev": "next dev -p 3002",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "start": "next start -p 3002",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"

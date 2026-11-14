@@ -5,7 +5,7 @@
   "description": "AXQ DAO Governance UI \u2014 quadratic voting + treasury dashboard",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "typecheck": "tsc --noEmit",
     "lint": "next lint || true",
     "clean": "rm -rf .next dist"

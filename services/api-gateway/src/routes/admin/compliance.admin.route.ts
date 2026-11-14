@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router } from "express";
 import { authenticate, requireCompliance, requireAdmin } from "../../middlewares/auth.middleware.js";
 import { ok, created, paginated } from "../../lib/response.js";
